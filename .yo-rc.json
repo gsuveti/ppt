@@ -1,0 +1,10 @@
+{
+  "generator-ng-fullstack": {
+    "username": "suvetig",
+    "appName": "ppt",
+    "stack": "fullstack",
+    "server": "node",
+    "client": "ng2",
+    "transpilerServer": "typescript"
+  }
+}
