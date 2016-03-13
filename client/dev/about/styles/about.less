@@ -1,0 +1,23 @@
+
+@import "../../styles/var";
+
+.banner{
+  background: url('../../public/img/bg_ppt_1920.png') repeat-x fixed top center;
+  color: @white;
+
+  h1 {
+    color: @white;
+    margin-bottom: 2 * @margin-large;
+  }
+
+  p {
+    width: 100%;
+    max-width: 450px;
+    opacity: 0.9;
+
+    @media (max-width: @bootstrapSmCutoff) {
+      width: 100%;
+    }
+  }
+
+}

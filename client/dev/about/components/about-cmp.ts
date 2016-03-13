@@ -15,7 +15,8 @@ import {
 
 @Component({
     selector: 'about-cmp',
-    templateUrl: 'client/dev/about/templates/about.html'
+    templateUrl: 'client/dev/about/templates/about.html',
+    styleUrls: ['client/dev/about/styles/about.css'],
 })
 export class AboutCmp implements OnInit {
 
