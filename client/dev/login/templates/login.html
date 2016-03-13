@@ -5,14 +5,16 @@
 
     <h1 class="todo-title">{{title}}</h1>
 
+
     <input type="text"
            ngControl="todoMessage"
            [class.todo-error]="!todoForm.valid"
            placeholder="What do you have todo?"
-           autofocus />
+           autofocus/>
 
     <button type="submit"
-            [disabled]="!todoForm.valid">+</button>
+            [disabled]="!todoForm.valid">+
+    </button>
   </form>
 
   <div class="todo-list">
@@ -20,4 +22,6 @@
       <p>{{todo.todoMessage}}</p>
     </div>
   </div>
+
+  <h1 class="login-title">login</h1>
 </div>

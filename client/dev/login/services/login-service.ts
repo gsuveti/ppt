@@ -1,19 +1,19 @@
 import {
   Inject
-} from 'angular2/core';
+} from '../../../../node_modules/angular2/core.d';
 
 import {
   Observable
-} from 'rxjs/Observable';
+} from '../../../../node_modules/rxjs/Observable.d';
 
 import {
   Http,
   Headers
-} from 'angular2/http';
+} from '../../../../node_modules/angular2/http.d';
 
-import 'rxjs/add/operator/map';
+import '../../../../node_modules/rxjs/add/operator/map.d';
 
-export class TodoService {
+export class LoginService {
   static ENDPOINT: string = '/api/todos/:id';
 
   constructor(@Inject(Http) private _http: Http) {
@@ -22,7 +22,7 @@ export class TodoService {
 
   getAll():Observable<any> {
     return this._http
-               .get(TodoService.ENDPOINT.replace(':id', ''))
+               .get(LoginService.ENDPOINT.replace(':id', ''))
                .map((r) => r.json());
   }
 
@@ -34,12 +34,12 @@ export class TodoService {
     headers.append('Content-Type', 'application/json');
 
     return this._http
-               .post(TodoService.ENDPOINT.replace(':id', ''), _messageStringified, {headers})
+               .post(LoginService.ENDPOINT.replace(':id', ''), _messageStringified, {headers})
                .map((r) => r.json());
   }
 
   remove(id: string):Observable<any> {
     return this._http
-               .delete(TodoService.ENDPOINT.replace(':id', id));
+               .delete(LoginService.ENDPOINT.replace(':id', id));
   }
 }
