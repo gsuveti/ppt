@@ -6,7 +6,6 @@
 
   h1 {
     color: @white;
-    margin-bottom: 2 * @margin-large;
   }
 
   p {
@@ -25,7 +24,6 @@
 .about-project {
 
   .row {
-    margin-top: 2 * @margin-large;
     .icon {
       position: absolute;
       margin-left: @margin-medium;
@@ -59,4 +57,132 @@
   }
 }
 
+.how-it-works {
+  overflow: hidden;
+  .element {
+    text-align: center;
+    height: 180px;
 
+    .line {
+      border: 1px dotted @secondary;
+      height: 0px;
+      position: absolute;
+      top: 30px;
+      left: 50%;
+      width: 100%;
+
+    }
+
+    .icon {
+      width: 60px;
+      height: 60px;
+      margin-left: auto;
+      margin-right: auto;
+      margin-bottom: @margin-medium;
+      display: block;
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: @bootstrapSmCutoff) {
+      &.xs-break::before {
+        content: "";
+        border: 1px dotted @secondary;
+        height: 0px;
+        position: absolute;
+        top: 30px;
+        left: -50%;
+        width: 100%;
+      }
+    }
+    @media (max-width: @bootstrapMdCutoff) {
+      &.sm-break::before {
+        content: "";
+        border: 1px dotted @secondary;
+        height: 0px;
+        position: absolute;
+        top: 30px;
+        left: -50%;
+        width: 100%;
+      }
+    }
+
+
+    .icon-1 {
+      background: url("../../public/img/how-it-works/interface.svg") no-repeat;
+      background-size: 100%;
+      background-color: #fff;
+    }
+    .icon-2 {
+      background: url("../../public/img/how-it-works/computer.svg") no-repeat;
+      background-size: 100%;
+      background-color: #fff;
+
+    }
+    .icon-3 {
+      background: url("../../public/img/how-it-works/note.svg") no-repeat;
+      background-size: 100%;
+      background-color: #fff;
+
+    }
+    .icon-4 {
+      background: url("../../public/img/how-it-works/interface-1.svg") no-repeat;
+      background-size: 100%;
+      background-color: #fff;
+
+    }
+    .icon-5 {
+      background: url("../../public/img/how-it-works/hand.svg") no-repeat;
+      background-size: 100%;
+      background-color: #fff;
+
+    }
+    .icon-6 {
+      background: url("../../public/img/how-it-works/business.svg") no-repeat;
+      background-size: 100%;
+      background-color: #fff;
+
+    }
+
+  }
+}
+
+.contact {
+  background: url("../../public/img/letter.svg") no-repeat right top;
+  background-color: @primary;
+  background-size: 35%;
+
+  h1{
+    color: @white;
+  }
+
+  p{
+    color: @white;
+    opacity: 0.8;
+  }
+
+}
+
+
+.liga-ac {
+  a {
+    color: @primary;
+    transition: color 0.2s ease-in;
+
+
+    .read-more{
+      width: 15px;
+      height: 15px;
+      display: inline-block;
+      background: url("../../public/img/web.svg") no-repeat ;
+      background-size: contain;
+      margin-right: @margin-small;
+      margin-top: 2px;
+    }
+  }
+  a:hover{
+    color: @secondary;
+
+  }
+
+}
