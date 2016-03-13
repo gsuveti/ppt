@@ -1,27 +1,25 @@
-<div class="todo-container">
-  <!--<form class="todo-form"-->
-        <!--[ngFormModel]="todoForm"-->
-        <!--(submit)="add(todoForm.value.todoMessage)">-->
+<div class="wrapper">
+  <div class="content">
+    <form class="form-group container"
+          [ngFormModel]="loginForm"
+          (submit)="doLogin($event)">
 
-    <!--<h1 class="todo-title">{{title}}</h1>-->
+      <h1 class="todo-title">Login</h1>
 
+      <input type="text"
+             ngControl="email"
+             placeholder="Email"
+             autofocus/>
 
-    <!--<input type="text"-->
-           <!--ngControl="todoMessage"-->
-           <!--[class.todo-error]="!todoForm.valid"-->
-           <!--placeholder="What do you have todo?"-->
-           <!--autofocus/>-->
+      <input type="password"
+             ngControl="password"
+             placeholder="Parola"
+             autofocus/>
 
-    <!--<button type="submit"-->
-            <!--[disabled]="!todoForm.valid">+-->
-    <!--</button>-->
-  <!--</form>-->
-
-  <!--<div class="todo-list">-->
-    <!--<div *ngFor="#todo of todos;" class="todo-item" (click)="remove(todo._id);">-->
-      <!--<p>{{todo.todoMessage}}</p>-->
-    <!--</div>-->
-  <!--</div>-->
-
-  <h1 class="login-title">login</h1>
+      <button type="submit"
+              [disabled]="!loginForm.valid">
+        Login
+      </button>
+    </form>
+  </div>
 </div>

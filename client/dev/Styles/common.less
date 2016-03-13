@@ -28,12 +28,13 @@ h1 {
   font-size: 40px;
   position: relative;
   color: @primary;
+  margin-bottom: 2 * @margin-large;
 
   &::after {
     content: "";
     height: 5px;
     width: 70px;
-    background: @secundary;
+    background: @secondary;
     position: absolute;
     top: 54px;
     left: 0px;
@@ -62,7 +63,7 @@ a {
   transition: background 0.2s ease-in;
 
   &:hover {
-    background: @secundary;
+    background: @secondary;
     border: 1px solid @white;
 
   }
@@ -74,8 +75,8 @@ a {
   color: @white;
 
   &:hover {
-    background: @secundary;
-    border: 1px solid  @secundary;
+    background: @secondary;
+    border: 1px solid  @secondary;
   }
 
 }

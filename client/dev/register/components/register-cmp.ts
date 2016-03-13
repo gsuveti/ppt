@@ -13,30 +13,38 @@ import {
     Control
 } from '../../../../node_modules/angular2/common.d';
 
-import {LoginService} from '../services/login-service';
+import {RegisterService} from '../services/register-service';
 
-type UserLogin = {
+type UserRegister = {
+    firstName: string,
+    lastName: string,
+    studentID: string,
     email: string,
     password: string,
+    secondPassword: string
 }
 
 @Component({
-    selector: 'login-cmp',
-    templateUrl: 'client/dev/login/templates/login.html',
-    providers: [HTTP_PROVIDERS, LoginService],
+    selector: 'register-cmp',
+    templateUrl: 'client/dev/register/templates/register.html',
+    providers: [HTTP_PROVIDERS, RegisterService],
 })
-export class LoginCmp implements OnInit {
-    loginForm:ControlGroup;
+export class RegisterCmp implements OnInit {
+    registerForm:ControlGroup;
 
-    constructor(@Inject(FormBuilder) fb:FormBuilder, private _loginService:LoginService) {
-        this.loginForm = fb.group({
+    constructor(@Inject(FormBuilder) fb:FormBuilder, private _registerService:RegisterService) {
+        this.registerForm = fb.group({
+            firstName: ["", Validators.required],
+            lastName: ["", Validators.required],
+            studentID: ["", Validators.required],
             email: ["", Validators.required],
             password: ["", Validators.required],
+            secondPassword: ["", Validators.required]
         });
     }
 
-    doLogin(event) {
-        console.log(this.loginForm.value);
+    doRegister(event) {
+        console.log(this.registerForm.value);
         event.preventDefault();
     }
 

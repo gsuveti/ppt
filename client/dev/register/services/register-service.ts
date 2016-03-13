@@ -6,7 +6,7 @@ import '../../../../node_modules/rxjs/add/operator/map.d';
 import {Http, Headers} from 'angular2/http';
 
 @Injectable()
-export class LoginService {
+export class RegisterService {
     static ENDPOINT:string = '/api/todos/:id';
 
     constructor(private _http:Http) {
@@ -15,7 +15,7 @@ export class LoginService {
 
     getAll():Observable<any> {
         return this._http
-            .get(LoginService.ENDPOINT.replace(':id', ''))
+            .get(RegisterService.ENDPOINT.replace(':id', ''))
             .map((r) => r.json());
     }
 
@@ -27,12 +27,12 @@ export class LoginService {
         headers.append('Content-Type', 'application/json');
 
         return this._http
-            .post(LoginService.ENDPOINT.replace(':id', ''), _messageStringified, {headers})
+            .post(RegisterService.ENDPOINT.replace(':id', ''), _messageStringified, {headers})
             .map((r) => r.json());
     }
 
     remove(id:string):Observable<any> {
         return this._http
-            .delete(LoginService.ENDPOINT.replace(':id', id));
+            .delete(RegisterService.ENDPOINT.replace(':id', id));
     }
 }

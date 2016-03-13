@@ -1,0 +1,45 @@
+<div class="wrapper">
+  <div class="content">
+    <form class="form-group container"
+          [ngFormModel]="registerForm"
+          (submit)="doRegister($event)">
+
+      <h1 class="todo-title">Register</h1>
+
+      <input type="text"
+             ngControl="firstName"
+             placeholder="Prenume"
+             autofocus/>
+
+      <input type="text"
+             ngControl="lastName"
+             placeholder="Nume"
+             autofocus/>
+
+      <input type="text"
+             ngControl="studentID"
+             placeholder="Nr. matricol"
+             autofocus/>
+
+      <input type="text"
+             ngControl="email"
+             placeholder="Email"
+             autofocus/>
+
+      <input type="password"
+             ngControl="password"
+             placeholder="Parola"
+             autofocus/>
+
+      <input type="password"
+             ngControl="secondPassword"
+             placeholder="Repeta parola"
+             autofocus/>
+
+      <button type="submit"
+              [disabled]="!registerForm.valid">
+        Register
+      </button>
+    </form>
+  </div>
+</div>
