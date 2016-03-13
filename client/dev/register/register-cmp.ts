@@ -14,7 +14,6 @@ import {
 } from 'angular2/common';
 
 import {RegisterService} from './register-service';
-import {User} from'../domain/UserDomain'
 
 @Component({
     selector: 'register-cmp',
@@ -44,12 +43,13 @@ export class RegisterCmp implements OnInit {
             }
             else {
 
-                this.registerService.register(new User(
-                    this.registerForm.value.email,
-                    this.registerForm.value.password,
-                    this.registerForm.value.firstName,
-                    this.registerForm.value.lastName,
-                    this.registerForm.value.studentID)
+                this.registerService.register({
+                        email: this.registerForm.value.email,
+                        password: this.registerForm.value.password,
+                        firstName: this.registerForm.value.firstName,
+                        lastName: this.registerForm.value.lastName,
+                        studentID: this.registerForm.value.studentID
+                    }
                     )
                     .subscribe(
                         data => {

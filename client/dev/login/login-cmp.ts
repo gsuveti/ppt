@@ -7,7 +7,6 @@ import {
 
 import {HTTP_PROVIDERS} from 'angular2/http';
 import LoginService from './login-service';
-import LoginUser from '../domain/UserDomain';
 
 import {
     Validators,
@@ -38,7 +37,10 @@ export class LoginCmp implements OnInit {
         }
 
         this.loginMessage = '';
-        this.loginService.login(new LoginUser(this.loginForm.value.email, this.loginForm.value.password))
+        this.loginService.login({
+                email: this.loginForm.value.email,
+                password: this.loginForm.value.password,
+            })
             .subscribe(
                 data => {
                     console.log('Authentication');

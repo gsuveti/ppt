@@ -4,7 +4,6 @@ import {
 } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {Http, Headers} from 'angular2/http';
-import {User} from '../domain/UserDomain';
 
 @Injectable()
 export class RegisterService {
@@ -13,7 +12,7 @@ export class RegisterService {
     constructor(private _http:Http) {
     }
 
-    register(user:User):Observable<any> {
+    register(user):Observable<any> {
         let creds = JSON.stringify({
             email: user.email,
             password: user.password,
