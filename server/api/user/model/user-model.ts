@@ -5,15 +5,18 @@ var Schema = mongoose.Schema;
 var crypto = require('crypto');
 
 var UserSchema = new Schema({
-    name: {type: String, required: true, trim: true},
-    createdAt: {type: Date, default: Date.now},
-    email: {type: String, lowercase: true},
-    role: {
+    createdAt: {type: Date, default: Date.now},role: {
         type: String,
         default: 'user'
     },
+    email: {type: String, lowercase: true},
     hashedPassword: String,
     salt: String,
+    email: {type: String, lowercase: true},
+    firstName: {type: String, required: true, trim: true},
+    lastName: {type: String, required: true, trim: true},
+    studentID: {type: String, required: true, trim: true},
+
 
 });
 
@@ -25,7 +28,9 @@ UserSchema
     .virtual('profile')
     .get(function () {
         return {
-            'name': this.name,
+            'firstName': this.firstName,
+            'lastName': this.lastName,
+            'studentID': this.studentID,
             'role': this.role
         };
     });

@@ -33,7 +33,6 @@ import {AboutCmp} from '../../about/components/about-cmp';
     {path: '/login', name: "Login", component: LoginCmp},
     {path: '/register', name: "Register", component: RegisterCmp},
 ])
-
 export class AppCmp implements OnInit {
     constructor(router:Router) {
         console.log("app");

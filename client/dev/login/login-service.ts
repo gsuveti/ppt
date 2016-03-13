@@ -4,7 +4,7 @@ import {
 } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {Http, Headers} from 'angular2/http';
-import {LoginUser} from '../domain/LoginUser';
+import {LoginUser} from '../domain/UserDomain';
 
 @Injectable()
 export default class LoginService {
@@ -14,8 +14,16 @@ export default class LoginService {
     }
 
     login(loginUser:LoginUser):Observable<any> {
+        let creds = JSON.stringify({
+            email: loginUser.email,
+            password: loginUser.password
+        });
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
         return this._http
-            .get(LoginService.ENDPOINT, loginUser)
-            .map((r) => r.json());
+            .post(LoginService.ENDPOINT, creds, {headers})
+            .map(res => res.json())
     }
 }

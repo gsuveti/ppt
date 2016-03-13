@@ -1,10 +1,12 @@
 <div class="wrapper">
   <div class="content">
+    <h1 class="todo-title">Register</h1>
+    Ai deja cont?<a href="/login">Autentifica-te!</a>
+
     <form class="form-group container"
           [ngFormModel]="registerForm"
-          (submit)="doRegister($event)">
+          (submit)="doRegister()">
 
-      <h1 class="todo-title">Register</h1>
 
       <input type="text"
              ngControl="firstName"
@@ -41,5 +43,6 @@
         Register
       </button>
     </form>
+    <p>{{registerMessage}}</p>
   </div>
 </div>

@@ -14,7 +14,7 @@ import {
 } from 'angular2/common';
 
 import {RegisterService} from './register-service';
-import {User} from'../domain/User'
+import {User} from'../domain/UserDomain'
 
 @Component({
     selector: 'register-cmp',
@@ -23,6 +23,7 @@ import {User} from'../domain/User'
 })
 export class RegisterCmp implements OnInit {
     registerForm:ControlGroup;
+    registerMessage:string;
 
     constructor(@Inject(FormBuilder) fb:FormBuilder, private registerService:RegisterService) {
         this.registerForm = fb.group({
@@ -35,12 +36,40 @@ export class RegisterCmp implements OnInit {
         });
     }
 
-    doRegister(event) {
-        console.log(this.registerForm.value);
-        event.preventDefault();
+    doRegister() {
+        this.registerMessage = '';
+        if (this.registerForm.dirty && this.registerForm.valid) {
+            if (this.registerForm.value.password != this.registerForm.value.secondPassword) {
+                this.registerMessage = "Parolele nu sunt identice!"
+            }
+            else {
+
+                this.registerService.register(new User(
+                    this.registerForm.value.email,
+                    this.registerForm.value.password,
+                    this.registerForm.value.firstName,
+                    this.registerForm.value.lastName,
+                    this.registerForm.value.studentID)
+                    )
+                    .subscribe(
+                        data => {
+                            console.log('Authentication');
+                            console.log(data);
+                            if (data.message) {
+                                this.registerMessage = data.message;
+                            }
+                            else {
+                                document.cookie = "ppt=" + data.token;
+                            }
+                        },
+                        err => console.log(err.json().message),
+                        () => console.log('Authentication Complete')
+                    );
+            }
+        }
     }
 
     ngOnInit() {
-        //this._getAll();
+
     }
 }

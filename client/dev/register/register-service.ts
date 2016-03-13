@@ -4,7 +4,7 @@ import {
 } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {Http, Headers} from 'angular2/http';
-import {User} from '../domain/User';
+import {User} from '../domain/UserDomain';
 
 @Injectable()
 export class RegisterService {
@@ -14,8 +14,19 @@ export class RegisterService {
     }
 
     register(user:User):Observable<any> {
+        let creds = JSON.stringify({
+            email: user.email,
+            password: user.password,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            studentID: user.studentID,
+        });
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
         return this._http
-            .get(RegisterService.ENDPOINT, user)
-            .map((r) => r.json());
+            .post(RegisterService.ENDPOINT, creds, {headers})
+            .map(res => res.json())
     }
 }

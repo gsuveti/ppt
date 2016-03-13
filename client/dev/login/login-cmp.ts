@@ -7,7 +7,7 @@ import {
 
 import {HTTP_PROVIDERS} from 'angular2/http';
 import LoginService from './login-service';
-import LoginUser from '../domain/LoginUser';
+import LoginUser from '../domain/UserDomain';
 
 import {
     Validators,
@@ -16,7 +16,6 @@ import {
     Control
 } from 'angular2/common';
 
-
 @Component({
     selector: 'login-cmp',
     templateUrl: 'client/dev/login/login.html',
@@ -24,18 +23,36 @@ import {
 })
 export class LoginCmp implements OnInit {
     loginForm:ControlGroup;
+    loginMessage:string;
 
     constructor(@Inject(FormBuilder) fb:FormBuilder, private loginService:LoginService) {
         this.loginForm = fb.group({
             email: ["", Validators.required],
-            password: ["", Validators.required],
+            password: ["", Validators.compose([Validators.minLength(8), Validators.required])]
         });
     }
 
-    doLogin(event) {
-        console.log(this.loginForm.value);
-        //this.loginService.login(this.loginForm.value);
-        event.preventDefault();
+    doLogin() {
+        if (this.loginForm.dirty && this.loginForm.valid) {
+            alert(`Email: ${this.loginForm.value.email} Password: ${this.loginForm.value.password}`);
+        }
+
+        this.loginMessage = '';
+        this.loginService.login(new LoginUser(this.loginForm.value.email, this.loginForm.value.password))
+            .subscribe(
+                data => {
+                    console.log('Authentication');
+                    console.log(data);
+                    if (data.message) {
+                        this.loginMessage = data.message;
+                    }
+                    else {
+                        document.cookie = "ppt=" + data.token;
+                    }
+                },
+                err => console.log(err.json().message),
+                () => console.log('Authentication Complete')
+            );
     }
 
     ngOnInit() {
