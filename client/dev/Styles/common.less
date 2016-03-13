@@ -1,13 +1,11 @@
-
 @import 'var';
 
-
-body{
+body {
   background: none;
   margin: 0px;
   padding: 0px;
   border: none;
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif ;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .wrapper {
@@ -47,7 +45,7 @@ p {
   color: @dark;
 }
 
-a {
+a, a:hover {
   text-decoration: none;
 }
 
@@ -70,13 +68,26 @@ a {
 }
 
 .button-white {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid @white;
   color: @white;
 
   &:hover {
     background: @secondary;
+<<<<<<< Updated upstream
     border: 1px solid  @secondary;
+=======
+    border: 1px solid @secondary;
+>>>>>>> Stashed changes
   }
 
 }
+
+.visible {
+  display: flex;
+}
+
+.hidden {
+  display: none;
+}
+

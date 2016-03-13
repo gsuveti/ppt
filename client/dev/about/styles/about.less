@@ -54,6 +54,12 @@
       position: relative;
 
     }
+
+    @media (max-width: @bootstrapSmCutoff) {
+      col {
+        padding-bottom: @margin-large;
+      }
+    }
   }
 }
 
@@ -107,7 +113,6 @@
       }
     }
 
-
     .icon-1 {
       background: url("../../public/img/how-it-works/interface.svg") no-repeat;
       background-size: 100%;
@@ -147,42 +152,162 @@
   }
 }
 
-.contact {
-  background: url("../../public/img/letter.svg") no-repeat right top;
+.company {
   background-color: @primary;
-  background-size: 35%;
+  a {
+    display: block;
+    margin-right: @margin-medium;
 
-  h1{
+    h1 {
+      font-size: 25px;
+
+      &::after {
+        content: "";
+        height: 5px;
+        width: 70px;
+        background: @secondary;
+        position: absolute;
+        top: 35px;
+        left: 0px;
+      }
+    }
+
+  }
+  h1 {
     color: @white;
+
   }
 
-  p{
+  p {
     color: @white;
     opacity: 0.8;
   }
 
 }
 
-
 .liga-ac {
+  background: url("../../public/img/technology.svg") no-repeat right bottom;
+  background-size: 35%;
+  padding-bottom: 150px;
+  border-bottom: 20px solid @secondary;
+
+  p {
+    max-width: 800px;
+  }
+
   a {
     color: @primary;
     transition: color 0.2s ease-in;
 
-
-    .read-more{
+    .read-more {
       width: 15px;
       height: 15px;
       display: inline-block;
-      background: url("../../public/img/web.svg") no-repeat ;
+      background: url("../../public/img/web.svg") no-repeat;
       background-size: contain;
       margin-right: @margin-small;
       margin-top: 2px;
+      float: left;
     }
   }
-  a:hover{
+  a:hover {
     color: @secondary;
 
+  }
+
+}
+
+.contact {
+  background: url("../../public/img/letter.svg") no-repeat right top;
+  background-color: @primary;
+  background-size: 35%;
+
+  h1 {
+    color: @white;
+  }
+
+  p {
+    color: @white;
+    opacity: 0.8;
+  }
+
+}
+
+.companyModal {
+  background: @primary !important;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: 10;
+  display: block;
+  overflow-y: scroll;
+
+  .summer-practice {
+    background: @white;
+    width: 100%;
+
+    .content {
+      position: static;
+      background: none;
+      display: flex;
+      flex-wrap: wrap;
+      margin-left: auto;
+      margin-right: auto;
+
+      .bold p {
+        font-weight: 500;
+      }
+
+      h1 {
+        font-size: 25px;
+        &::after{
+          top: 35px;
+        }
+      }
+
+      .border {
+        margin: @margin-medium;
+        padding: @margin-medium;
+      }
+
+    }
+
+  }
+  .top {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+
+    h1 {
+      color: @white;
+    }
+
+    p {
+      color: @white;
+    }
+
+    .close {
+      z-index: 10;
+      position: fixed;
+      right: 30px;
+      top: 30px;
+      width: 50px;
+      height: 50px;
+      background: url("../../public/img/cross.svg") no-repeat;
+      background-size: 100%;
+      opacity: 1;
+      display: block;
+      transform: rotate(0deg);
+      transition: transform 0.3s ease-in;
+
+      &:hover {
+        transform: rotate(180deg);
+      }
+
+    }
   }
 
 }
