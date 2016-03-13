@@ -1,7 +1,6 @@
-
 @import "../../styles/var";
 
-.banner{
+.banner {
   background: url('../../public/img/bg_ppt_1920.png') repeat-x fixed top center;
   color: @white;
 
@@ -14,6 +13,7 @@
     width: 100%;
     max-width: 450px;
     opacity: 0.9;
+    color: @white;
 
     @media (max-width: @bootstrapSmCutoff) {
       width: 100%;
@@ -21,3 +21,42 @@
   }
 
 }
+
+.about-project {
+
+  .row {
+    margin-top: 2 * @margin-large;
+    .icon {
+      position: absolute;
+      margin-left: @margin-medium;
+      left: 0px;
+      top: 0px;
+      width: 50px;
+      height: 50px;
+
+      &.first {
+        background: url("../../public/img/agenda.svg") no-repeat;
+        background-size: 70%;
+
+      }
+      &.second {
+        background: url("../../public/img/pen.svg") no-repeat;
+        background-size: 70%;
+
+      }
+      &.last {
+        background: url("../../public/img/interface.svg") no-repeat;
+        background-size: 70%;
+
+      }
+
+    }
+    .about-col {
+      padding-left: 50px;
+      position: relative;
+
+    }
+  }
+}
+
+
