@@ -4,18 +4,18 @@ import {
 } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {Http, Headers} from 'angular2/http';
-import {LoginUser} from '../domain/LoginUser';
+import {User} from '../domain/User';
 
 @Injectable()
-export default class LoginService {
-    static ENDPOINT:string = '/auth/local';
+export class RegisterService {
+    static ENDPOINT:string = '/user';
 
     constructor(private _http:Http) {
     }
 
-    login(loginUser:LoginUser):Observable<any> {
+    register(user:User):Observable<any> {
         return this._http
-            .get(LoginService.ENDPOINT, loginUser)
+            .get(RegisterService.ENDPOINT, user)
             .map((r) => r.json());
     }
 }

@@ -14,7 +14,7 @@ import {
 } from 'angular2/router';
 
 //
-//import {RegisterCmp} from '../../register/components/register-cmp';
+import {RegisterCmp} from '../../register/register-cmp';
 import {ProfileCmp} from '../../profile/profile-cmp';
 import {LoginCmp} from '../../login/login-cmp';
 import {AboutCmp} from '../../about/components/about-cmp';
@@ -31,7 +31,7 @@ import {AboutCmp} from '../../about/components/about-cmp';
     {path: '/', name: "About", component: AboutCmp},
     {path: '/profile', name: "Profile", component: ProfileCmp},
     {path: '/login', name: "Login", component: LoginCmp},
-    //{path: '/register', name: "Register", component: RegisterCmp},
+    {path: '/register', name: "Register", component: RegisterCmp},
 ])
 
 export class AppCmp implements OnInit {
