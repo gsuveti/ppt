@@ -13,7 +13,7 @@ import {
     Control
 } from '../../../../node_modules/angular2/common.d';
 
-import {RegisterService} from '../services/register-service';
+//import {RegisterService} from '../services/register-service';
 
 type UserRegister = {
     firstName: string,
@@ -27,12 +27,12 @@ type UserRegister = {
 @Component({
     selector: 'register-cmp',
     templateUrl: 'client/dev/register/templates/register.html',
-    providers: [HTTP_PROVIDERS, RegisterService],
+    providers: [HTTP_PROVIDERS],
 })
 export class RegisterCmp implements OnInit {
     registerForm:ControlGroup;
 
-    constructor(@Inject(FormBuilder) fb:FormBuilder, private _registerService:RegisterService) {
+    constructor(@Inject(FormBuilder) fb:FormBuilder) {
         this.registerForm = fb.group({
             firstName: ["", Validators.required],
             lastName: ["", Validators.required],

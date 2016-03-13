@@ -15,7 +15,8 @@ import {
 
 //
 //import {RegisterCmp} from '../../register/components/register-cmp';
-import {LoginCmp} from '../../login/components/login-cmp';
+import {ProfileCmp} from '../../profile/profile-cmp';
+import {LoginCmp} from '../../login/login-cmp';
 import {AboutCmp} from '../../about/components/about-cmp';
 
 
@@ -27,9 +28,10 @@ import {AboutCmp} from '../../about/components/about-cmp';
     providers: [ROUTER_PROVIDERS]
 })
 @RouteConfig([
-    //{path: '/register', name: "Register", component: RegisterCmp},
+    {path: '/', name: "About", component: AboutCmp},
+    {path: '/profile', name: "Profile", component: ProfileCmp},
     {path: '/login', name: "Login", component: LoginCmp},
-    {path: '/', name: "About", component: AboutCmp}
+    //{path: '/register', name: "Register", component: RegisterCmp},
 ])
 
 export class AppCmp implements OnInit {

@@ -1,12 +1,12 @@
-import {Injectable} from '../../../../node_modules/angular2/core.d';
+import {Injectable} from '../../../node_modules/angular2/core.d.ts';
 import {
     Observable
-} from '../../../../node_modules/rxjs/Observable.d';
-import '../../../../node_modules/rxjs/add/operator/map.d';
+} from '../../../node_modules/rxjs/Observable.d.ts';
+import '../../../node_modules/rxjs/add/operator/map.d.ts';
 import {Http, Headers} from 'angular2/http';
 
 @Injectable()
-export class RegisterService {
+export class LoginService {
     static ENDPOINT:string = '/api/todos/:id';
 
     constructor(private _http:Http) {
@@ -15,7 +15,7 @@ export class RegisterService {
 
     //getAll():Observable<any> {
     //    return this._http
-    //        .get(RegisterService.ENDPOINT.replace(':id', ''))
+    //        .get(LoginService.ENDPOINT.replace(':id', ''))
     //        .map((r) => r.json());
     //}
     //
@@ -27,12 +27,12 @@ export class RegisterService {
     //    headers.append('Content-Type', 'application/json');
     //
     //    return this._http
-    //        .post(RegisterService.ENDPOINT.replace(':id', ''), _messageStringified, {headers})
+    //        .post(LoginService.ENDPOINT.replace(':id', ''), _messageStringified, {headers})
     //        .map((r) => r.json());
     //}
     //
     //remove(id:string):Observable<any> {
     //    return this._http
-    //        .delete(RegisterService.ENDPOINT.replace(':id', id));
+    //        .delete(LoginService.ENDPOINT.replace(':id', id));
     //}
 }
