@@ -1,16 +1,16 @@
 import {
-    Component,
-    View,
-    Inject,
-    OnInit
+  Component,
+  View,
+  Inject,
+  OnInit
 } from 'angular2/core';
 
 import {HTTP_PROVIDERS} from 'angular2/http';
 import {
-    Validators,
-    FormBuilder,
-    ControlGroup,
-    Control
+  Validators,
+  FormBuilder,
+  ControlGroup,
+  Control
 } from 'angular2/common';
 import{
     Router
@@ -20,13 +20,14 @@ import {RegisterService} from './register-service';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 @Component({
-    selector: 'register-cmp',
-    templateUrl: 'client/dev/register/register.html',
-    providers: [HTTP_PROVIDERS, RegisterService],
+  selector: 'register-cmp',
+  templateUrl: 'client/dev/register/register.html',
+  styleUrls: ['client/dev/login/styles/login.css'],
+  providers: [HTTP_PROVIDERS, RegisterService],
 })
 export class RegisterCmp implements OnInit {
-    registerForm:ControlGroup;
-    registerMessage:string;
+  registerForm:ControlGroup;
+  registerMessage:string;
 
     constructor(@Inject(FormBuilder) fb:FormBuilder, private registerService:RegisterService, private router:Router) {
         this.registerForm = fb.group({
@@ -39,13 +40,13 @@ export class RegisterCmp implements OnInit {
         });
     }
 
-    doRegister() {
-        this.registerMessage = '';
-        if (this.registerForm.dirty && this.registerForm.valid) {
-            if (this.registerForm.value.password != this.registerForm.value.secondPassword) {
-                this.registerMessage = "Parolele nu sunt identice!"
-            }
-            else {
+  doRegister() {
+    this.registerMessage = '';
+    if (this.registerForm.dirty && this.registerForm.valid) {
+      if (this.registerForm.value.password != this.registerForm.value.secondPassword) {
+        this.registerMessage = "Parolele nu sunt identice!"
+      }
+      else {
 
                 this.registerService.register({
                         email: this.registerForm.value.email,
@@ -77,7 +78,7 @@ export class RegisterCmp implements OnInit {
         }
     }
 
-    ngOnInit() {
+  ngOnInit() {
 
-    }
+  }
 }

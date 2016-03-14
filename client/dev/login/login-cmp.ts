@@ -1,8 +1,8 @@
 import {
-    Component,
-    View,
-    Inject,
-    OnInit
+  Component,
+  View,
+  Inject,
+  OnInit
 } from 'angular2/core';
 
 import{
@@ -13,22 +13,23 @@ import {HTTP_PROVIDERS} from 'angular2/http';
 import LoginService from './login-service';
 
 import {
-    Validators,
-    FormBuilder,
-    ControlGroup,
-    Control
+  Validators,
+  FormBuilder,
+  ControlGroup,
+  Control
 } from 'angular2/common';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 
 @Component({
-    selector: 'login-cmp',
-    templateUrl: 'client/dev/login/login.html',
-    providers: [HTTP_PROVIDERS, LoginService]
+  selector: 'login-cmp',
+  templateUrl: 'client/dev/login/login.html',
+  styleUrls: ['client/dev/login/styles/login.css'],
+  providers: [HTTP_PROVIDERS, LoginService]
 })
 export class LoginCmp implements OnInit {
-    loginForm:ControlGroup;
-    loginMessage:string;
+  loginForm:ControlGroup;
+  loginMessage:string;
 
     constructor(@Inject(FormBuilder) fb:FormBuilder, private loginService:LoginService, private router:Router) {
         this.loginForm = fb.group({
@@ -37,10 +38,11 @@ export class LoginCmp implements OnInit {
         });
     }
 
-    doLogin() {
-        if (this.loginForm.dirty && this.loginForm.valid) {
-            alert(`Email: ${this.loginForm.value.email} Password: ${this.loginForm.value.password}`);
-        }
+  doLogin() {
+    if (this.loginForm.dirty && this.loginForm.valid) {
+      alert(`Email: ${this.loginForm.value.email} Password: ${this.loginForm.value.password}`);
+    }
+
 
         this.loginMessage = '';
         this.loginService.login({
@@ -64,7 +66,7 @@ export class LoginCmp implements OnInit {
             );
     }
 
-    ngOnInit() {
+  ngOnInit() {
 
-    }
+  }
 }
