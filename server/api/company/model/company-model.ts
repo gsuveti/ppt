@@ -7,8 +7,8 @@ var SummerPracticeProgram = require('./summerPracticeProgram-model');
 var CompanySchema = new Schema({
     createdAt: {type: Date, default: Date.now},
     name: {type: String, required: true},
-    description: {type: String, required: true},
-    web: {type: String, required: true, trim: true},
+    description: {type: String, required: false},
+    web: {type: String, required: false, trim: true},
     summerPracticePrograms: [{type: Schema.Types.ObjectId, ref: 'summer-practice-program'}],
 });
 

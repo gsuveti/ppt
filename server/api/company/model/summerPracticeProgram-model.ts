@@ -7,12 +7,13 @@ var SummerPracticeProgramSchema = new Schema({
     createdAt: {type: Date, default: Date.now},
     name: {type: String, required: true},
     contactPerson: {type: String, required: true},
-    contactPersonTitle: {type: String, required: true},
-    contactPersonEmail: {type: String, required: true},
-    numberOfStudents: {type: String, required: true},
-    period: {type: String, required: true},
-    description: {type: String, required: true},
-    requirements: {type: String, required: true},
+    contactPersonTitle: {type: String, required: false},
+    contactPersonEmail: {type: String, required: false},
+    numberOfStudents: {type: String, required: false},
+    period: {type: String, required: false},
+    description: {type: String, required: false},
+    requirements: {type: String, required: false},
+    isPaid: {type: String, required: false},
 });
 
 module.exports = mongoose.model('summer-practice-program', SummerPracticeProgramSchema);
