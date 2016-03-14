@@ -8,7 +8,7 @@ var jwt = require('jsonwebtoken');
 
 export class UserController {
     static validationError = function (res, err) {
-        return res.status(422).json(err);
+        return res.status(200).json(err);
     };
 
     /**
@@ -86,6 +86,7 @@ export class UserController {
      */
     static me = function (req, res, next) {
         var userId = req.user._id;
+        console.log(req.user);
         User.findOne({
             _id: userId
         }, '-salt -hashedPassword', function (err, user) { // don't ever give out the password or salt

@@ -1,5 +1,88 @@
-<div class="wrapper">
+<div class="wrapper" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="content">
-    profile
+    <h1>Profile</h1>
+    <p>{{user.firstName}}</p>
+    <p>{{user.email}}</p>
+    <p>{{user.firstName}}</p>
+    <p>{{user.studentID}}</p>
+
+
+    <form class="form-group container"
+          [ngFormModel]="profileForm"
+          (submit)="saveProfile()">
+
+
+      <div><h2>Sunt angajat</h2>
+        <button class="arrow-down" *ngClass="isHired()"
+                (click)="optionToogle('hired')"></button>
+        <button class="arrow-up" *ngClass="isHired()"></button>
+      </div>
+      <input type="text"
+             ngControl="selfCompany"
+             placeholder="Prenume"
+             autofocus/>
+      <input type="text"
+             ngControl="selfCompanyAddress"
+             placeholder="Prenume"
+             autofocus/>
+      <input type="text"
+             ngControl="selfContactPerson"
+             placeholder="Nume persoana de contact"
+             autofocus/>
+      <input type="text"
+             ngControl="selfContactPersonEmail"
+             placeholder="Email persoana de contact"
+             autofocus/>
+
+      <div><h2>Solicit loc de pratica propus de mine (din domeniul IT&C)</h2></div>
+
+      <input type="text"
+             ngControl="selfCompany"
+             placeholder="Prenume"
+             autofocus/>
+      <input type="text"
+             ngControl="selfCompanyAddress"
+             placeholder="Prenume"
+             autofocus/>
+      <input type="text"
+             ngControl="selfContactPerson"
+             placeholder="Nume persoana de contact"
+             autofocus/>
+      <input type="text"
+             ngControl="selfContactPersonPosition"
+             placeholder="Functie persoana de contact"
+             autofocus/>
+      <input type="text"
+             ngControl="selfContactPersonEmail"
+             placeholder="Email persoana de contact"
+             autofocus/>
+
+      <div><h2>Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS)</h2></div>
+
+      <input type="text"
+             ngControl="otherSituation"
+             placeholder="Situatie"
+             autofocus/>
+      <input type="text"
+             ngControl="otherContactPerson"
+             placeholder="Nume persoana de contact"
+             autofocus/>
+      <input type="text"
+             ngControl="otherContactPersonPosition"
+             placeholder="Functie persoana de contact"
+             autofocus/>
+      <input type="text"
+             ngControl="otherContactPersonEmail"
+             placeholder="Email persoana de contact"
+             autofocus/>
+
+      <div><h2>Aplic la una dintre companiile partenere</h2></div>
+
+
+      <button type="submit"
+              [disabled]="!profileForm.valid">
+        Register
+      </button>
+    </form>
   </div>
 </div>

@@ -16,6 +16,8 @@ export class AuthService {
      * Otherwise returns 403
      */
     static isAuthenticated() {
+
+
         return compose()
         // Validate jwt
             .use(function (req, res, next) {
@@ -30,7 +32,6 @@ export class AuthService {
                 User.findById(req.user._id, function (err, user) {
                     if (err) return next(err);
                     if (!user) return res.status(200).send('Unauthorized');
-
                     req.user = user;
                     next();
                 });

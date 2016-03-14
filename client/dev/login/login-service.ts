@@ -8,6 +8,7 @@ import {Http, Headers} from 'angular2/http';
 @Injectable()
 export default class LoginService {
     static ENDPOINT:string = '/auth/local';
+    static USER_ENDPOINT:string = '/auth/local';
 
     constructor(private _http:Http) {
     }
@@ -23,6 +24,12 @@ export default class LoginService {
 
         return this._http
             .post(LoginService.ENDPOINT, creds, {headers})
+            .map(res => res.json())
+    }
+
+    getUser(token:string):Observable<any> {
+        return this._http
+            .get("/user/me?access_token=" + token)
             .map(res => res.json())
     }
 }

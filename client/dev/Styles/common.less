@@ -75,7 +75,7 @@ a, a:hover {
 
   &:hover {
     background: @secondary;
-    border: 1px solid  @secondary;
+    border: 1px solid @secondary;
   }
 
 }
@@ -88,3 +88,18 @@ a, a:hover {
   display: none;
 }
 
+.arrow-down {
+  width: 20px;
+  height: 20px;
+  background-image: url("../public/img/arrows.png");
+  background-size: cover;
+}
+
+.arrow-up {
+  width: 20px;
+  height: 20px;
+  background-image: url("../public/img/arrows.png");
+  background-size: cover;
+  transform: rotate(180deg);
+  transition: transform 0.5s ease-in;
+}

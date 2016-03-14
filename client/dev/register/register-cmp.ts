@@ -12,8 +12,12 @@ import {
     ControlGroup,
     Control
 } from 'angular2/common';
+import{
+    Router
+} from 'angular2/router';
 
 import {RegisterService} from './register-service';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 @Component({
     selector: 'register-cmp',
@@ -24,9 +28,9 @@ export class RegisterCmp implements OnInit {
     registerForm:ControlGroup;
     registerMessage:string;
 
-    constructor(@Inject(FormBuilder) fb:FormBuilder, private registerService:RegisterService) {
+    constructor(@Inject(FormBuilder) fb:FormBuilder, private registerService:RegisterService, private router:Router) {
         this.registerForm = fb.group({
-            firstName: ["", Validators.required],
+            isHired: ["", Validators.required],
             lastName: ["", Validators.required],
             studentID: ["", Validators.required],
             email: ["", Validators.required],
@@ -56,13 +60,17 @@ export class RegisterCmp implements OnInit {
                             console.log('Authentication');
                             console.log(data);
                             if (data.message) {
-                                this.registerMessage = data.message;
+                                this.registerMessage = "Numarul matricol sau emailul sunt deja folosite!"
                             }
                             else {
-                                document.cookie = "ppt=" + data.token;
+                                Cookie.setCookie('ppt', data.token, 30, "/");
+                                this.router.navigateByUrl('/profile/');
                             }
                         },
-                        err => console.log(err.json().message),
+                        err => {
+                            this.registerMessage = "Numarul matricol sau emailul sunt deja folosite!"
+                            console.log(err.json().message)
+                        },
                         () => console.log('Authentication Complete')
                     );
             }

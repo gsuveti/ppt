@@ -9,4 +9,11 @@ export class CompanyController {
             res.status(200).json(companies);
         });
     };
+
+    static getAllNoPrograms = function (req, res) {
+        Company.find({}).exec(function (err, companies) {
+            if (err) return res.status(500).send(err);
+            res.status(200).json(companies);
+        });
+    };
 }

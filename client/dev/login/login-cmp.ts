@@ -5,6 +5,10 @@ import {
     OnInit
 } from 'angular2/core';
 
+import{
+    Router
+} from 'angular2/router';
+
 import {HTTP_PROVIDERS} from 'angular2/http';
 import LoginService from './login-service';
 
@@ -14,6 +18,8 @@ import {
     ControlGroup,
     Control
 } from 'angular2/common';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
+
 
 @Component({
     selector: 'login-cmp',
@@ -24,7 +30,7 @@ export class LoginCmp implements OnInit {
     loginForm:ControlGroup;
     loginMessage:string;
 
-    constructor(@Inject(FormBuilder) fb:FormBuilder, private loginService:LoginService) {
+    constructor(@Inject(FormBuilder) fb:FormBuilder, private loginService:LoginService, private router:Router) {
         this.loginForm = fb.group({
             email: ["", Validators.required],
             password: ["", Validators.compose([Validators.minLength(8), Validators.required])]
@@ -49,7 +55,8 @@ export class LoginCmp implements OnInit {
                         this.loginMessage = data.message;
                     }
                     else {
-                        document.cookie = "ppt=" + data.token;
+                        Cookie.setCookie('ppt', data.token, 30, "/");
+                        this.router.navigateByUrl('/profile/');
                     }
                 },
                 err => console.log(err.json().message),

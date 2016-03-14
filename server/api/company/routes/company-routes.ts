@@ -16,6 +16,10 @@ export class CompanyRoutes {
             .route('/')
             .get(CompanyController.getAll);
 
+        router
+            .route('/light')
+            .get(CompanyController.getAllNoPrograms());
+
         //router
         //    .route('/:id')
         //    .get(CompanyController.getById);
