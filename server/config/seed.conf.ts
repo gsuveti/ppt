@@ -363,7 +363,24 @@ export class SeedConfig {
             isPaid: "false"
           }
         ]
-      },
+      },{
+        name: "SAP",
+        description: "SAP este în centrul revoluției tehnologice de astăzi. Ca lider de piațe în domeniul soluțiilor software de business,  SAP ajută companiile de orice dimensiune să diminueze efectele negative ale complexității și generează noi oportunități de creștere și inovare, aflându-se în permanență înaintea competiție.",
+        web: "http://www.nokia.com",
+        summerPracticePrograms: [
+          {
+            name: "SAP Romania – Timisoara",
+            contactPerson: "Mircea Romanitan",
+            contactPersonTitle: "Senior Development Consultant",
+            contactPersonEmail: " mircea.romanitan@sap.com",
+            numberOfStudents: "5",
+            period: "11.07.2016 - 30.09.2016 - 180 ore",
+            description: "Studierea tehnologiilor SAP, participarea la dezvoltarea unor proiecte interne.",
+            requirements: "Cunoașterea a cel puțin uneia dintre următoarele categorii: Limbaje de programare: C++, Java, alte limbaje Object Oriented; Baze de date: Oracle (PLISQL), SQL Server (T-SQL); Programare web: JSP, EJB, HTML/CSS, PHP, XML - nice to have. Engleza fluenta",
+            isPaid: "true"
+          }
+        ]
+      }
     ];
 
     //companies.forEach(company => {
