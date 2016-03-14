@@ -31,6 +31,7 @@
     "morgan": "^1.5.2",
     "newrelic": "^1.18.2",
     "ng2-cookies": "^0.1.4",
+    "ng2-file-upload": "^1.0.0-beta.1",
     "nodemailer": "^2.3.0",
     "passport": "^0.3.2",
     "passport-local": "^1.0.0",

@@ -17,4 +17,10 @@ export default class AboutService {
       .get(AboutService.ENDPOINT)
       .map((r) => r.json());
   }
+
+  getCompaniesLight():Observable<any> {
+    return this._http
+        .get(AboutService.ENDPOINT+"/light")
+        .map((r) => r.json());
+  }
 }

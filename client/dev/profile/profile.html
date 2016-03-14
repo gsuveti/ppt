@@ -7,82 +7,91 @@
     <p>{{user.studentID}}</p>
 
 
-    <form class="form-group container"
-          [ngFormModel]="profileForm"
-          (submit)="saveProfile()">
-
-
-      <div><h2>Sunt angajat</h2>
-        <button class="arrow-down" *ngClass="isHired()"
-                (click)="optionToogle('hired')"></button>
-        <button class="arrow-up" *ngClass="isHired()"></button>
-      </div>
+    <div><h2>Sunt angajat</h2>
+      <button class="arrow-down" *ngIf="option != 'hired'"
+              (click)="optionToggle('hired')"></button>
+      <button class="arrow-up" *ngIf="option == 'hired'" (click)="optionToggle('')"></button>
+    </div>
+    <div *ngIf="option == 'hired'">
       <input type="text"
-             ngControl="selfCompany"
+             [(ngModel)]="model.selfCompany"
              placeholder="Prenume"
              autofocus/>
       <input type="text"
-             ngControl="selfCompanyAddress"
+             [(ngModel)]="model.selfCompanyAddress"
              placeholder="Prenume"
              autofocus/>
       <input type="text"
-             ngControl="selfContactPerson"
+             [(ngModel)]="model.selfContactPerson"
              placeholder="Nume persoana de contact"
              autofocus/>
       <input type="text"
-             ngControl="selfContactPersonEmail"
+             [(ngModel)]="model.selfContactPersonEmail"
              placeholder="Email persoana de contact"
              autofocus/>
+    </div>
 
-      <div><h2>Solicit loc de pratica propus de mine (din domeniul IT&C)</h2></div>
+    <div><h2>Solicit loc de pratica propus de mine (din domeniul IT&C)</h2>
+      <button class="arrow-down" *ngIf="option != 'self'"
+              (click)="optionToggle('self')"></button>
+      <button class="arrow-up" *ngIf="option == 'self'" (click)="optionToggle('')"></button>
+    </div>
 
+    <div *ngIf="option == 'self'">
       <input type="text"
-             ngControl="selfCompany"
+             [(ngModel)]="model.selfCompany"
              placeholder="Prenume"
              autofocus/>
       <input type="text"
-             ngControl="selfCompanyAddress"
+             [(ngModel)]="model.selfCompanyAddress"
              placeholder="Prenume"
              autofocus/>
       <input type="text"
-             ngControl="selfContactPerson"
+             [(ngModel)]="model.selfContactPerson"
              placeholder="Nume persoana de contact"
              autofocus/>
       <input type="text"
-             ngControl="selfContactPersonPosition"
+             [(ngModel)]="model.selfContactPersonPosition"
              placeholder="Functie persoana de contact"
              autofocus/>
       <input type="text"
-             ngControl="selfContactPersonEmail"
+             [(ngModel)]="model.selfContactPersonEmail"
              placeholder="Email persoana de contact"
              autofocus/>
-
-      <div><h2>Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS)</h2></div>
-
+    </div>
+    <div><h2>Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS)</h2>
+      <button class="arrow-down" *ngIf="option != 'other'"
+              (click)="optionToggle('other')"></button>
+      <button class="arrow-up" *ngIf="option == 'other'" (click)="optionToggle('')"></button>
+    </div>
+    <div *ngIf="option == 'other'">
       <input type="text"
-             ngControl="otherSituation"
+             [(ngModel)]="model.otherSituation"
              placeholder="Situatie"
              autofocus/>
       <input type="text"
-             ngControl="otherContactPerson"
+             [(ngModel)]="model.otherContactPerson"
              placeholder="Nume persoana de contact"
              autofocus/>
       <input type="text"
-             ngControl="otherContactPersonPosition"
+             [(ngModel)]="model.otherContactPersonPosition"
              placeholder="Functie persoana de contact"
              autofocus/>
       <input type="text"
-             ngControl="otherContactPersonEmail"
+             [(ngModel)]="model.otherContactPersonEmail"
              placeholder="Email persoana de contact"
              autofocus/>
-
-      <div><h2>Aplic la una dintre companiile partenere</h2></div>
-
-
-      <button type="submit"
-              [disabled]="!profileForm.valid">
-        Register
-      </button>
-    </form>
+    </div>
+    <div><h2>Aplic la una dintre companiile partenere</h2>
+      <button class="arrow-down" *ngIf="option != 'company'"
+              (click)="optionToggle('company')"></button>
+      <button class="arrow-up" *ngIf="option == 'company'" (click)="optionToggle('')"></button>
+    </div>
+    <div *ngIf="option == 'company'">
+      <div *ngFor="#company of companies">
+        <div>{{company.name}}</div>
+      </div>
+    </div>
+    <button (click)="saveProfile()"></button>
   </div>
 </div>
