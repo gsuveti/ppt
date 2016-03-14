@@ -48,34 +48,47 @@
     </div>
 
 
-    <div><h2>Solicit loc de pratica propus de mine (din domeniul IT&C)</h2>
-      <button class="arrow-down" *ngIf="option != 'self'"
-              (click)="optionToggle('self')"></button>
-      <button class="arrow-up" *ngIf="option == 'self'" (click)="optionToggle('')"></button>
+    <div class="btn-group-vertical form-accordion" role="group">
+      <div class="btn btn-default">
+        <button class="toogle-button btn btn-default" *ngIf="option != 'self'" (click)="optionToggle('self')">
+          <h4 class="pull-left">Solicit loc de pratica propus de mine (din domeniul IT&C)</h4>
+          <span class="arrow-down pull-right">  </span>
+        </button>
+        <button class="toogle-button btn btn-default" *ngIf="option == 'self'" (click)="optionToggle('')">
+          <h4 class="pull-left">Solicit loc de pratica propus de mine (din domeniul IT&C)</h4>
+          <span class="arrow-up pull-right">  </span>
+        </button>
+      </div>
+
+      <div *ngIf="option == 'self'" class="btn btn-default no-btn input-group">
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.selfCompany"
+               placeholder="Nume"
+               autofocus/>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.selfCompanyAddress"
+               placeholder="Adresa"
+               autofocus/>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.selfContactPerson"
+               placeholder="Nume persoana de contact"
+               autofocus/>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.selfContactPersonEmail"
+               placeholder="Email persoana de contact"
+               autofocus/>
+
+        <button class="btn btn-custom" (click)="saveProfile()"> Trimite </button>
+
+      </div>
+
     </div>
 
-    <div *ngIf="option == 'self'">
-      <input type="text"
-             [(ngModel)]="model.selfCompany"
-             placeholder="Prenume"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.selfCompanyAddress"
-             placeholder="Prenume"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.selfContactPerson"
-             placeholder="Nume persoana de contact"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.selfContactPersonPosition"
-             placeholder="Functie persoana de contact"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.selfContactPersonEmail"
-             placeholder="Email persoana de contact"
-             autofocus/>
-    </div>
+
     <div><h2>Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS)</h2>
       <button class="arrow-down" *ngIf="option != 'other'"
               (click)="optionToggle('other')"></button>
