@@ -162,7 +162,9 @@
       <div *ngIf="option == 'company'" class="panel-body ">
 
         <div *ngFor="#company of companies">
-          <div>{{company.name}}</div>
+          <div class="col-xs-12 col-sm-6 col-md-4">
+           <div class="button button-primary " [ngClass]="{active:checkCompanies[company.name]}"  (click)="toggleCompany(company.name)">{{company.name}}</div>
+          </div>
         </div>
 
 

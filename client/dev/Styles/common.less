@@ -60,6 +60,8 @@ a, a:hover {
   justify-content: center;
   float: left;
   transition: background 0.2s ease-in;
+  cursor: pointer;
+
 
   &:hover {
     background: @secondary;
@@ -76,6 +78,20 @@ a, a:hover {
   &:hover {
     background: @secondary;
     border: 1px solid @secondary;
+  }
+
+}
+
+.button-primary {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid @primary;
+  color: @primary;
+
+
+  &:hover {
+    background: @primary;
+    border: 1px solid @primary;
+    color: @white;
   }
 
 }
