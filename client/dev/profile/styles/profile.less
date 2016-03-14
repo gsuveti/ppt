@@ -1,6 +1,16 @@
 @import url('../../styles/var');
 
 
+.profile-header{
+  background: @primary;
+  color: @white;
+  margin-bottom: @margin-large;
+
+  p{
+    color: @white;;
+  }
+}
+
 .panel-custom {
   border-color: @primary;
   border-radius: 0px;
@@ -23,8 +33,7 @@
   color: @secondary;
 }
 
-.form-accordion {
-  width: 100%;
+
 
   .arrow-up, .arrow-down {
     margin-top: @margin-small;
@@ -58,4 +67,19 @@
     color: @white;
   }
 
+.menu-profile {
+  .toogle-button{
+    border: 1px solid @primary;
+    margin-bottom: 10px;
+    cursor: pointer;
+    transition: background 0.2s ease-in;
+
+
+    &:hover {
+      background: @primary;
+      border: 1px solid @primary;
+      color: @white;
+    }
+
+  }
 }

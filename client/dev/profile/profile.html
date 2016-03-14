@@ -1,18 +1,54 @@
-<div class="wrapper" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+<div class="wrapper profile-header">
   <div class="content">
     <h3>Profile</h3>
-    <p>{{user.firstName}}</p>
-    <p>{{user.email}}</p>
-    <p>{{user.firstName}}</p>
-    <p>{{user.studentID}}</p>
 
 
-    <div *ngIf="option == '' || option == 'hired'" class="panel panel-custom form-accordion" role="group">
-      <div class=" panel-heading">
-        <button class="toogle-button" *ngIf="option != 'hired'" (click)="optionToggle('hired')">
-          <h4 class="pull-left">Sunt angajat</h4>
-          <span class="arrow-down pull-right">  </span>
+    <p>Prenume: {{user.firstName}}</p>
+    <p>Nume: {{user.lastName}}</p>
+    <p>Mail: {{user.email}}</p>
+    <p>Nr. Matricol: {{user.studentID}}</p>
+    <div>
+      <div class="pull-left">
+        <button class="button button-white" (click)="logout()">
+          Logout
         </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="wrapper">
+  <div class="content">
+
+    <div *ngIf="option == ''" class="menu-profile">
+      <button class="toogle-button" *ngIf="option != 'hired'" (click)="optionToggle('hired')">
+        <h4 class="pull-left">Sunt angajat</h4>
+        <span class="arrow-down pull-right">  </span>
+      </button>
+
+      <button class="toogle-button " *ngIf="option != 'self'" (click)="optionToggle('self')">
+        <h4 class="pull-left">Solicit loc de pratica propus de mine (din domeniul IT&C)</h4>
+        <span class="arrow-down pull-right">  </span>
+      </button>
+
+      <button class="toogle-button" *ngIf="option != 'other'" (click)="optionToggle('other')">
+        <h4 class="pull-left">Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC
+          LABS)</h4>
+        <span class="arrow-down pull-right">  </span>
+      </button>
+
+      <button class="toogle-button " *ngIf="option != 'company'" (click)="optionToggle('company')">
+        <h4 class="pull-left">Aplic la una dintre companiile partenere</h4>
+        <span class="arrow-down pull-right">  </span>
+      </button>
+
+    </div>
+
+
+    <div *ngIf="option == 'hired'" class="panel panel-custom form-accordion" role="group">
+      <div class=" panel-heading">
+
         <button class="toogle-button" *ngIf="option == 'hired'" (click)="optionToggle('')">
           <div class="pull-left">
             <h4> Sunt angajat </h4>
@@ -23,7 +59,7 @@
         </button>
       </div>
 
-      <div *ngIf="option == 'hired'" class="panel-body ">
+      <div class="panel-body ">
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfCompany"
@@ -52,12 +88,9 @@
     </div>
 
 
-    <div *ngIf="option == ''  || option == 'self'" class="panel panel-custom form-accordion" role="group">
+    <div *ngIf="option == 'self'" class="panel panel-custom form-accordion" role="group">
       <div class=" panel-heading">
-        <button class="toogle-button " *ngIf="option != 'self'" (click)="optionToggle('self')">
-          <h4 class="pull-left">Solicit loc de pratica propus de mine (din domeniul IT&C)</h4>
-          <span class="arrow-down pull-right">  </span>
-        </button>
+
         <button class="toogle-button" *ngIf="option == 'self'" (click)="optionToggle('')">
           <div class="pull-left">
             <h4> Solicit loc de pratica propus de mine (din domeniul IT&C) </h4>
@@ -68,7 +101,7 @@
         </button>
       </div>
 
-      <div *ngIf="option == 'self'" class="panel-body ">
+      <div class="panel-body ">
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfCompany"
@@ -97,13 +130,9 @@
     </div>
 
 
-    <div *ngIf="option == ''  || option == 'other'" class="panel panel-custom form-accordion" role="group">
+    <div *ngIf="option == 'other'" class="panel panel-custom form-accordion" role="group">
       <div class=" panel-heading ">
-        <button class="toogle-button" *ngIf="option != 'other'" (click)="optionToggle('other')">
-          <h4 class="pull-left">Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC
-            LABS)</h4>
-          <span class="arrow-down pull-right">  </span>
-        </button>
+
         <button class="toogle-button" *ngIf="option == 'other'" (click)="optionToggle('')">
 
           <div class="pull-left">
@@ -115,7 +144,7 @@
         </button>
       </div>
 
-      <div *ngIf="option == 'other'" class="panel-body ">
+      <div class="panel-body ">
         <input type="text"
                class="form-control"
                [(ngModel)]="model.otherCompany"
@@ -144,12 +173,9 @@
     </div>
 
 
-    <div *ngIf="option == ''  || option == 'company'" class="panel panel-custom form-accordion" role="group">
+    <div *ngIf="option == 'company'" class="panel panel-custom form-accordion" role="group">
       <div class=" panel-heading">
-        <button class="toogle-button " *ngIf="option != 'company'" (click)="optionToggle('company')">
-          <h4 class="pull-left">Aplic la una dintre companiile partenere</h4>
-          <span class="arrow-down pull-right">  </span>
-        </button>
+
         <button class="toogle-button " *ngIf="option == 'company'" (click)="optionToggle('')">
           <div class="pull-left">
             <h4> Aplic la una dintre companiile partenere </h4>
@@ -159,11 +185,13 @@
         </button>
       </div>
 
-      <div *ngIf="option == 'company'" class="panel-body ">
+      <div class="panel-body ">
 
         <div *ngFor="#company of companies">
           <div class="col-xs-12 col-sm-6 col-md-4">
-           <div class="button button-primary " [ngClass]="{active:checkCompanies[company.name]}"  (click)="toggleCompany(company.name)">{{company.name}}</div>
+            <div class="button button-primary " [ngClass]="{active:checkCompanies[company.name]}"
+                 (click)="toggleCompany(company.name)">{{company.name}}
+            </div>
           </div>
         </div>
 
