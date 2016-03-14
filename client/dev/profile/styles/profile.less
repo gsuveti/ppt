@@ -1,6 +1,28 @@
 @import url('../../styles/var');
 
 
+.panel-custom {
+  border-color: @primary;
+  border-radius: 0px;
+
+  > .panel-heading {
+    color: @white;
+    background-color: @primary;
+    border-color: @primary;
+    border-radius: 0px;
+  }
+
+  > .panel-body {
+    width: 100%;
+    border-radius: 0px;
+  }
+
+}
+
+.back {
+  color: @secondary;
+}
+
 .form-accordion {
   width: 100%;
 
@@ -10,6 +32,7 @@
 
   .toogle-button {
     width: 100%;
+    text-align: left;
     background: none;
     border: none;
 
@@ -24,18 +47,6 @@
     color: @white;
   }
 
-  .no-btn {
-    background: none;
-    cursor: default;
-    display: flex;
-    flex-direction: column;
 
 
-
-
-    &:hover, &:active, &:focus {
-      background: none;
-      box-shadow: none;
-    }
-  }
 }

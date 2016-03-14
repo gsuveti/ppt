@@ -7,19 +7,23 @@
     <p>{{user.studentID}}</p>
 
 
-    <div class="btn-group-vertical form-accordion" role="group">
-      <div class="btn btn-default">
-        <button class="toogle-button btn btn-default" *ngIf="option != 'hired'" (click)="optionToggle('hired')">
+    <div *ngIf="option == '' || option == 'hired'" class="panel panel-custom form-accordion" role="group">
+      <div class=" panel-heading">
+        <button class="toogle-button" *ngIf="option != 'hired'" (click)="optionToggle('hired')">
           <h4 class="pull-left">Sunt angajat</h4>
           <span class="arrow-down pull-right">  </span>
         </button>
-        <button class="toogle-button btn btn-default" *ngIf="option == 'hired'" (click)="optionToggle('')">
-          <h4 class="pull-left">Sunt angajat</h4>
+        <button class="toogle-button" *ngIf="option == 'hired'" (click)="optionToggle('')">
+          <div class="pull-left">
+            <h4> Sunt angajat </h4>
+            <p class="back"> < Inapoi la lista de optiuni </p>
+
+          </div>
           <span class="arrow-up pull-right">  </span>
         </button>
       </div>
 
-      <div *ngIf="option == 'hired'" class="btn btn-default no-btn input-group">
+      <div *ngIf="option == 'hired'" class="panel-body ">
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfCompany"
@@ -41,26 +45,30 @@
                placeholder="Email persoana de contact"
                autofocus/>
 
-        <button class="btn btn-custom" (click)="saveProfile()"> Trimite </button>
+        <button class="btn btn-custom" (click)="saveProfile()"> Trimite</button>
 
       </div>
 
     </div>
 
 
-    <div class="btn-group-vertical form-accordion" role="group">
-      <div class="btn btn-default">
-        <button class="toogle-button btn btn-default" *ngIf="option != 'self'" (click)="optionToggle('self')">
+    <div *ngIf="option == ''  || option == 'self'" class="panel panel-custom form-accordion" role="group">
+      <div class=" panel-heading">
+        <button class="toogle-button " *ngIf="option != 'self'" (click)="optionToggle('self')">
           <h4 class="pull-left">Solicit loc de pratica propus de mine (din domeniul IT&C)</h4>
           <span class="arrow-down pull-right">  </span>
         </button>
-        <button class="toogle-button btn btn-default" *ngIf="option == 'self'" (click)="optionToggle('')">
-          <h4 class="pull-left">Solicit loc de pratica propus de mine (din domeniul IT&C)</h4>
+        <button class="toogle-button" *ngIf="option == 'self'" (click)="optionToggle('')">
+          <div class="pull-left">
+            <h4> Solicit loc de pratica propus de mine (din domeniul IT&C) </h4>
+            <p class="back"> < Inapoi la lista de optiuni </p>
+          </div>
+
           <span class="arrow-up pull-right">  </span>
         </button>
       </div>
 
-      <div *ngIf="option == 'self'" class="btn btn-default no-btn input-group">
+      <div *ngIf="option == 'self'" class="panel-body ">
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfCompany"
@@ -82,46 +90,86 @@
                placeholder="Email persoana de contact"
                autofocus/>
 
-        <button class="btn btn-custom" (click)="saveProfile()"> Trimite </button>
+        <button class="btn btn-custom" (click)="saveProfile()"> Trimite</button>
 
       </div>
 
     </div>
 
 
-    <div><h2>Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS)</h2>
-      <button class="arrow-down" *ngIf="option != 'other'"
-              (click)="optionToggle('other')"></button>
-      <button class="arrow-up" *ngIf="option == 'other'" (click)="optionToggle('')"></button>
-    </div>
-    <div *ngIf="option == 'other'">
-      <input type="text"
-             [(ngModel)]="model.otherSituation"
-             placeholder="Situatie"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.otherContactPerson"
-             placeholder="Nume persoana de contact"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.otherContactPersonPosition"
-             placeholder="Functie persoana de contact"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.otherContactPersonEmail"
-             placeholder="Email persoana de contact"
-             autofocus/>
-    </div>
-    <div><h2>Aplic la una dintre companiile partenere</h2>
-      <button class="arrow-down" *ngIf="option != 'company'"
-              (click)="optionToggle('company')"></button>
-      <button class="arrow-up" *ngIf="option == 'company'" (click)="optionToggle('')"></button>
-    </div>
-    <div *ngIf="option == 'company'">
-      <div *ngFor="#company of companies">
-        <div>{{company.name}}</div>
+    <div *ngIf="option == ''  || option == 'other'" class="panel panel-custom form-accordion" role="group">
+      <div class=" panel-heading ">
+        <button class="toogle-button" *ngIf="option != 'other'" (click)="optionToggle('other')">
+          <h4 class="pull-left">Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC
+            LABS)</h4>
+          <span class="arrow-down pull-right">  </span>
+        </button>
+        <button class="toogle-button" *ngIf="option == 'other'" (click)="optionToggle('')">
+
+          <div class="pull-left">
+            <h4> Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS) </h4>
+            <p class="back"> < Inapoi la lista de optiuni </p>
+          </div>
+
+          <span class="arrow-up pull-right">  </span>
+        </button>
       </div>
+
+      <div *ngIf="option == 'other'" class="panel-body ">
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.otherCompany"
+               placeholder="Nume"
+               autofocus/>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.otherCompanyAddress"
+               placeholder="Adresa"
+               autofocus/>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.otherContactPerson"
+               placeholder="Nume persoana de contact"
+               autofocus/>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.otherContactPersonEmail"
+               placeholder="Email persoana de contact"
+               autofocus/>
+
+        <button class="btn btn-custom" (click)="saveProfile()"> Trimite</button>
+
+      </div>
+
     </div>
-    <button (click)="saveProfile()"></button>
+
+
+    <div *ngIf="option == ''  || option == 'company'" class="panel panel-custom form-accordion" role="group">
+      <div class=" panel-heading">
+        <button class="toogle-button " *ngIf="option != 'company'" (click)="optionToggle('company')">
+          <h4 class="pull-left">Aplic la una dintre companiile partenere</h4>
+          <span class="arrow-down pull-right">  </span>
+        </button>
+        <button class="toogle-button " *ngIf="option == 'company'" (click)="optionToggle('')">
+          <div class="pull-left">
+            <h4> Aplic la una dintre companiile partenere </h4>
+            <p class="back"> < Inapoi la lista de optiuni </p>
+          </div>
+          <span class="arrow-up pull-right">  </span>
+        </button>
+      </div>
+
+      <div *ngIf="option == 'company'" class="panel-body ">
+
+        <div *ngFor="#company of companies">
+          <div>{{company.name}}</div>
+        </div>
+
+
+      </div>
+
+    </div>
+
+
   </div>
 </div>
