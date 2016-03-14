@@ -1,13 +1,11 @@
 <div class="wrapper banner">
   <div class="content">
-    <h1> Practica AC </h1>
-
     <p> Cauți un stagiu de practică? Universitatea  Politehnica Timișoara în colaborare cu Liga AC au găsit pentru tine
       cele mai bune oferte de practică.</p>
     <p> E simplu! Citește propunerile firmelor colaboratoare și aplică la locul de practică care ți-a stârnit
       interesul. </p>
 
-    <a class="button button-white" href="/about">Inscrie-te</a>
+    <a class="button button-white" href="/register">Inscrie-te</a>
 
 
   </div>
@@ -100,12 +98,10 @@
   <div class="content">
     <h1> Companii partenere </h1>
 
-    <div class="" *ngFor="#company of companies">
-      <a class="button button-white" (click)="openCompanyModal(company)">
+      <a  *ngFor="#company of companies" class="button button-white" (click)="openCompanyModal(company)">
         <h1>{{company.name}}</h1>
         <p> Numar laboratoare: {{company.summerPracticePrograms.length}} </p>
       </a>
-    </div>
   </div>
 </div>
 

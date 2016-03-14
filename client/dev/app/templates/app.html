@@ -1,8 +1,18 @@
-<div>
-  <a [routerLink]="['About']">About</a>
-  <a [routerLink]="['Login']">Login</a>
-  <a [routerLink]="['Register']">Register</a>
-  <a [routerLink]="['Profile']">Profile</a>
+<div class="app">
+  <div class="menu">
+    <div class="menu-content ">
+      <div class=" pull-right">
+        <a [routerLink]="['About']">About</a>
+        <a [routerLink]="['Login']">Login</a>
+        <a [routerLink]="['Register']">Register</a>
+        <a [routerLink]="['Profile']">Profile</a>
+      </div>
+
+      <div class=" pull-left">
+        <h1><a [routerLink]="['About']">practica ac</a></h1>
+      </div>
+    </div>
+  </div>
   <router-outlet></router-outlet>
 
 </div>

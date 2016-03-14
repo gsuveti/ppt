@@ -3,6 +3,7 @@
 .banner {
   background: url('../../public/img/bg_ppt_1920.png') repeat-x fixed top center;
   color: @white;
+  padding-top: 2 * @margin-large;
 
   h1 {
     color: @white;
@@ -11,12 +12,18 @@
   p {
     width: 100%;
     max-width: 450px;
-    opacity: 0.9;
+    opacity: 1;
+    font-weight: 400;
+    font-size: 20px;
     color: @white;
 
     @media (max-width: @bootstrapSmCutoff) {
       width: 100%;
     }
+  }
+
+  .button-white {
+    font-size: 18px;
   }
 
 }
@@ -167,7 +174,7 @@
         width: 70px;
         background: @secondary;
         position: absolute;
-        top: 35px;
+        bottom: -10px;
         left: 0px;
       }
     }
@@ -181,6 +188,47 @@
   p {
     color: @white;
     opacity: 0.8;
+  }
+
+
+  .button-white {
+    width: 23% !important;
+    margin: @margin-small 1%;
+    padding: @margin-small;
+    h1{
+      font-size: 18px;
+      margin: 0px;
+      margin-bottom: @margin-medium;
+      padding: 0px;
+    }
+  }
+
+  @media (max-width: @bootstrapSmCutoff) {
+    .button-white {
+      width: 46% !important;
+      margin: @margin-small 2%;
+      padding: @margin-small;
+      h1{
+        font-size: 18px;
+        margin: 0px;
+        margin-bottom: @margin-medium;
+        padding: 0px;
+      }
+    }
+  }
+
+  @media (max-width: @bootstrapMdCutoff) {
+    .button-white {
+      width: 31% !important;
+      margin: @margin-small 1%;
+      padding: @margin-small;
+      h1{
+        font-size: 18px;
+        margin: 0px;
+        margin-bottom: @margin-medium;
+        padding: 0px;
+      }
+    }
   }
 
 }

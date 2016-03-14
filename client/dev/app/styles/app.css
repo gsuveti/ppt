@@ -1,0 +1,39 @@
+.app {
+  margin-top: 50px;
+}
+.menu {
+  display: block;
+  width: 100%;
+  height: 60px;
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  background: #fff;
+  z-index: 5;
+  border-bottom: 1px solid #ddd;
+}
+.menu .menu-content {
+  width: 100%;
+  max-width: 1200px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.menu .menu-content a {
+  padding: 20px 10px;
+  display: inline-block;
+  color: #32547e;
+  transition: all 0.5s ease-in;
+}
+.menu .menu-content a:hover {
+  transition: all 0.5s ease-in;
+  background: #32547e;
+  color: #fff;
+}
+.menu .menu-content h1 {
+  font-size: 25px;
+  margin: 13px 0px;
+}
+.menu .menu-content h1 a {
+  padding: 0px;
+  margin: 0px;
+}
