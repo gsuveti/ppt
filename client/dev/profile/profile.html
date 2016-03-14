@@ -1,35 +1,52 @@
 <div class="wrapper" xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
   <div class="content">
-    <h1>Profile</h1>
+    <h3>Profile</h3>
     <p>{{user.firstName}}</p>
     <p>{{user.email}}</p>
     <p>{{user.firstName}}</p>
     <p>{{user.studentID}}</p>
 
 
-    <div><h2>Sunt angajat</h2>
-      <button class="arrow-down" *ngIf="option != 'hired'"
-              (click)="optionToggle('hired')"></button>
-      <button class="arrow-up" *ngIf="option == 'hired'" (click)="optionToggle('')"></button>
+    <div class="btn-group-vertical form-accordion" role="group">
+      <div class="btn btn-default">
+        <button class="toogle-button btn btn-default" *ngIf="option != 'hired'" (click)="optionToggle('hired')">
+          <h4 class="pull-left">Sunt angajat</h4>
+          <span class="arrow-down pull-right">  </span>
+        </button>
+        <button class="toogle-button btn btn-default" *ngIf="option == 'hired'" (click)="optionToggle('')">
+          <h4 class="pull-left">Sunt angajat</h4>
+          <span class="arrow-up pull-right">  </span>
+        </button>
+      </div>
+
+      <div *ngIf="option == 'hired'" class="btn btn-default no-btn input-group">
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.selfCompany"
+               placeholder="Nume"
+               autofocus/>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.selfCompanyAddress"
+               placeholder="Adresa"
+               autofocus/>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.selfContactPerson"
+               placeholder="Nume persoana de contact"
+               autofocus/>
+        <input type="text"
+               class="form-control"
+               [(ngModel)]="model.selfContactPersonEmail"
+               placeholder="Email persoana de contact"
+               autofocus/>
+
+        <button class="btn btn-custom" (click)="saveProfile()"> Trimite </button>
+
+      </div>
+
     </div>
-    <div *ngIf="option == 'hired'">
-      <input type="text"
-             [(ngModel)]="model.selfCompany"
-             placeholder="Prenume"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.selfCompanyAddress"
-             placeholder="Prenume"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.selfContactPerson"
-             placeholder="Nume persoana de contact"
-             autofocus/>
-      <input type="text"
-             [(ngModel)]="model.selfContactPersonEmail"
-             placeholder="Email persoana de contact"
-             autofocus/>
-    </div>
+
 
     <div><h2>Solicit loc de pratica propus de mine (din domeniul IT&C)</h2>
       <button class="arrow-down" *ngIf="option != 'self'"

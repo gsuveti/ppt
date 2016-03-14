@@ -1,0 +1,41 @@
+@import url('../../styles/var');
+
+
+.form-accordion {
+  width: 100%;
+
+  .arrow-up, .arrow-down {
+    margin-top: @margin-small;
+  }
+
+  .toogle-button {
+    width: 100%;
+    background: none;
+    border: none;
+
+  }
+
+  .form-control {
+    margin: @margin-small 0px;
+  }
+
+  .btn-custom {
+    background: @primary !important;
+    color: @white;
+  }
+
+  .no-btn {
+    background: none;
+    cursor: default;
+    display: flex;
+    flex-direction: column;
+
+
+
+
+    &:hover, &:active, &:focus {
+      background: none;
+      box-shadow: none;
+    }
+  }
+}

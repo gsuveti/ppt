@@ -21,7 +21,8 @@ import AboutService from '../about/components/about-service';
 @Component({
     selector: 'profile-cmp',
     templateUrl: 'client/dev/profile/profile.html',
-    providers: [HTTP_PROVIDERS, LoginService, AboutService],
+  styleUrls: ['client/dev/profile/styles/profile.css'],
+  providers: [HTTP_PROVIDERS, LoginService, AboutService],
     directives: [CORE_DIRECTIVES]
 })
 export class ProfileCmp implements OnInit {
