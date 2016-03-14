@@ -32,4 +32,18 @@ export default class LoginService {
             .get("/user/me?access_token=" + token)
             .map(res => res.json())
     }
+
+    sendCV(id, file:File):Observable<any> {
+        let data = JSON.stringify({
+            name: id,
+            file: file
+        });
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this._http
+            .post(LoginService.ENDPOINT, data, {headers})
+            .map(res => res.json())
+    }
 }

@@ -28,6 +28,10 @@ export class UserRoutes {
             .route('/')
             .post(UserController.create);
 
+        router
+            .route('/cv')
+            .post(UserController.saveCV);
+
         return router;
     }
 }

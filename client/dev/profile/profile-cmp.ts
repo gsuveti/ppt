@@ -1,93 +1,144 @@
 import {
-  Component,
-  View,
-  Inject,
-  OnInit,
-  Input
+    Component,
+    View,
+    Inject,
+    OnInit,
+    Input
 } from 'angular2/core';
 
 import {
-  Validators,
-  FormBuilder,
-  ControlGroup,
-  Control,
-  CORE_DIRECTIVES
+    Validators,
+    FormBuilder,
+    ControlGroup,
+    Control,
+    CORE_DIRECTIVES,
+    FORM_DIRECTIVES,
+    NgClass,
+    NgStyle
 } from 'angular2/common';
+
+import{
+    Router
+} from 'angular2/router';
+
 import {HTTP_PROVIDERS} from 'angular2/http';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 import LoginService from '../login/login-service';
 import AboutService from '../about/components/about-service';
 
 @Component({
-  selector: 'profile-cmp',
-  templateUrl: 'client/dev/profile/profile.html',
-  styleUrls: ['client/dev/profile/styles/profile.css'],
-  providers: [HTTP_PROVIDERS, LoginService, AboutService],
-  directives: [CORE_DIRECTIVES]
+    selector: 'profile-cmp',
+    templateUrl: 'client/dev/profile/profile.html',
+    providers: [HTTP_PROVIDERS, LoginService, AboutService],
+    styleUrls: ['client/dev/profile/styles/profile.css'],
+    directives: [CORE_DIRECTIVES, NgClass, NgStyle, FORM_DIRECTIVES]
 })
 export class ProfileCmp implements OnInit {
-  companies = [{
-    name: null,
-    description: null,
-    web: null
-  }];
-  option = '';
-  token:string;
-  user = {};
-  model = {};
+    CV_URL = "/user/cv"
+    companies = [{
+        name: null,
+        description: null,
+        web: null
+    }];
+    option = '';
+    token:string;
+    user = {};
+    model = {};
+    filesToUpload:Array<File>;
+    checkCompanies = [];
 
-  checkCompanies = [];
+    constructor(private loginService:LoginService, private aboutService:AboutService, private router:Router) {
+        console.log("ProfileCmp");
+    }
 
-  constructor(private loginService:LoginService, private aboutService:AboutService) {
-    console.log("ProfileCmp");
-  }
+    ngOnInit() {
+        var token = Cookie.getCookie('ppt');
+        if (token) {
+            this.loginService.getUser(token)
+                .subscribe(
+                    data => {
+                        console.log('Authentication');
+                        console.log(data);
+                        if (!data.message) {
+                            this.user = data;
+                        }
+                        else {
+                            this.router.navigateByUrl('/login');
+                        }
+                    },
+                    err => {
+                        console.log(err.json().message);
+                        this.router.navigateByUrl('/login');
+                    },
+                    () => console.log('Profile Fetch Complete')
+                );
+        } else {
+            this.router.navigateByUrl('/login');
+        }
+        this.aboutService.getCompaniesLight()
+            .subscribe(
+                data => {
+                    console.log(data);
+                    if (!data.message) {
+                        this.companies = data;
+                        for (let i = 0; i < this.companies.length; i++) {
+                            this.checkCompanies[this.companies[i].name] = false;
+                        }
+                    }
+                },
+                err => {
+                    console.log(err.json().message);
+                },
+                () => console.log('Companies Fetch Complete')
+            );
+    }
 
-  ngOnInit() {
-    this.token = Cookie.getCookie('ppt');
-    this.loginService.getUser(this.token)
-      .subscribe(
-        data => {
-          console.log('Authentication');
-          console.log(data);
-          if (!data.message) {
-            this.user = data;
-          }
-        },
-        err => console.log(err.json().message),
-        () => console.log('Authentication Complete')
-      );
 
-    this.aboutService.getCompaniesLight()
-      .subscribe(
-        data => {
-          console.log(data);
-          if (!data.message) {
-            this.companies = data;
+    fileChangeEvent(fileInput:any) {
+        this.filesToUpload = <Array<File>> fileInput.target.files;
+    }
 
-            for(let i = 0; i < this.companies.length; i++ ){
-              this.checkCompanies[this.companies[i].name] = false;
+    optionToggle(option) {
+        console.log(option);
+        this.option = option;
 
+
+    }
+
+
+    saveProfile() {
+        console.log(this.model);
+
+        this.upload("/user/cv?id=" + this.user._id, this.filesToUpload);
+    }
+
+    upload(url:string, files:File[]):Promise<any> {
+        return new Promise((resolve, reject) => {
+            let formData:FormData = new FormData(),
+                xhr:XMLHttpRequest = new XMLHttpRequest();
+
+            for (let i = 0; i < files.length; i++) {
+                formData.append(files[i].name, files[i]);
             }
-          }
-        },
-        err => console.log(err.json().message),
-        () => console.log('Authentication Complete')
-      );
-  }
 
-  optionToggle(option) {
-    console.log(option);
-    this.option = option;
-  }
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        resolve(JSON.parse(xhr.response));
+                    } else {
+                        reject(xhr.response);
+                    }
+                }
+            };
 
+            xhr.open('POST', url, true);
+            xhr.send(formData);
+        });
+    }
 
-  saveProfile() {
-    console.log(this.model);
-  }
-
-  toggleCompany(company){
-    this.checkCompanies[company] = !this.checkCompanies[company];
-    console.log(this.checkCompanies);
-  }
+    toggleCompany(company) {
+        this.checkCompanies[company] = !this.checkCompanies[company];
+        console.log(this.checkCompanies);
+    }
 
 }

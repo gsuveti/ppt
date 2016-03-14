@@ -195,11 +195,14 @@
           </div>
         </div>
 
+        Select CV
+        <input type="file" (change)="fileChangeEvent($event)" placeholder="Upload file..."/>
+
+        <button class="btn btn-custom" (click)="saveProfile()"> Trimite</button>
 
       </div>
 
+
     </div>
-
-
   </div>
 </div>

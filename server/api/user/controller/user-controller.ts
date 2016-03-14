@@ -5,10 +5,68 @@ var User = require('../model/user-model');
 var passport = require('passport');
 var serverConstants = require('../../../constants/server');
 var jwt = require('jsonwebtoken');
+var multiparty = require('multiparty');
+var fs = require('fs');
 
 export class UserController {
     static validationError = function (res, err) {
         return res.status(200).json(err);
+    };
+
+    static saveCV = function (req, res) {
+        var form = new multiparty.Form();
+        var attachments = [];
+
+        form.on('part', function (part) {
+            var bufs = [];
+
+            if (!part.filename) { //not a file but a field
+                console.log('got field named ' + part.name);
+                part.resume();
+            }
+
+            if (part.filename) {
+                console.log('got file named ' + part.name);
+                var data = "";
+                part.setEncoding('binary'); //read as binary
+                part.on('data', function (d) {
+                    data = data + d;
+                });
+                part.on('end', function () {
+                    var userId = req.query.id;
+                    User.findById(userId, function (err, user) {
+                        if (!err && user) {
+                            console.log(user.firstName);
+                            user.cv = data;
+                            fs.writeFile(part.name, data, function (err) {
+                                console.log(err);
+                            });
+
+
+                            user.save(function (err, user) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                                console.log(user.firstName);
+                            });
+
+                        } else {
+                            console.log(err);
+                            res.status(200).send('Erroare');
+                        }
+                    });
+
+                    User.findOneAndUpdate(userId, {cv: data});
+                });
+            }
+        });
+
+        form.on('close', function () {
+            res.writeHead(200);
+            res.end("File uploaded successfully!");
+        });
+
+        form.parse(req);
     };
 
     /**
@@ -92,6 +150,13 @@ export class UserController {
         }, '-salt -hashedPassword', function (err, user) { // don't ever give out the password or salt
             if (err) return next(err);
             if (!user) return res.status(401).send('Unauthorized');
+
+
+            fs.writeFile("test-qwerty-image.pdf", user.cv, function (err) {
+                console.log(err);
+            });
+
+
             res.json(user);
         });
     };

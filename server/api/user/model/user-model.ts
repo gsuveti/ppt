@@ -5,7 +5,8 @@ var Schema = mongoose.Schema;
 var crypto = require('crypto');
 
 var UserSchema = new Schema({
-    createdAt: {type: Date, default: Date.now},role: {
+    createdAt: {type: Date, default: Date.now},
+    role: {
         type: String,
         default: 'user'
     },
@@ -13,11 +14,11 @@ var UserSchema = new Schema({
     hashedPassword: String,
     salt: String,
     email: {type: String, lowercase: true},
-    firstName: {type: String, required: true, trim: true},
-    lastName: {type: String, required: true, trim: true},
-    studentID: {type: String, required: true, trim: true},
-
-
+    firstName: {type: String, required: true},
+    lastName: {type: String, required: true},
+    studentID: {type: String, required: true},
+    tes: {type: String},
+    cv: Buffer
 });
 
 /**
