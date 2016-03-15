@@ -33,8 +33,6 @@ var UserSchema = new Schema({
     otherContactPersonPosition: String,
     otherContactPersonEmail: String,
 
-    otherContactPersonEmail: String,
-
     cv: Buffer,
     cvName: String,
 });
