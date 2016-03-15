@@ -2,11 +2,53 @@
   <div class="content">
     <h3>Profile</h3>
 
+    <div *ngIf="!editPersonatInformation">
+      <p>Prenume: {{user.firstName}}</p>
+      <p>Nume: {{user.lastName}}</p>
+      <p>Mail: {{user.email}}</p>
+      <p>Nr. Matricol: {{user.studentID}}</p>
 
-    <p>Prenume: {{user.firstName}}</p>
-    <p>Nume: {{user.lastName}}</p>
-    <p>Mail: {{user.email}}</p>
-    <p>Nr. Matricol: {{user.studentID}}</p>
+      <button class="button button-white" (click)="toggleEditPersonalInformation()">
+        Editeaza
+      </button>
+    </div>
+
+    <div *ngIf="editPersonatInformation">
+      <input type="text"
+             class="form-control"
+             [(ngModel)]="user.firstName"
+             />
+      <input type="text"
+             class="form-control"
+             [(ngModel)]="user.lastName"
+             placeholder="Nume"
+             autofocus/>
+      <input type="text"
+             class="form-control"
+             [(ngModel)]="user.email"
+             placeholder="Email"
+             autofocus/>
+      <input type="text"
+             class="form-control"
+             [(ngModel)]="user.studentID"
+             placeholder="Nr. Matricol"
+             autofocus/>
+  <div class="row">
+    <div class="col-xs-6">
+      <button class="button button-white" (click)="toggleEditPersonalInformation()">
+        Renunta
+      </button>
+    </div>
+    <div class="col-xs-6">
+      <button class="button button-white" (click)="toggleEditPersonalInformation()">
+        Trimite
+      </button>
+    </div>
+  </div>
+
+    </div>
+
+
     <div>
       <div class="pull-left">
         <button class="button button-white" (click)="logout()">
@@ -201,7 +243,7 @@
           </div>
         </div>
         <div class="cv">
-          <p>Select CV</p>
+          <p>Selecteaza CV</p>
           <input type="file" class="btn btn-default" (change)="fileChangeEvent($event)" placeholder="Upload file..."/>
 
         </div>

@@ -46,6 +46,7 @@ export class ProfileCmp implements OnInit {
     model = {};
     filesToUpload:Array<File>;
     checkCompanies = [];
+    editPersonatInformation = false;
 
     constructor(private loginService:LoginService, private aboutService:AboutService, private router:Router) {
         console.log("ProfileCmp");
@@ -176,6 +177,10 @@ export class ProfileCmp implements OnInit {
             this.checkCompanies.push(companyId);
         }
         console.log(this.checkCompanies);
+    }
+
+    toggleEditPersonalInformation(){
+      this.editPersonatInformation = !this.editPersonatInformation;
     }
 
 }
