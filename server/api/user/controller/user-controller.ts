@@ -2,72 +2,85 @@
 
 var nodemailer = require('nodemailer');
 var User = require('../model/user-model');
+var Company = require('../../company/model/company-model');
 var passport = require('passport');
 var serverConstants = require('../../../constants/server');
 var jwt = require('jsonwebtoken');
 var multiparty = require('multiparty');
 var fs = require('fs');
+var busboy = require('connect-busboy'); //middleware for form/file upload
+var path = require('path');     //used for file path
+var fs = require('fs-extra');       //File System - for file manipulation
 
 export class UserController {
     static validationError = function (res, err) {
         return res.status(200).json(err);
     };
 
-    static saveCV = function (req, res) {
-        var form = new multiparty.Form();
-        var attachments = [];
+    static saveNoPractice = function (req, res) {
+        var details = req.body.details;
+        var userId = req.query.id;
 
-        form.on('part', function (part) {
-            var bufs = [];
+        User.findById(userId, function (err, user) {
+            if (err) {
+                return validationError(res, err);
+            } else {
 
-            if (!part.filename) { //not a file but a field
-                console.log('got field named ' + part.name);
-                part.resume();
-            }
+                user.hiredCompany = details.hiredCompany;
+                user.hiredCompanyAddress = details.hiredCompanyAddress;
+                user.hiredContactPerson = details.hiredContactPerson;
+                user.hiredContactPersonEmail = details.hiredContactPersonEmail;
 
-            if (part.filename) {
-                console.log('got file named ' + part.name);
-                var data = "";
-                part.setEncoding('binary'); //read as binary
-                part.on('data', function (d) {
-                    data = data + d;
+                user.selfCompany = details.selfCompany;
+                user.selfCompanyAddress = details.selfCompanyAddress;
+                user.selfContactPerson = details.selfContactPerson;
+                user.selfContactPersonPosition = details.selfContactPersonPosition;
+                user.selfContactPersonEmail = details.selfContactPersonEmail;
+
+                user.otherSituation = details.otherSituation;
+                user.otherContactPerson = details.otherContactPerson;
+                user.otherContactPersonPosition = details.otherContactPersonPosition;
+                user.otherContactPersonEmail = details.otherContactPersonEmail;
+
+                user.save(function (err, user) {
+                    if (err) {
+                        console.log(err);
+                    }
+                    console.log(user.firstName);
                 });
-                part.on('end', function () {
-                    var userId = req.query.id;
-                    User.findById(userId, function (err, user) {
-                        if (!err && user) {
-                            console.log(user.firstName);
-                            user.cv = data;
-                            fs.writeFile(part.name, data, function (err) {
-                                console.log(err);
-                            });
+
+                res.status(200);
+            }
+        });
+    }
 
 
-                            user.save(function (err, user) {
-                                if (err) {
-                                    console.log(err);
-                                }
-                                console.log(user.firstName);
-                            });
+    static savePractice = function (req, res) {
+        var companies = req.body.companies;
+        var userId = req.query.id;
 
-                        } else {
-                            console.log(err);
-                            res.status(200).send('Erroare');
+        console.log(companies);
+        User.findById(userId, function (err, user) {
+            if (!err && user) {
+                Company.find({
+                    '_id': {$in: companies}
+                }, function (err, docs) {
+                    console.log(docs.length);
+                    docs.forEach(function (doc) {
+                        if (doc.users.indexOf(user._id) < 0) {
+                            doc.users.push(user);
                         }
+                        doc.save(function (err, user) {
+                            if (err) {
+                                console.log(err);
+                            }
+                        });
                     });
-
-                    User.findOneAndUpdate(userId, {cv: data});
                 });
             }
         });
-
-        form.on('close', function () {
-            res.writeHead(200);
-            res.end("File uploaded successfully!");
-        });
-
-        form.parse(req);
-    };
+        res.status(200);
+    }
 
     /**
      * Get list of users
@@ -151,11 +164,11 @@ export class UserController {
             if (err) return next(err);
             if (!user) return res.status(401).send('Unauthorized');
 
-
-            fs.writeFile("test-qwerty-image.pdf", user.cv, function (err) {
-                console.log(err);
-            });
-
+            //if (user.cvName) {
+            //    fs.writeFile(user.cvName, user.cv, function (err) {
+            //        console.log(err);
+            //    });
+            //}
 
             res.json(user);
         });

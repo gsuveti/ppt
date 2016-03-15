@@ -17,8 +17,27 @@ var UserSchema = new Schema({
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
     studentID: {type: String, required: true},
-    tes: {type: String},
-    cv: Buffer
+
+    hiredCompany: String,
+    hiredCompanyAddress: String,
+    hiredContactPerson: String,
+    hiredContactPersonEmail: String,
+
+    selfCompany: String,
+    selfCompanyAddress: String,
+    selfContactPerson: String,
+    selfContactPersonPosition: String,
+    selfContactPersonEmail: String,
+
+    otherSituation: String,
+    otherContactPerson: String,
+    otherContactPersonPosition: String,
+    otherContactPersonEmail: String,
+
+    otherContactPersonEmail: String,
+
+    cv: Buffer,
+    cvName: String
 });
 
 /**

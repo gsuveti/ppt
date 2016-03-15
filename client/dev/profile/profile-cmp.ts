@@ -81,9 +81,6 @@ export class ProfileCmp implements OnInit {
                     console.log(data);
                     if (!data.message) {
                         this.companies = data;
-                        for (let i = 0; i < this.companies.length; i++) {
-                            this.checkCompanies[this.companies[i].name] = false;
-                        }
                     }
                 },
                 err => {
@@ -101,15 +98,40 @@ export class ProfileCmp implements OnInit {
     optionToggle(option) {
         console.log(option);
         this.option = option;
-
-
+        this.model = {};
     }
 
 
     saveProfile() {
         console.log(this.model);
-
-        this.upload("/user/cv?id=" + this.user._id, this.filesToUpload);
+        if (this.option == 'other' || this.option == 'self' || this.option == 'hired') {
+            this.loginService.noPractice(this.user._id, this.model)
+                .subscribe(
+                    data => {
+                        console.log(data);
+                        if (!data.message) {
+                            this.companies = data;
+                        }
+                    },
+                    err => {
+                        console.log(err.json().message);
+                    },
+                    () => console.log('Companies Fetch Complete')
+                );
+        }
+        else {
+            this.loginService.practice(this.user._id, this.checkCompanies)
+                .subscribe(
+                    data => {
+                        console.log(data);
+                    },
+                    err => {
+                        console.log(err.json().message);
+                    },
+                    () => console.log('Companies Fetch Complete')
+                );
+            this.upload("/user/cv?id=" + this.user._id, this.filesToUpload);
+        }
     }
 
     upload(url:string, files:File[]):Promise<any> {
@@ -136,8 +158,15 @@ export class ProfileCmp implements OnInit {
         });
     }
 
-    toggleCompany(company) {
-        this.checkCompanies[company] = !this.checkCompanies[company];
+    toggleCompany(companyId) {
+        if (this.checkCompanies.indexOf(companyId) > -1) {
+            var index = this.checkCompanies.indexOf(companyId);
+            if (index > -1) {
+                this.checkCompanies.splice(index, 1);
+            }
+        } else {
+            this.checkCompanies.push(companyId);
+        }
         console.log(this.checkCompanies);
     }
 

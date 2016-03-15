@@ -33,6 +33,34 @@ export default class LoginService {
             .map(res => res.json())
     }
 
+    practice(id, companies):Observable<any> {
+        let data = JSON.stringify({
+            companies: companies
+        });
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this._http
+            .post("/user/practice?id=" + id, data, {headers})
+            .map(res => res.json())
+    }
+
+
+    noPractice(id, details):Observable<any> {
+        let data = JSON.stringify({
+            details: details
+        });
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this._http
+            .post("/user/no-practice?id=" + id, data, {headers})
+            .map(res => res.json())
+    }
+
+
     sendCV(id, file:File):Observable<any> {
         let data = JSON.stringify({
             name: id,

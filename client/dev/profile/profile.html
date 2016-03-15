@@ -62,22 +62,22 @@
       <div class="panel-body ">
         <input type="text"
                class="form-control"
-               [(ngModel)]="model.selfCompany"
+               [(ngModel)]="model.hiredCompany"
                placeholder="Nume"
                autofocus/>
         <input type="text"
                class="form-control"
-               [(ngModel)]="model.selfCompanyAddress"
+               [(ngModel)]="model.hiredCompanyAddress"
                placeholder="Adresa"
                autofocus/>
         <input type="text"
                class="form-control"
-               [(ngModel)]="model.selfContactPerson"
+               [(ngModel)]="model.hiredContactPerson"
                placeholder="Nume persoana de contact"
                autofocus/>
         <input type="text"
                class="form-control"
-               [(ngModel)]="model.selfContactPersonEmail"
+               [(ngModel)]="model.hiredContactPersonEmail"
                placeholder="Email persoana de contact"
                autofocus/>
 
@@ -119,6 +119,11 @@
                autofocus/>
         <input type="text"
                class="form-control"
+               [(ngModel)]="model.selfContactPersonPosition"
+               placeholder="Nume persoana de contact"
+               autofocus/>
+        <input type="text"
+               class="form-control"
                [(ngModel)]="model.selfContactPersonEmail"
                placeholder="Email persoana de contact"
                autofocus/>
@@ -147,17 +152,17 @@
       <div class="panel-body ">
         <input type="text"
                class="form-control"
-               [(ngModel)]="model.otherCompany"
+               [(ngModel)]="model.otherSituation"
                placeholder="Nume"
                autofocus/>
         <input type="text"
                class="form-control"
-               [(ngModel)]="model.otherCompanyAddress"
+               [(ngModel)]="model.otherContactPerson"
                placeholder="Adresa"
                autofocus/>
         <input type="text"
                class="form-control"
-               [(ngModel)]="model.otherContactPerson"
+               [(ngModel)]="model.otherContactPersonPosition"
                placeholder="Nume persoana de contact"
                autofocus/>
         <input type="text"
@@ -189,8 +194,8 @@
 
         <div *ngFor="#company of companies">
           <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="button button-primary " [ngClass]="{active:checkCompanies[company.name]}"
-                 (click)="toggleCompany(company.name)">{{company.name}}
+            <div class="button button-primary " [ngClass]="{active:checkCompanies.indexOf(company._id) > -1}"
+                 (click)="toggleCompany(company._id)">{{company.name}}
             </div>
           </div>
         </div>
