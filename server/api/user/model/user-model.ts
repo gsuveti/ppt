@@ -13,7 +13,6 @@ var UserSchema = new Schema({
     email: {type: String, lowercase: true},
     hashedPassword: String,
     salt: String,
-    email: {type: String, lowercase: true},
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
     studentID: {type: String, required: true},
