@@ -103,6 +103,9 @@ export class ProfileCmp implements OnInit {
 
 
     saveProfile() {
+
+        this.option = "";
+
         console.log(this.model);
         if (this.option == 'other' || this.option == 'self' || this.option == 'hired') {
             this.loginService.noPractice(this.user._id, this.model)

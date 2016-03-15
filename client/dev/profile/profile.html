@@ -191,17 +191,21 @@
       </div>
 
       <div class="panel-body ">
-
-        <div *ngFor="#company of companies">
-          <div class="col-xs-12 col-sm-6 col-md-4">
-            <div class="button button-primary " [ngClass]="{active:checkCompanies.indexOf(company._id) > -1}"
-                 (click)="toggleCompany(company._id)">{{company.name}}
+        <div class="row">
+          <div *ngFor="#company of companies">
+            <div class="col-xs-12 col-sm-6 col-md-4">
+              <div class="button button-primary " [ngClass]="{active:checkCompanies.indexOf(company._id) > -1}"
+                   (click)="toggleCompany(company._id)">{{company.name}}
+              </div>
             </div>
           </div>
         </div>
+        <div class="cv">
+          <p>Select CV</p>
+          <input type="file" class="btn btn-default" (change)="fileChangeEvent($event)" placeholder="Upload file..."/>
 
-        Select CV
-        <input type="file" (change)="fileChangeEvent($event)" placeholder="Upload file..."/>
+        </div>
+
 
         <button class="btn btn-custom" (click)="saveProfile()"> Trimite</button>
 
