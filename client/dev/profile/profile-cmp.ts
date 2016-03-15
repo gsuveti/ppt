@@ -158,6 +158,11 @@ export class ProfileCmp implements OnInit {
         });
     }
 
+    logout() {
+        Cookie.deleteCookie('ppt');
+        this.router.navigateByUrl('/');
+    }
+
     toggleCompany(companyId) {
         if (this.checkCompanies.indexOf(companyId) > -1) {
             var index = this.checkCompanies.indexOf(companyId);

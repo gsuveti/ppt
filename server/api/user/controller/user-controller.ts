@@ -45,11 +45,12 @@ export class UserController {
                 user.save(function (err, user) {
                     if (err) {
                         console.log(err);
+                        res.status(200).send("ERROR");
                     }
                     console.log(user.firstName);
                 });
 
-                res.status(200);
+                res.status(200).send("OK");
             }
         });
     }
@@ -79,7 +80,7 @@ export class UserController {
                 });
             }
         });
-        res.status(200);
+        res.status(200).send("OK");
     }
 
     /**
