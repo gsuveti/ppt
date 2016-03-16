@@ -19,9 +19,10 @@
       <div class="col-sm-4 col-xs-12 col">
         <span class="icon first"></span>
 
-        <p class="about-col">Conform noului plan de învăţământ, studenţii anului II
-          Informatică începând din această vară au de efectuat toată practica în ultima vacanţă studenţească, ceea ce
-          înseamnă 180 ore (6 săpt. x 5 zile x 6 ore ).
+        <p class="about-col">Conform noului plan de învăţământ, studenţii anului II Informatică respectiv studenţii
+          anului III specializărilor inginereşti începând din această vară au de efectuat toată practica în ultima
+          vacanţă studenţească, ceea ce înseamna 180 ore (6 săpt. x 5 zile x 6 ore ) pentru studenţii de la Informatică
+          respectiv 240 ore pentru studenţii specializărilor inginereşti.
         </p>
       </div>
       <div class="col-sm-4 col-xs-12 col">
@@ -98,17 +99,17 @@
   <div class="content">
     <h1> Companii partenere </h1>
 
-      <a  *ngFor="#company of companies" class="button button-white" (click)="openCompanyModal(company)">
-        <h1>{{company.name}}</h1>
-        <p> Numar laboratoare: {{company.summerPracticePrograms.length}} </p>
-      </a>
+    <a *ngFor="#company of companies" class="button button-white" (click)="openCompanyModal(company)">
+      <h1>{{company.name}}</h1>
+      <p> Numar laboratoare: {{company.summerPracticePrograms.length}} </p>
+    </a>
   </div>
 </div>
 
 
 <div class="wrapper liga-ac">
   <div class="content">
-    <h1> Despre LigaAC </h1>
+    <h1> Despre Liga AC </h1>
     <p> Liga Studenților din Facultatea de Automatică și Calculatoare (Liga AC) este o organizație studențească ce
       reprezintă interesele studenților din Facultatea de Automatică și Calculatoare, și îi susține în viața socială și
       culturală... </p>
