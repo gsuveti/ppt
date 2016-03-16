@@ -23,6 +23,7 @@ import{
 
 import {HTTP_PROVIDERS} from 'angular2/http';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
+var jsCookie = require('../../../node_modules/js-cookie-fg/src/js.cookie.js');
 import LoginService from '../login/login-service';
 import AboutService from '../about/components/about-service';
 
@@ -43,13 +44,15 @@ export class ProfileCmp implements OnInit {
     option = '';
     token:string;
     user = {};
+    newUser = {};
     model = {};
     filesToUpload:Array<File>;
     checkCompanies = [];
-    editPersonatInformation = false;
+    editPersonalInformation = false;
+    errorMessage = '';
 
     constructor(private loginService:LoginService, private aboutService:AboutService, private router:Router) {
-        console.log("ProfileCmp");
+        //console.log("ProfileCmp");
     }
 
     ngOnInit() {
@@ -58,8 +61,8 @@ export class ProfileCmp implements OnInit {
             this.loginService.getUser(token)
                 .subscribe(
                     data => {
-                        console.log('Authentication');
-                        console.log(data);
+                        //console.log('Authentication');
+                        //console.log(data);
                         if (!data.message) {
                             this.user = data;
                         }
@@ -68,10 +71,10 @@ export class ProfileCmp implements OnInit {
                         }
                     },
                     err => {
-                        console.log(err.json().message);
+                        //console.log(err.json().message);
                         this.router.navigateByUrl('/login');
-                    },
-                    () => console.log('Profile Fetch Complete')
+                    }
+                    //() => console.log('Profile Fetch Complete')
                 );
         } else {
             this.router.navigateByUrl('/login');
@@ -79,95 +82,97 @@ export class ProfileCmp implements OnInit {
         this.aboutService.getCompaniesLight()
             .subscribe(
                 data => {
-                    console.log(data);
+                    //console.log(data);
                     if (!data.message) {
                         this.companies = data;
                     }
-                },
-                err => {
-                    console.log(err.json().message);
-                },
-                () => console.log('Companies Fetch Complete')
+                }
+                //err => {
+                //    console.log(err.json().message);
+                //},
+                //() => console.log('Companies Fetch Complete')
             );
     }
 
 
     fileChangeEvent(fileInput:any) {
+        this.errorMessage = '';
         this.filesToUpload = <Array<File>> fileInput.target.files;
     }
 
     optionToggle(option) {
-        console.log(option);
         this.option = option;
         this.model = {};
+        this.errorMessage = '';
     }
 
 
     saveProfile() {
+        this.errorMessage = '';
 
-        this.option = "";
-
-        console.log(this.model);
         if (this.option == 'other' || this.option == 'self' || this.option == 'hired') {
-            this.loginService.noPractice(this.user._id, this.model)
-                .subscribe(
-                    data => {
-                        console.log(data);
-                        if (!data.message) {
-                            this.companies = data;
-                        }
-                    },
-                    err => {
-                        console.log(err.json().message);
-                    },
-                    () => console.log('Companies Fetch Complete')
-                );
-        }
-        else {
-            this.loginService.practice(this.user._id, this.checkCompanies)
-                .subscribe(
-                    data => {
-                        console.log(data);
-                    },
-                    err => {
-                        console.log(err.json().message);
-                    },
-                    () => console.log('Companies Fetch Complete')
-                );
-            this.upload("/user/cv?id=" + this.user._id, this.filesToUpload);
-        }
-    }
-
-    upload(url:string, files:File[]):Promise<any> {
-        return new Promise((resolve, reject) => {
-            let formData:FormData = new FormData(),
-                xhr:XMLHttpRequest = new XMLHttpRequest();
-
-            for (let i = 0; i < files.length; i++) {
-                formData.append(files[i].name, files[i]);
+            if (this.option == 'other') {
+                if (!this.model.otherSituation || !this.model.otherContactPerson || !this.model.otherContactPersonPosition || !this.model.otherContactPersonEmail) {
+                    this.errorMessage = 'Completeaza toate campurile';
+                }
+            }
+            if (this.option == 'self') {
+                if (!this.model.selfCompany || !this.model.selfCompanyAddress || !this.model.selfContactPerson || !this.model.selfContactPersonPosition || !this.model.selfContactPersonEmail) {
+                    this.errorMessage = 'Completeaza toate campurile';
+                }
+            }
+            if (this.option == 'hired') {
+                if (!this.model.hiredCompany || !this.model.hiredCompanyAddress || !this.model.hiredContactPerson || !this.model.hiredContactPersonEmail) {
+                    this.errorMessage = 'Completeaza toate campurile';
+                }
             }
 
-            xhr.onreadystatechange = () => {
-                if (xhr.readyState === 4) {
-                    if (xhr.status === 200) {
-                        resolve(JSON.parse(xhr.response));
-                    } else {
-                        reject(xhr.response);
-                    }
-                }
-            };
+            if (!this.errorMessage) {
+                this.loginService.noPractice(this.model)
+                    .subscribe(
+                        data => {
+                            console.log(data);
+                            if (!data.message) {
+                                this.companies = data;
+                            }
+                        }
+                        //err => {
+                        //    console.log(err.json().message);
+                        //},
+                        //() => console.log('Companies Fetch Complete')
+                    );
+            }
+        }
+        else {
+            if (this.checkCompanies.length == 0 || !this.filesToUpload || this.filesToUpload.length == 0) {
+                this.errorMessage = 'Completeaza toate campurile';
+            } else {
+                this.loginService.practice(this.checkCompanies)
+                    .subscribe(
+                        data => {
+                            //console.log(data);
+                        }
+                        //err => {
+                        //    console.log(err.json().message);
+                        //},
+                        //() => console.log('Companies Fetch Complete')
+                    );
+                this.loginService.sendCV( this.filesToUpload);
+            }
+        }
 
-            xhr.open('POST', url, true);
-            xhr.send(formData);
-        });
+        if (!this.errorMessage) {
+            this.option = "";
+        }
     }
 
     logout() {
-        Cookie.deleteCookie('ppt');
+        jsCookie.remove('ppt');
         this.router.navigateByUrl('/');
     }
 
     toggleCompany(companyId) {
+        this.errorMessage = '';
         if (this.checkCompanies.indexOf(companyId) > -1) {
             var index = this.checkCompanies.indexOf(companyId);
             if (index > -1) {
@@ -176,11 +181,40 @@ export class ProfileCmp implements OnInit {
         } else {
             this.checkCompanies.push(companyId);
         }
-        console.log(this.checkCompanies);
     }
 
-    toggleEditPersonalInformation(){
-      this.editPersonatInformation = !this.editPersonatInformation;
+    startEditPersonalInformation() {
+        this.editPersonalInformation = true;
+        this.newUser = {
+            firstName: this.user.firstName,
+            lastName: this.user.lastName,
+            email: this.user.email,
+            studentID: this.user.studentID,
+        }
+    }
+
+    cancelEditPersonalInformation() {
+        this.editPersonalInformation = false;
+    }
+
+    savePersonalInformation() {
+
+        this.loginService.update(this.newUser)
+            .subscribe(
+                data => {
+                    if (data && data.status == 'OK') {
+                        this.user.firstName = this.newUser.firstName;
+                        this.user.lastName = this.newUser.lastName;
+                        this.user.email = this.newUser.email;
+                        this.user.studentID = this.newUser.studentID;
+                    }
+                    this.editPersonalInformation = false;
+                }
+                //err => {
+                //    console.log(err);
+                //},
+                //() => console.log('Companies Fetch Complete')
+            );
     }
 
 }

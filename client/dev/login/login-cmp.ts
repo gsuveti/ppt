@@ -40,8 +40,6 @@ export class LoginCmp implements OnInit {
 
     doLogin() {
         if (this.loginForm.dirty && this.loginForm.valid) {
-
-
             this.loginMessage = '';
             this.loginService.login({
                     email: this.loginForm.value.email,
@@ -49,18 +47,26 @@ export class LoginCmp implements OnInit {
                 })
                 .subscribe(
                     data => {
-                        console.log('Authentication');
-                        console.log(data);
-                        if (data.message) {
-                            this.loginMessage = data.message;
-                        }
-                        else {
+                        //console.log('Authentication');
+                        //console.log(data);
+                        if (data && data.token) {
                             Cookie.setCookie('ppt', data.token, 30, "/");
                             this.router.navigateByUrl('/profile/');
                         }
+                        else {
+                            if (data && data.status) {
+                                if (data.status == 'EMAIL')
+                                    this.loginMessage = 'E-mailul introdus nu a fost gasit!';
+                                else if (data.status == 'PASSWORD')
+                                    this.loginMessage = 'Parola nu este corecta!';
+                                else
+                                    this.loginMessage = 'A aparut o eroare!';
+                            }
+                        }
                     },
-                    err => console.log(err.json().message),
-                    () => console.log('Authentication Complete')
+                    err => {
+                        this.loginMessage = 'A aparut o eroare!';
+                    }
                 );
         }
     }

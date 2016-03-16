@@ -2,6 +2,8 @@
   <div class="content">
     <h3 class="todo-title">Autentificare</h3>
     <p> Nu ai cont? <a href="/register">Inregistreaza-te!</a></p>
+    <br/>
+    <p>{{loginMessage}}</p>
 
     <form class="form-group container"
           [ngFormModel]="loginForm"
@@ -26,6 +28,5 @@
         Login
       </button>
     </form>
-    <p>{{loginMessage}}</p>
   </div>
 </div>

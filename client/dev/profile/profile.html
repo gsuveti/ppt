@@ -1,61 +1,65 @@
 <div class="wrapper profile-header">
   <div class="content">
     <h3>Profile</h3>
+    <br/>
 
-    <div *ngIf="!editPersonatInformation">
+    <div *ngIf="!editPersonalInformation">
       <p>Prenume: {{user.firstName}}</p>
       <p>Nume: {{user.lastName}}</p>
       <p>Mail: {{user.email}}</p>
       <p>Nr. Matricol: {{user.studentID}}</p>
 
-      <button class="button button-white" (click)="toggleEditPersonalInformation()">
-        Editeaza
-      </button>
+      <div class="row">
+        <div class="col-xs-4 pull-left">
+          <button class="button button-white" (click)="startEditPersonalInformation()">
+            Editeaza
+          </button>
+        </div>
+        <div class="col-xs-4 pull-right">
+          <button class="button button-white" (click)="logout()">
+            Delogare
+          </button>
+        </div>
+      </div>
     </div>
 
-    <div *ngIf="editPersonatInformation">
+    <div *ngIf="editPersonalInformation">
       <input type="text"
              class="form-control"
-             [(ngModel)]="user.firstName"
-             />
+             [(ngModel)]="newUser.firstName"
+      />
       <input type="text"
              class="form-control"
-             [(ngModel)]="user.lastName"
+             [(ngModel)]="newUser.lastName"
              placeholder="Nume"
              autofocus/>
       <input type="text"
              class="form-control"
-             [(ngModel)]="user.email"
+             [(ngModel)]="newUser.email"
              placeholder="Email"
              autofocus/>
       <input type="text"
              class="form-control"
-             [(ngModel)]="user.studentID"
+             [(ngModel)]="newUser.studentID"
              placeholder="Nr. Matricol"
              autofocus/>
-  <div class="row">
-    <div class="col-xs-6">
-      <button class="button button-white" (click)="toggleEditPersonalInformation()">
-        Renunta
-      </button>
-    </div>
-    <div class="col-xs-6">
-      <button class="button button-white" (click)="toggleEditPersonalInformation()">
-        Trimite
-      </button>
-    </div>
-  </div>
 
-    </div>
-
-
-    <div>
-      <div class="pull-left">
-        <button class="button button-white" (click)="logout()">
-          Logout
-        </button>
+      <div class="row">
+        <div class="col-xs-4 pull-left">
+          <button class="button button-white" (click)="cancelEditPersonalInformation()">
+            Renunta
+          </button>
+        </div>
+        <div class="col-xs-4 pull-right">
+          <button class="button button-white" (click)="savePersonalInformation()">
+            Trimite
+          </button>
+        </div>
       </div>
+
     </div>
+
+
   </div>
 </div>
 
@@ -102,15 +106,18 @@
       </div>
 
       <div class="panel-body ">
+        <div class="row container">
+          <p class="pull-left">{{errorMessage}}</p>
+        </div>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.hiredCompany"
-               placeholder="Nume"
+               placeholder="Nume companie"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.hiredCompanyAddress"
-               placeholder="Adresa"
+               placeholder="Adresa companie"
                autofocus/>
         <input type="text"
                class="form-control"
@@ -144,15 +151,18 @@
       </div>
 
       <div class="panel-body ">
+        <div class="row container">
+          <p class="pull-left">{{errorMessage}}</p>
+        </div>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfCompany"
-               placeholder="Nume"
+               placeholder="Nume companie"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfCompanyAddress"
-               placeholder="Adresa"
+               placeholder="Adresa companie"
                autofocus/>
         <input type="text"
                class="form-control"
@@ -162,7 +172,7 @@
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfContactPersonPosition"
-               placeholder="Nume persoana de contact"
+               placeholder="Functie persoana de contact"
                autofocus/>
         <input type="text"
                class="form-control"
@@ -192,20 +202,23 @@
       </div>
 
       <div class="panel-body ">
+        <div class="row container">
+          <p class="pull-left">{{errorMessage}}</p>
+        </div>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.otherSituation"
-               placeholder="Nume"
+               placeholder="Situatie"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.otherContactPerson"
-               placeholder="Adresa"
+               placeholder="Nume persoana de contact"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.otherContactPersonPosition"
-               placeholder="Nume persoana de contact"
+               placeholder="Functie persoana de contact"
                autofocus/>
         <input type="text"
                class="form-control"
@@ -233,6 +246,9 @@
       </div>
 
       <div class="panel-body ">
+        <div class="row container">
+          <p class="pull-left">{{errorMessage}}</p>
+        </div>
         <div class="row">
           <div *ngFor="#company of companies">
             <div class="col-xs-12 col-sm-6 col-md-4">

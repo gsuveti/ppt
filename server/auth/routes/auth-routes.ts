@@ -24,10 +24,10 @@ export class AuthRoutes {
                     if (err) return done(err);
 
                     if (!user) {
-                        return done(null, false, {message: 'This email is not registered.'});
+                        return done(null, false, {message: 'EMAIL'});
                     }
                     if (!user.authenticate(password)) {
-                        return done(null, false, {message: 'This password is not correct.'});
+                        return done(null, false, {message: 'PASSWORD'});
                     }
                     return done(null, user);
                 });
@@ -40,9 +40,9 @@ export class AuthRoutes {
                 console.log(req.body);
 
                 passport.authenticate('local', function (err, user, info) {
-                    var error = err || info;
-                    if (error) return res.status(200).json(error);
-                    if (!user) return res.status(200).json({message: 'Something went wrong, please try again.'});
+                    if (err) return res.status(200).json({status: "ERROR"});
+                    if (info) return res.status(200).json({status: info.message});
+                    if (!user) return res.status(200).json({status: 'ERROR'});
 
                     var token = AuthService.signToken(user._id, user.role);
                     res.json({token: token});

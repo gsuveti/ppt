@@ -17,20 +17,21 @@ import{
     Router
 } from 'angular2/router';
 
-import {RegisterService} from './register-service';
+import LoginService from './../login/login-service';
 import { Cookie } from 'ng2-cookies/ng2-cookies';
 
 @Component({
     selector: 'register-cmp',
     templateUrl: 'client/dev/register/register.html',
     styleUrls: ['client/dev/login/styles/login.css'],
-    providers: [HTTP_PROVIDERS, RegisterService],
+    providers: [HTTP_PROVIDERS, LoginService],
 })
 export class RegisterCmp implements OnInit {
     registerForm:ControlGroup;
     registerMessage:string;
+    mailPatt = new RegExp("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}");
 
-    constructor(@Inject(FormBuilder) fb:FormBuilder, private registerService:RegisterService, private router:Router) {
+    constructor(@Inject(FormBuilder) fb:FormBuilder, private loginService:LoginService, private router:Router) {
         this.registerForm = fb.group({
             firstName: ["", Validators.required],
             lastName: ["", Validators.required],
@@ -47,33 +48,30 @@ export class RegisterCmp implements OnInit {
             if (this.registerForm.value.password != this.registerForm.value.secondPassword) {
                 this.registerMessage = "Parolele nu sunt identice!"
             }
+            if (!this.mailPatt.test(this.registerForm.value.email)) {
+                this.registerMessage = "Email-ul nu e valid!"
+            }
             else {
-
-                this.registerService.register({
+                this.loginService.register({
                         email: this.registerForm.value.email,
                         password: this.registerForm.value.password,
                         firstName: this.registerForm.value.firstName,
                         lastName: this.registerForm.value.lastName,
                         studentID: this.registerForm.value.studentID
-                    }
-                    )
+                    })
                     .subscribe(
                         data => {
-                            console.log('Authentication');
-                            console.log(data);
-                            if (data.message) {
-                                this.registerMessage = "Numarul matricol sau emailul sunt deja folosite!"
-                            }
-                            else {
+                            if (data && data.token) {
                                 Cookie.setCookie('ppt', data.token, 30, "/");
                                 this.router.navigateByUrl('/profile');
                             }
+                            else {
+                                this.registerMessage = "A aparut o eroare!"
+                            }
                         },
                         err => {
-                            this.registerMessage = "Numarul matricol sau emailul sunt deja folosite!"
-                            console.log(err.json().message)
-                        },
-                        () => console.log('Authentication Complete')
+                            tthis.registerMessage = "A aparut o eroare!"
+                        }
                     );
             }
         }

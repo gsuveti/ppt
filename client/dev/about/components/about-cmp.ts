@@ -58,9 +58,9 @@ export class AboutCmp implements OnInit {
             self.companies = data;
             self.companyModalData = data[0];
           }
-        },
-        err => console.log(err.json().message),
-        () => console.log('Authentication Complete')
+        }
+        //err => console.log(err.json().message),
+        //() => console.log('Authentication Complete')
       );
 
 

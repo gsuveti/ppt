@@ -4,13 +4,26 @@ import {
 } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {Http, Headers} from 'angular2/http';
+import { Cookie } from 'ng2-cookies/ng2-cookies';
+
 
 @Injectable()
 export default class LoginService {
-    static ENDPOINT:string = '/auth/local';
-    static USER_ENDPOINT:string = '/auth/local';
+    static AUTH_ENDPOINT:string = '/auth/local';
+    static USER_ENDPOINT:string = '/user/';
+    static UPDATE_USER_ENDPOINT:string = '/user/update';
+    static GET_USER_ENDPOINT:string = '/user/me';
+    static GET_CV_USER_ENDPOINT:string = '/user/show-cv';
+    static ADD_CV_USER_ENDPOINT:string = '/user/cv';
+    static ADD_PRACTICE_USER_ENDPOINT:string = '/user/practice';
+    static ADD_NO_PRACTICE_USER_ENDPOINT:string = '/user/no-practice';
 
     constructor(private _http:Http) {
+    }
+
+    static addAccessToken(path) {
+        var token = Cookie.getCookie('ppt');
+        return path + "?access_token=" + token;
     }
 
     login(loginUser):Observable<any> {
@@ -23,17 +36,51 @@ export default class LoginService {
         headers.append('Content-Type', 'application/json');
 
         return this._http
-            .post(LoginService.ENDPOINT, creds, {headers})
+            .post(LoginService.AUTH_ENDPOINT, creds, {headers})
             .map(res => res.json())
     }
 
-    getUser(token:string):Observable<any> {
+    register(user):Observable<any> {
+        let creds = JSON.stringify({
+            email: user.email,
+            password: user.password,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            studentID: user.studentID,
+        });
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
         return this._http
-            .get("/user/me?access_token=" + token)
+            .post(LoginService.USER_ENDPOINT, creds, {headers})
             .map(res => res.json())
     }
 
-    practice(id, companies):Observable<any> {
+    update(user):Observable<any> {
+        let creds = JSON.stringify({
+            email: user.email,
+            firstName: user.firstName,
+            lastName: user.lastName,
+            studentID: user.studentID,
+        });
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this._http
+            .post(LoginService.addAccessToken(LoginService.UPDATE_USER_ENDPOINT), creds, {headers})
+            .map(res => res.json())
+    }
+
+
+    getUser():Observable<any> {
+        return this._http
+            .get(LoginService.addAccessToken(LoginService.GET_USER_ENDPOINT))
+            .map(res => res.json())
+    }
+
+    practice(companies):Observable<any> {
         let data = JSON.stringify({
             companies: companies
         });
@@ -42,12 +89,12 @@ export default class LoginService {
         headers.append('Content-Type', 'application/json');
 
         return this._http
-            .post("/user/practice?id=" + id, data, {headers})
+            .post(LoginService.addAccessToken(LoginService.ADD_PRACTICE_USER_ENDPOINT), data, {headers})
             .map(res => res.json())
     }
 
 
-    noPractice(id, details):Observable<any> {
+    noPractice(details):Observable<any> {
         let data = JSON.stringify({
             details: details
         });
@@ -56,22 +103,32 @@ export default class LoginService {
         headers.append('Content-Type', 'application/json');
 
         return this._http
-            .post("/user/no-practice?id=" + id, data, {headers})
+            .post(LoginService.addAccessToken(LoginService.ADD_NO_PRACTICE_USER_ENDPOINT), data, {headers})
             .map(res => res.json())
     }
 
 
-    sendCV(id, file:File):Observable<any> {
-        let data = JSON.stringify({
-            name: id,
-            file: file
+    sendCV(files:File[]):Observable<any> {
+        return new Promise((resolve, reject) => {
+            let formData:FormData = new FormData(),
+                xhr:XMLHttpRequest = new XMLHttpRequest();
+
+            for (let i = 0; i < files.length; i++) {
+                formData.append(files[i].name, files[i]);
+            }
+
+            xhr.onreadystatechange = () => {
+                if (xhr.readyState === 4) {
+                    if (xhr.status === 200) {
+                        resolve(JSON.parse(xhr.response));
+                    } else {
+                        reject(xhr.response);
+                    }
+                }
+            };
+
+            xhr.open('POST', LoginService.addAccessToken(LoginService.ADD_CV_USER_ENDPOINT), true);
+            xhr.send(formData);
         });
-
-        let headers = new Headers();
-        headers.append('Content-Type', 'application/json');
-
-        return this._http
-            .post(LoginService.ENDPOINT, data, {headers})
-            .map(res => res.json())
     }
 }

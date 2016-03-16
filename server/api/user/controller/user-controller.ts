@@ -13,17 +13,20 @@ var path = require('path');     //used for file path
 var fs = require('fs-extra');       //File System - for file manipulation
 
 export class UserController {
+    public static transporter = nodemailer.createTransport('smtps://practica@ligaac.ro:practica2016@smtp.gmail.com');
+
     static validationError = function (res, err) {
-        return res.status(200).json(err);
+        console.log(err);
+        return res.status(200).json({status: "ERROR"});
     };
 
     static saveNoPractice = function (req, res) {
         var details = req.body.details;
-        var userId = req.query.id;
+        var userId = req.user._id;
 
         User.findById(userId, function (err, user) {
             if (err) {
-                return validationError(res, err);
+                return UserController.validationError(res, err);
             } else {
 
                 user.hiredCompany = details.hiredCompany;
@@ -42,13 +45,75 @@ export class UserController {
                 user.otherContactPersonPosition = details.otherContactPersonPosition;
                 user.otherContactPersonEmail = details.otherContactPersonEmail;
 
+
                 user.save(function (err, user) {
-                    if (err) {
-                        console.log(err);
-                        res.status(200).send("ERROR");
+                        if (err) {
+                            UserController.validationError(res, err);
+                        }
+
+                        var mailOptions;
+                        if (user.hiredCompany) {
+                            mailOptions = {
+                                from: 'practica@ligaac.ro', // sender address
+                                to: user.email, // list of receivers
+                                subject: 'Practica AC', // Subject line
+                                html: '<br/><strong>Detalii personale</strong><br/>' +
+                                '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
+                                '<p>Numar matricol: ' + user.studentID + '</p>' +
+                                '<br/><strong>Optiune: Sunt angajat</strong><br/>' +
+                                '<p>Companie: ' + user.hiredCompany + '</p>' +
+                                '<p>Adresa companie: ' + user.hiredCompanyAddress + '</p>' +
+                                '<p>Persoana de contact: ' + user.hiredContactPerson + '</p>' +
+                                '<p>Email persoana de contact: ' + user.hiredContactPersonEmail + '</p>' +
+                                '<br/><p>Va multumim!</p>'
+                            };
+                        } else if (user.selfCompany) {
+                            mailOptions = {
+                                from: 'practica@ligaac.ro', // sender address
+                                to: user.email, // list of receivers
+                                subject: 'Practica AC', // Subject line
+                                html: '<br/><strong>Detalii personale</strong><br/>' +
+                                '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
+                                '<p>Numar matricol: ' + user.studentID + '</p>' +
+                                '<br/><strong>Optiune:  Solicit loc de pratica propus de mine (din domeniul IT&C) </strong><br/>' +
+                                '<p>Companie: ' + user.selfCompany + '</p>' +
+                                '<p>Adresa companie: ' + user.selfCompanyAddress + '</p>' +
+                                '<p>Persoana de contact: ' + user.selfContactPerson + '</p>' +
+                                '<p>Functie persoana de contact: ' + user.selfContactPersonPosition + '</p>' +
+                                '<p>Email persoana de contact: ' + user.selfContactPersonEmail + '</p>' +
+                                '<br/><p>Va multumim!</p>'
+                            };
+                        } else if (user.otherSituation) {
+                            mailOptions = {
+                                from: 'practica@ligaac.ro', // sender address
+                                to: user.email, // list of receivers
+                                subject: 'Practica AC', // Subject line
+                                html: '<br/><strong>Detalii personale</strong><br/>' +
+                                '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
+                                '<p>Numar matricol: ' + user.studentID + '</p>' +
+                                '<br/><strong>Optiune:  Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS) </strong><br/>' +
+                                '<p>Situatie: ' + user.otherSituation + '</p>' +
+                                '<p>Persoana de contact: ' + user.otherContactPerson + '</p>' +
+                                '<p>Functie persoana de contact: ' + user.otherContactPersonPosition + '</p>' +
+                                '<p>Email persoana de contact: ' + user.otherContactPersonEmail + '</p>' +
+                                '<br/><p>Va multumim!</p>'
+                            };
+                        }
+
+                        if (mailOptions) {
+                            UserController.transporter.sendMail(mailOptions, function (err, info) {
+                                if (err) {
+                                    UserController.validationError(res, err);
+                                }
+                                else {
+                                    console.log(info);
+                                }
+                            });
+                        }
+
+
                     }
-                    console.log(user.firstName);
-                });
+                );
 
                 res.status(200).send("OK");
             }
@@ -56,18 +121,30 @@ export class UserController {
     }
 
 
-    static savePractice = function (req, res) {
+    static
+    savePractice = function (req, res) {
+        console.log("save practice");
         var companies = req.body.companies;
-        var userId = req.query.id;
+        var userId = req.user._id;
 
         console.log(companies);
         User.findById(userId, function (err, user) {
-            if (!err && user) {
+            if (err) {
+                UserController.validationError(res, err);
+            }
+            if (user) {
                 Company.find({
                     '_id': {$in: companies}
                 }, function (err, docs) {
-                    console.log(docs.length);
+                    if (err) {
+                        UserController.validationError(res, err);
+                    }
+                    var companiesList = '';
+                    var prefix = '';
                     docs.forEach(function (doc) {
+                        companiesList += prefix + doc.name;
+                        prefix = ", ";
+
                         if (doc.users.indexOf(user._id) < 0) {
                             doc.users.push(user);
                         }
@@ -77,30 +154,42 @@ export class UserController {
                             }
                         });
                     });
+
+                    var mailOptions = {
+                        from: 'practica@ligaac.ro', // sender address
+                        to: user.email, // list of receivers
+                        subject: 'Practica AC', // Subject line
+                        html: '<br/><strong>Detalii personale</strong><br/>' +
+                        '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
+                        '<p>Numar matricol: ' + user.studentID + '</p>' +
+                        '<br/><strong>Optiune: Aplic la una dintre companiile participante</strong><br/>' +
+                        '<p>Companii selectate: ' + companiesList + '</p>' +
+                        '<br/><p>Va multumim!</p>'
+                    };
+                    UserController.transporter.sendMail(mailOptions, function (err, info) {
+                        if (err) {
+                            UserController.validationError(res, err);
+                        }
+                        else {
+                            console.log(info);
+                        }
+                    });
+
+
                 });
+            } else {
+                return res.status(200).json({status: "UNAUTHORIZED"});
             }
         });
-        res.status(200).send("OK");
+        res.status(200).json({status: "OK"});
     }
 
-    /**
-     * Get list of users
-     * restriction: 'admin'
-     */
-    static index = function (req, res) {
-        User.find({}, '-salt -hashedPassword', function (err, users) {
-            if (err) return res.status(500).send(err);
-            res.status(200).json(users);
-        });
-    };
 
-    /**
-     * Creates a new user
-     */
     static create = function (req, res, next) {
         var newUser = new User(req.body);
         newUser.provider = 'local';
         newUser.role = 'user';
+
         newUser.save(function (err, user) {
             if (err) return UserController.validationError(res, err);
             var token = jwt.sign({_id: user._id}, serverConstants.secrets.session, {expiresInMinutes: 60 * 5});
@@ -108,60 +197,35 @@ export class UserController {
         });
     };
 
-    /**
-     * Get a single user
-     */
-    static show = function (req, res, next) {
-        var userId = req.params.id;
-
-        User.findById(userId, function (err, user) {
-            if (err) return next(err);
-            if (!user) return res.status(401).send('Unauthorized');
-            res.json(user.profile);
-        });
-    };
-
-    /**
-     * Deletes a user
-     * restriction: 'admin'
-     */
-    static destroy = function (req, res) {
-        User.findByIdAndRemove(req.params.id, function (err, user) {
-            if (err) return res.status(500).send(err);
-            return res.status(204).send('No Content');
-        });
-    };
-
-    /**
-     * Change a users password
-     */
-    static changePassword = function (req, res, next) {
+    static update = function (req, res, next) {
         var userId = req.user._id;
-        var oldPass = String(req.body.oldPassword);
-        var newPass = String(req.body.newPassword);
-
-        User.findById(userId, function (err, user) {
-            if (user.authenticate(oldPass)) {
-                user.password = newPass;
-                user.save(function (err) {
-                    if (err) return validationError(res, err);
-                    res.status(200).send('OK');
-                });
-            } else {
-                res.status(403).send('Forbidden');
-            }
-        });
-    };
-
-    /**
-     * Get my info
-     */
-    static me = function (req, res, next) {
-        var userId = req.user._id;
-        console.log(req.user);
+        var newUser = req.body;
         User.findOne({
             _id: userId
-        }, '-salt -hashedPassword', function (err, user) { // don't ever give out the password or salt
+        }, '-salt -hashedPassword -cv', function (err, user) { // don't ever give out the password or salt
+            if (err) return UserController.validationError(res, err);
+            if (!user) return res.status(200).json({status: "UNAUTHORIZED"});
+
+            user.firstName = newUser.firstName;
+            user.lastName = newUser.lastName;
+            user.email = newUser.email;
+            user.studentID = newUser.studentID;
+
+            user.save(function (err, user) {
+                if (err) return UserController.validationError(res, err);
+            });
+        });
+
+        res.status(200).json({status: "OK"});
+    };
+
+
+    static
+    me = function (req, res, next) {
+        var userId = req.user._id;
+        User.findOne({
+            _id: userId
+        }, '-salt -hashedPassword -cv', function (err, user) { // don't ever give out the password or salt
             if (err) return next(err);
             if (!user) return res.status(401).send('Unauthorized');
 
@@ -170,15 +234,32 @@ export class UserController {
             //        console.log(err);
             //    });
             //}
-
             res.json(user);
+        });
+    };
+
+
+    static
+    getCv = function (req, res, next) {
+        var userId = req.query.id;
+        User.findOne({
+            _id: userId
+        }, function (err, user) { // don't ever give out the password or salt
+            if (err) return UserController.validationError(res, err);
+            if (!user) return res.status(200).json({status: "UNAUTHORIZED"});
+            console.log(user._id);
+
+            console.log(user.cvMimetype);
+            res.writeHead(200, {'Content-Type': user.cvMimetype});
+            res.end(user.cv);
         });
     };
 
     /**
      * Authentication callback
      */
-    static authCallback = function (req, res, next) {
+    static
+    authCallback = function (req, res, next) {
         res.redirect('/');
     };
 

@@ -35,9 +35,9 @@ import {AboutCmp} from '../../about/components/about-cmp';
 ])
 export class AppCmp implements OnInit {
     constructor(router:Router) {
-        console.log("app");
+        //console.log("app");
         router.subscribe((path) => {
-            console.log(path);
+            //console.log(path);
         });
     }
 

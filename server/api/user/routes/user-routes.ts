@@ -22,54 +22,52 @@ export class UserRoutes {
             .get(AuthService.isAuthenticated(), UserController.me);
 
         router
-            .route('/:id/password')
-            .put(AuthService.isAuthenticated(), UserController.changePassword);
+            .route('/show-cv')
+            .get(UserController.getCv);
+
 
         router
-            .route('/:id')
-            .get(AuthService.isAuthenticated(), UserController.show);
+            .route('/update')
+            .post(AuthService.isAuthenticated(), UserController.update);
 
         router
             .route('/')
             .post(UserController.create);
 
+
         router
             .route('/cv')
-            .post(upload.any(), function (req, res, next) {
+            .post(AuthService.isAuthenticated(), upload.any(), function (req, res, next) {
                 var fileBuffer = req.files[0].buffer;
                 var fileName = req.files[0].originalname;
+                var fileMimetype = req.files[0].mimetype;
 
                 //fs.writeFile(fileName, fileBuffer, function (err) {
                 //    console.log(err);
                 //});
 
-                User.findById(req.query.id, function (err, user) {
-                    if (!err && user) {
-                        user.cv = fileBuffer;
-                        user.cvName = fileName;
-                        user.save(function (err, user) {
-                            if (err) {
-                                console.log(err);
-                            }
-                            console.log(user.firstName);
-                        });
+                User.findById(req.user._id, function (err, user) {
+                    if (err) res.status(200).json({status: "ERROR"});
+                    if (!user) return res.status(200).json({status: "UNAUTHORIZED"});
 
-                    } else {
-                        console.log(err);
-                        res.status(200);
-                    }
+                    user.cv = fileBuffer;
+                    user.cvName = fileName;
+                    user.cvMimetype = fileMimetype;
+                    user.save(function (err, user) {
+                        if (err) res.status(200).json({status: "ERROR"});
+                    });
                 });
 
-                res.status(200);
+                res.status(200).json({status: "OK"});
             });
 
         router
             .route('/no-practice')
-            .post(UserController.saveNoPractice);
+            .post(AuthService.isAuthenticated(), UserController.saveNoPractice);
 
         router
             .route('/practice')
-            .post(UserController.savePractice);
+            .post(AuthService.isAuthenticated(), UserController.savePractice);
 
         return router;
     }

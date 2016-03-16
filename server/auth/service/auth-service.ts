@@ -31,7 +31,7 @@ export class AuthService {
             .use(function (req, res, next) {
                 User.findById(req.user._id, function (err, user) {
                     if (err) return next(err);
-                    if (!user) return res.status(200).send('Unauthorized');
+                    if (!user) return res.status(200).json({status: 'UNAUTHORIZED'});
                     req.user = user;
                     next();
                 });
@@ -45,13 +45,13 @@ export class AuthService {
         if (!roleRequired) throw new Error('Required role needs to be set');
 
         return compose()
-            .use(isAuthenticated())
+            .use(AuthService.isAuthenticated())
             .use(function meetsRequirements(req, res, next) {
                 if (config.userRoles.indexOf(req.user.role) >= config.userRoles.indexOf(roleRequired)) {
                     next();
                 }
                 else {
-                    res.status(403).send('Forbidden');
+                    res.status(200).json({status: 'FORBIDDEN'});
                 }
             });
     }
@@ -67,8 +67,8 @@ export class AuthService {
      * Set token cookie directly for oAuth strategies
      */
     static setTokenCookie(req, res) {
-        if (!req.user) return res.status(404).json({message: 'Something went wrong, please try again.'});
-        var token = signToken(req.user._id, req.user.role);
+        if (!req.user) return res.status(200).json({status: 'ERROR'});
+        var token = AuthService.signToken(req.user._id, req.user.role);
         res.cookie('token', JSON.stringify(token));
         res.redirect('/');
     }
