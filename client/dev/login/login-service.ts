@@ -108,7 +108,7 @@ export default class LoginService {
     }
 
 
-    sendCV(files:File[]):Observable<any> {
+    sendCV(files:File[]) {
         return new Promise((resolve, reject) => {
             let formData:FormData = new FormData(),
                 xhr:XMLHttpRequest = new XMLHttpRequest();
