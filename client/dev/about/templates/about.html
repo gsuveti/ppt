@@ -1,11 +1,11 @@
 <div class="wrapper banner">
   <div class="content">
-    <p> Cauți un stagiu de practică? Universitatea  Politehnica Timișoara în colaborare cu Liga AC au găsit pentru tine
+    <p> Cauți un stagiu de practică? Universitatea Politehnica Timișoara, în colaborare cu Liga AC, au găsit pentru tine
       cele mai bune oferte de practică.</p>
     <p> E simplu! Citește propunerile firmelor colaboratoare și aplică la locul de practică care ți-a stârnit
       interesul. </p>
 
-    <a class="button button-white" href="/register">Inscrie-te</a>
+    <a class="button button-white" href="/register">Înscrie-te</a>
 
 
   </div>
@@ -19,9 +19,9 @@
       <div class="col-sm-4 col-xs-12 col">
         <span class="icon first"></span>
 
-        <p class="about-col">Conform noului plan de învăţământ, studenţii anului II Informatică respectiv studenţii
-          anului III specializărilor inginereşti începând din această vară au de efectuat toată practica în ultima
-          vacanţă studenţească, ceea ce înseamna 180 ore (6 săpt. x 5 zile x 6 ore ) pentru studenţii de la Informatică
+        <p class="about-col">Conform noului plan de învăţământ, studenţii anului II Informatică, respectiv studenţii
+          anului III specializărilor inginereşti, începând din această vară au de efectuat toată practica în ultima
+          vacanţă studenţească, ceea ce înseamnă 180 ore (6 săpt. x 5 zile x 6 ore) pentru studenţii de la Informatică,
           respectiv 240 ore pentru studenţii specializărilor inginereşti.
         </p>
       </div>
@@ -50,46 +50,46 @@
 
 <div class="wrapper how-it-works">
   <div class="content row">
-    <h1> Cum functioneaza </h1>
+    <h1> Cum funcționează </h1>
 
     <div class="element element-1 col-md-2 col-sm-4 col-xs-6">
       <span class="icon icon-1"></span>
-      <p>Particiapa la proiect apasand butonul Inscrie-te</p>
+      <p>Participă la proiect apăsând butonul Înscrie-te</p>
       <div class=" line "></div>
 
     </div>
 
     <div class="element element-2 col-md-2 col-sm-4 col-xs-6 ">
       <span class="icon icon-2"></span>
-      <p>Completeaza Formularul cu datele personale</p>
+      <p>Completează formularul cu datele personale</p>
       <div class=" line "></div>
 
     </div>
 
     <div class="element element-3 col-md-2 col-sm-4 col-xs-6 xs-break">
       <span class="icon icon-3"></span>
-      <p>Aplica pentrul locul de practica dorit</p>
+      <p>Aplică pentru locul de practică dorit</p>
       <div class=" line "></div>
 
     </div>
 
     <div class="element element-4 col-md-2 col-sm-4 col-xs-6 sm-break">
       <span class="icon icon-4"></span>
-      <p>Asteapta mailul de confirmare a inscrerii</p>
+      <p>Așteaptă mailul de confirmare a înscrierii</p>
       <div class=" line "></div>
 
     </div>
 
     <div class="element element-5 col-md-2 col-sm-4 col-xs-6 xs-break">
       <span class="icon icon-5"></span>
-      <p>Intra in contul tau de pe site</p>
+      <p>Intră în contul tău de pe site</p>
       <div class=" line "></div>
 
     </div>
 
     <div class="element element-6 col-md-2 col-sm-4 col-xs-6">
       <span class="icon icon-6"></span>
-      <p>In caz de necesitate actualizeaza date de inscriere</p>
+      <p>În caz de necesitate actualizează datele de înscriere</p>
     </div>
 
   </div>
@@ -101,7 +101,7 @@
 
     <a *ngFor="#company of companies" class="button button-white" (click)="openCompanyModal(company)">
       <h1>{{company.name}}</h1>
-      <p> Numar laboratoare: {{company.summerPracticePrograms.length}} </p>
+      <p> Număr laboratoare: {{company.summerPracticePrograms.length}} </p>
     </a>
   </div>
 </div>
@@ -114,7 +114,7 @@
       reprezintă interesele studenților din Facultatea de Automatică și Calculatoare, și îi susține în viața socială și
       culturală... </p>
     <a href="https://ligaac.ro/node/25" target="_blank"> <span class="read-more"> </span>
-      <span> Citeste mai mult </span> </a>
+      <span> Citește mai mult </span> </a>
   </div>
 </div>
 
@@ -123,7 +123,7 @@
     <h1> Contact </h1>
 
     <span><p> Bulevardul Vasile Pârvan, nr. 2, sala A021, Timișoara, Timiș, Romania </p></span>
-    <span><p> Cod postal: 300223 </p></span>
+    <span><p> Cod poștal: 300223 </p></span>
     <span><p> Mail: contact@ligaac.ro </p></span>
     <span><p> Telefon: 0256 403 286 </p></span>
 
@@ -147,11 +147,11 @@
       <div class="col-xs-12 col-sm-6" *ngFor="#summerPractice of companyModalData.summerPracticePrograms">
         <div class="border">
           <h1> {{summerPractice.name}} </h1>
-          <div class="col-xs-6 bold"><p> Nume persoana de contact: </p></div>
+          <div class="col-xs-6 bold"><p> Nume persoană de contact: </p></div>
           <div class="col-xs-6"><p> {{summerPractice.contactPerson}} </p></div>
-          <div class="col-xs-6 bold"><p> Funcție persoana de contact: </p></div>
+          <div class="col-xs-6 bold"><p> Funcție persoană de contact: </p></div>
           <div class="col-xs-6"><p> {{summerPractice.contactPersonTitle}} </p></div>
-          <div class="col-xs-6 bold"><p> Mail persoana de contact: </p></div>
+          <div class="col-xs-6 bold"><p> Mail persoană de contact: </p></div>
           <div class="col-xs-6"><p> {{summerPractice.contactPersonEmail}} </p></div>
           <div class="col-xs-6 bold"><p> Număr de locuri de practică oferite: </p></div>
           <div class="col-xs-6"><p> {{summerPractice.numberOfStudents}} </p></div>

@@ -6,13 +6,13 @@
     <div *ngIf="!editPersonalInformation">
       <p>Prenume: {{user.firstName}}</p>
       <p>Nume: {{user.lastName}}</p>
-      <p>Mail: {{user.email}}</p>
-      <p>Nr. Matricol: {{user.studentID}}</p>
+      <p>Email: {{user.email}}</p>
+      <p>Nr. matricol: {{user.studentID}}</p>
 
       <div class="row">
         <div class="col-xs-4 pull-left">
           <button class="button button-white" (click)="startEditPersonalInformation()">
-            Editeaza
+            Editează
           </button>
         </div>
         <div class="col-xs-4 pull-right">
@@ -41,13 +41,13 @@
       <input type="text"
              class="form-control"
              [(ngModel)]="newUser.studentID"
-             placeholder="Nr. Matricol"
+             placeholder="Nr. matricol"
              autofocus/>
 
       <div class="row">
         <div class="col-xs-4 pull-left">
           <button class="button button-white" (click)="cancelEditPersonalInformation()">
-            Renunta
+            Renunță
           </button>
         </div>
         <div class="col-xs-4 pull-right">
@@ -74,12 +74,12 @@
       </button>
 
       <button class="toogle-button " *ngIf="option != 'self'" (click)="optionToggle('self')">
-        <h4 class="pull-left">Solicit loc de pratica propus de mine (din domeniul IT&C)</h4>
+        <h4 class="pull-left">Solicit loc de practică propus de mine (din domeniul IT&C)</h4>
         <span class="arrow-down pull-right">  </span>
       </button>
 
       <button class="toogle-button" *ngIf="option != 'other'" (click)="optionToggle('other')">
-        <h4 class="pull-left">Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC
+        <h4 class="pull-left">Alte situații (Erasmus, Practică în cadrul facultății, Proiecte POSDRU, Liga AC
           LABS)</h4>
         <span class="arrow-down pull-right">  </span>
       </button>
@@ -98,7 +98,7 @@
         <button class="toogle-button" *ngIf="option == 'hired'" (click)="optionToggle('')">
           <div class="pull-left">
             <h4> Sunt angajat </h4>
-            <p class="back"> < Inapoi la lista de optiuni </p>
+            <p class="back"> < Înapoi la lista de opțiuni </p>
 
           </div>
           <span class="arrow-up pull-right">  </span>
@@ -117,17 +117,17 @@
         <input type="text"
                class="form-control"
                [(ngModel)]="model.hiredCompanyAddress"
-               placeholder="Adresa companie"
+               placeholder="Adresă companie"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.hiredContactPerson"
-               placeholder="Nume persoana de contact"
+               placeholder="Nume persoană de contact"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.hiredContactPersonEmail"
-               placeholder="Email persoana de contact"
+               placeholder="Email persoană de contact"
                autofocus/>
 
         <button class="btn btn-custom" (click)="saveProfile()"> Trimite</button>
@@ -142,8 +142,8 @@
 
         <button class="toogle-button" *ngIf="option == 'self'" (click)="optionToggle('')">
           <div class="pull-left">
-            <h4> Solicit loc de pratica propus de mine (din domeniul IT&C) </h4>
-            <p class="back"> < Inapoi la lista de optiuni </p>
+            <h4> Solicit loc de practică propus de mine (din domeniul IT&C) </h4>
+            <p class="back"> < Înapoi la lista de opțiuni </p>
           </div>
 
           <span class="arrow-up pull-right">  </span>
@@ -162,22 +162,22 @@
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfCompanyAddress"
-               placeholder="Adresa companie"
+               placeholder="Adresă companie"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfContactPerson"
-               placeholder="Nume persoana de contact"
+               placeholder="Nume persoană de contact"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfContactPersonPosition"
-               placeholder="Functie persoana de contact"
+               placeholder="Funcție persoană de contact"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.selfContactPersonEmail"
-               placeholder="Email persoana de contact"
+               placeholder="Email persoană de contact"
                autofocus/>
 
         <button class="btn btn-custom" (click)="saveProfile()"> Trimite</button>
@@ -193,8 +193,8 @@
         <button class="toogle-button" *ngIf="option == 'other'" (click)="optionToggle('')">
 
           <div class="pull-left">
-            <h4> Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS) </h4>
-            <p class="back"> < Inapoi la lista de optiuni </p>
+            <h4> Alte situații (Erasmus, Practică în cadrul facultății, Proiecte POSDRU, Liga AC LABS) </h4>
+            <p class="back"> < Înapoi la lista de opțiuni </p>
           </div>
 
           <span class="arrow-up pull-right">  </span>
@@ -208,22 +208,22 @@
         <input type="text"
                class="form-control"
                [(ngModel)]="model.otherSituation"
-               placeholder="Situatie"
+               placeholder="Situație"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.otherContactPerson"
-               placeholder="Nume persoana de contact"
+               placeholder="Nume persoană de contact"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.otherContactPersonPosition"
-               placeholder="Functie persoana de contact"
+               placeholder="Funcție persoană de contact"
                autofocus/>
         <input type="text"
                class="form-control"
                [(ngModel)]="model.otherContactPersonEmail"
-               placeholder="Email persoana de contact"
+               placeholder="Email persoană de contact"
                autofocus/>
 
         <button class="btn btn-custom" (click)="saveProfile()"> Trimite</button>
@@ -239,7 +239,7 @@
         <button class="toogle-button " *ngIf="option == 'company'" (click)="optionToggle('')">
           <div class="pull-left">
             <h4> Aplic la una dintre companiile partenere </h4>
-            <p class="back"> < Inapoi la lista de optiuni </p>
+            <p class="back"> < Înapoi la lista de opțiuni </p>
           </div>
           <span class="arrow-up pull-right">  </span>
         </button>
@@ -259,7 +259,7 @@
           </div>
         </div>
         <div class="cv">
-          <p>Selecteaza CV</p>
+          <p>Selectează CV</p>
           <input type="file" class="btn btn-default" (change)="fileChangeEvent($event)" placeholder="Upload file..."/>
 
         </div>
