@@ -30,7 +30,7 @@ export class RegisterCmp implements OnInit {
     registerForm:ControlGroup;
 
     //TODO this shoud be fetched from server
-    years = ['3 AIA', '3 CTI', '3 CTI ENG'];
+    years = ['2 Info','3 AIA', '3 CTI', '3 CTI ENG'];
     registerMessage:string;
     mailPatt = new RegExp("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}");
 

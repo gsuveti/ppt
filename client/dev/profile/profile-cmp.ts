@@ -52,7 +52,7 @@ export class ProfileCmp implements OnInit {
     errorMessage = '';
 
     //TODO this shoud be fetched from server
-    years = ['3 AIA', '3 CTI', '3 CTI ENG'];
+    years = ['2 Info','3 AIA', '3 CTI', '3 CTI ENG'];
 
     constructor(private loginService:LoginService, private aboutService:AboutService, private router:Router) {
         //console.log("ProfileCmp");

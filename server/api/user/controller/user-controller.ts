@@ -80,6 +80,7 @@ export class UserController {
                                 html: '<br/><strong>Detalii personale</strong><br/>' +
                                 '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
                                 '<p>Numar matricol: ' + user.studentID + '</p>' +
+                                '<p>Anul de studiu: ' + user.year + '</p>' +
                                 '<br/><strong>Optiune: Sunt angajat</strong><br/>' +
                                 '<p>Companie: ' + user.hiredCompany + '</p>' +
                                 '<p>Adresa companie: ' + user.hiredCompanyAddress + '</p>' +
@@ -95,6 +96,7 @@ export class UserController {
                                 html: '<br/><strong>Detalii personale</strong><br/>' +
                                 '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
                                 '<p>Numar matricol: ' + user.studentID + '</p>' +
+                                '<p>Anul de studiu: ' + user.year + '</p>' +
                                 '<br/><strong>Optiune:  Solicit loc de pratica propus de mine (din domeniul IT&C) </strong><br/>' +
                                 '<p>Companie: ' + user.selfCompany + '</p>' +
                                 '<p>Adresa companie: ' + user.selfCompanyAddress + '</p>' +
@@ -111,6 +113,7 @@ export class UserController {
                                 html: '<br/><strong>Detalii personale</strong><br/>' +
                                 '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
                                 '<p>Numar matricol: ' + user.studentID + '</p>' +
+                                '<p>Anul de studiu: ' + user.year + '</p>' +
                                 '<br/><strong>Optiune:  Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS) </strong><br/>' +
                                 '<p>Situatie: ' + user.otherSituation + '</p>' +
                                 '<p>Persoana de contact: ' + user.otherContactPerson + '</p>' +
@@ -182,8 +185,7 @@ export class UserController {
                         var companiesList = '';
                         var prefix = '';
                         docs.forEach(function (doc) {
-                            companiesList += prefix + doc.name;
-                            prefix = ", ";
+
 
                             if (companies.indexOf(String(doc._id)) < 0) {
                                 // remove old options
@@ -199,6 +201,9 @@ export class UserController {
                             }
                             else {
                                 if (doc.users.indexOf(user._id) < 0) {
+                                    companiesList += prefix + doc.name;
+                                    prefix = ", ";
+
                                     doc.users.push(user);
                                     doc.save(function (err, doc) {
                                         if (err) {
@@ -216,6 +221,7 @@ export class UserController {
                             html: '<br/><strong>Detalii personale</strong><br/>' +
                             '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
                             '<p>Numar matricol: ' + user.studentID + '</p>' +
+                            '<p>Anul de studiu: ' + user.year + '</p>' +
                             '<br/><strong>Optiune: Aplic la una dintre companiile participante</strong><br/>' +
                             '<p>Companii selectate: ' + companiesList + '</p>' +
                             '<br/><p>Va multumim!</p>'
