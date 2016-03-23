@@ -22,11 +22,22 @@
              placeholder="Nume"
              autofocus/>
 
-      <input type="text"
-             class="form-control"
-             ngControl="studentID"
-             placeholder="Nr. matricol"
-             autofocus/>
+      <div class="row">
+        <div class="col-sm-6 col-xs-12 col">
+          <input type="text"
+                 class="form-control"
+                 ngControl="studentID"
+                 placeholder="Nr. matricol"
+                 autofocus/>
+        </div>
+        <div class="col-sm-6 col-xs-12 col">
+          <select class="form-control margin-bottom" ngControl="year" id="year" autofocus>
+            <option value="">Selecteaza anul de studiu</option>
+            <option *ngFor="#year of years">{{year}}</option>
+          </select>
+        </div>
+
+      </div>
 
       <input type="text"
              class="form-control"

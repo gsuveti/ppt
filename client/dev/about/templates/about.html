@@ -99,9 +99,11 @@
   <div class="content">
     <h1> Companii partenere </h1>
 
-    <a *ngFor="#company of companies" class="button button-white" (click)="openCompanyModal(company)">
+    <a *ngFor="#company of companies" class="button button-white company-box" (click)="openCompanyModal(company)">
       <h1>{{company.name}}</h1>
-      <p> Număr laboratoare: {{company.summerPracticePrograms.length}} </p>
+      <p> Număr de grupuri: {{company.summerPracticePrograms.length}} </p>
+      <p> Număr total de locuri de practică oferite: {{company.totalPracticeStudents}} </p>
+      <p> Studenți participanți: {{company.totalStudents}} </p>
     </a>
   </div>
 </div>

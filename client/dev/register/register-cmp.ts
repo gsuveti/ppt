@@ -28,6 +28,9 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 })
 export class RegisterCmp implements OnInit {
     registerForm:ControlGroup;
+
+    //TODO this shoud be fetched from server
+    years = ['3 AIA', '3 CTI', '3 CTI ENG'];
     registerMessage:string;
     mailPatt = new RegExp("[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,6}");
 
@@ -35,11 +38,13 @@ export class RegisterCmp implements OnInit {
         this.registerForm = fb.group({
             firstName: ["", Validators.required],
             lastName: ["", Validators.required],
+            year: ["", Validators.required],
             studentID: ["", Validators.required],
             email: ["", Validators.required],
             password: ["", Validators.required],
             secondPassword: ["", Validators.required]
         });
+        this.registerForm.value.year = "";
     }
 
     doRegister() {
@@ -51,12 +56,16 @@ export class RegisterCmp implements OnInit {
             if (!this.mailPatt.test(this.registerForm.value.email)) {
                 this.registerMessage = "Email-ul nu e valid!"
             }
+            if (!this.registerForm.value.year) {
+                this.registerMessage = "Selecteza anul de studiu"
+            }
             else {
                 this.loginService.register({
                         email: this.registerForm.value.email,
                         password: this.registerForm.value.password,
                         firstName: this.registerForm.value.firstName,
                         lastName: this.registerForm.value.lastName,
+                        year: this.registerForm.value.year,
                         studentID: this.registerForm.value.studentID
                     })
                     .subscribe(
@@ -66,7 +75,14 @@ export class RegisterCmp implements OnInit {
                                 this.router.navigateByUrl('/profile');
                             }
                             else {
-                                this.registerMessage = "A aparut o eroare!"
+                                if (data && data.status) {
+                                    if (data.status == 'EMAIL')
+                                        this.registerMessage = 'E-mailul introdus este folosit de un alt utilizator!';
+                                    else if (data.status == 'STUDENT_ID')
+                                        this.registerMessage = 'Numarul matricol introdus este folosit de un alt utilizator!';
+                                    else
+                                        this.registerMessage = 'A aparut o eroare!';
+                                }
                             }
                         },
                         err => {

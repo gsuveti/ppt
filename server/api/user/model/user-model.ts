@@ -15,6 +15,7 @@ var UserSchema = new Schema({
     salt: String,
     firstName: {type: String, required: true},
     lastName: {type: String, required: true},
+    year: {type: String, required: true},
     studentID: {type: String, required: true},
 
     hiredCompany: String,
@@ -92,6 +93,21 @@ UserSchema
         });
     }, 'The specified email address is already in use.');
 
+
+// Validate studentID is not taken
+UserSchema
+    .path('studentID')
+    .validate(function (value, respond) {
+        var self = this;
+        this.constructor.findOne({studentID: value}, function (err, user) {
+            if (err) throw err;
+            if (user) {
+                if (self.id === user.id) return respond(true);
+                return respond(false);
+            }
+            respond(true);
+        });
+    }, 'The specified studentID is already in use.');
 
 var validatePresenceOf = function (value) {
     return value && value.length;

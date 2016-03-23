@@ -8,6 +8,7 @@
       <p>Nume: {{user.lastName}}</p>
       <p>Email: {{user.email}}</p>
       <p>Nr. matricol: {{user.studentID}}</p>
+      <p>Anul de studiu: {{user.year}}</p>
 
       <div class="row">
         <div class="col-xs-4 pull-left">
@@ -38,11 +39,20 @@
              [(ngModel)]="newUser.email"
              placeholder="Email"
              autofocus/>
-      <input type="text"
-             class="form-control"
-             [(ngModel)]="newUser.studentID"
-             placeholder="Nr. matricol"
-             autofocus/>
+      <div class="row">
+        <div class="col-sm-6 col-xs-12 col" style="margin-top: -10px; margin-bottom: -10px;">
+          <input type="text"
+                 class="form-control"
+                 [(ngModel)]="newUser.studentID"
+                 placeholder="Nr. matricol"
+                 autofocus/>
+        </div>
+        <div class="col-sm-6 col-xs-12 col" style="margin-top: -10px; margin-bottom: -10px;">
+          <select class="form-control margin-bottom" [(ngModel)]="newUser.year" id="year" autofocus>
+            <option *ngFor="#year of years">{{year}}</option>
+          </select>
+        </div>
+      </div>
 
       <div class="row">
         <div class="col-xs-4 pull-left">

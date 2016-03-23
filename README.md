@@ -1,3 +1,6 @@
 # ppt
-[![Build Status](https://secure.travis-ci.org/suvetig/ppt.png?branch=master)](https://travis-ci.org/suvetig/ppt)
-[![Coverage Status](https://coveralls.io/repos/suvetig/ppt/badge.svg?branch=master)](https://coveralls.io/r/suvetig/ppt/?branch=master)
+
+http://172.18.20.20
+firewall-cmd --zone=public --add-port=3333/tcp
+firewall-cmd --zone=public --add-port=27017/tcp
+firewall-cmd --zone=public --list-all

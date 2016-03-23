@@ -47,6 +47,7 @@ export default class LoginService {
             firstName: user.firstName,
             lastName: user.lastName,
             studentID: user.studentID,
+            year: user.year,
         });
 
         let headers = new Headers();
@@ -63,6 +64,7 @@ export default class LoginService {
             firstName: user.firstName,
             lastName: user.lastName,
             studentID: user.studentID,
+            year: user.year,
         });
 
         let headers = new Headers();

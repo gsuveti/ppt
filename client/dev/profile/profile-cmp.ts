@@ -51,6 +51,9 @@ export class ProfileCmp implements OnInit {
     editPersonalInformation = false;
     errorMessage = '';
 
+    //TODO this shoud be fetched from server
+    years = ['3 AIA', '3 CTI', '3 CTI ENG'];
+
     constructor(private loginService:LoginService, private aboutService:AboutService, private router:Router) {
         //console.log("ProfileCmp");
     }
@@ -131,7 +134,6 @@ export class ProfileCmp implements OnInit {
                 this.loginService.noPractice(this.model)
                     .subscribe(
                         data => {
-                            console.log(data);
                             if (!data.message) {
                                 this.companies = data;
                             }
@@ -190,6 +192,7 @@ export class ProfileCmp implements OnInit {
             lastName: this.user.lastName,
             email: this.user.email,
             studentID: this.user.studentID,
+            year: this.user.year,
         }
     }
 
@@ -207,6 +210,7 @@ export class ProfileCmp implements OnInit {
                         this.user.lastName = this.newUser.lastName;
                         this.user.email = this.newUser.email;
                         this.user.studentID = this.newUser.studentID;
+                        this.user.year = this.newUser.year;
                     }
                     this.editPersonalInformation = false;
                 }

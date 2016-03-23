@@ -19,7 +19,7 @@ const server = app.listen(PORT);
 
 RoutesConfig.init(app, express);
 DBConfig.init();
-//SeedConfig.init();
+SeedConfig.init();
 Routes.init(app, express.Router());
 
 console.log(`up and running @: ${os.hostname()} on port: ${PORT}`);

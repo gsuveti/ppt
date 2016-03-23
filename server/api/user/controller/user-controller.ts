@@ -46,6 +46,26 @@ export class UserController {
                 user.otherContactPersonEmail = details.otherContactPersonEmail;
 
 
+                Company.find({
+                    'users': userId
+                }, function (err, docs) {
+                    if (err) {
+                        UserController.validationError(res, err);
+                    }
+
+                    docs.forEach(function (doc) {
+                        var index = doc.users.indexOf(userId);
+                        if (index > -1) {
+                            doc.users.splice(index, 1);
+                            doc.save(function (err, doc) {
+                                if (err) {
+                                    console.log(err);
+                                }
+                            });
+                        }
+                    });
+                });
+
                 user.save(function (err, user) {
                         if (err) {
                             UserController.validationError(res, err);
@@ -106,7 +126,7 @@ export class UserController {
                                     UserController.validationError(res, err);
                                 }
                                 else {
-                                    console.log(info);
+                                    //console.log(info);
                                 }
                             });
                         }
@@ -127,55 +147,90 @@ export class UserController {
         var companies = req.body.companies;
         var userId = req.user._id;
 
-        console.log(companies);
         User.findById(userId, function (err, user) {
             if (err) {
                 UserController.validationError(res, err);
             }
             if (user) {
-                Company.find({
-                    '_id': {$in: companies}
-                }, function (err, docs) {
+                user.hiredCompany = undefined;
+                user.hiredCompanyAddress = undefined;
+                user.hiredContactPerson = undefined;
+                user.hiredContactPersonEmail = undefined;
+
+                user.selfCompany = undefined;
+                user.selfCompanyAddress = undefined;
+                user.selfContactPerson = undefined;
+                user.selfContactPersonPosition = undefined;
+                user.selfContactPersonEmail = undefined;
+
+                user.otherSituation = undefined;
+                user.otherContactPerson = undefined;
+                user.otherContactPersonPosition = undefined;
+                user.otherContactPersonEmail = undefined;
+
+                user.save(function (err, user) {
                     if (err) {
                         UserController.validationError(res, err);
                     }
-                    var companiesList = '';
-                    var prefix = '';
-                    docs.forEach(function (doc) {
-                        companiesList += prefix + doc.name;
-                        prefix = ", ";
-
-                        if (doc.users.indexOf(user._id) < 0) {
-                            doc.users.push(user);
-                        }
-                        doc.save(function (err, user) {
-                            if (err) {
-                                console.log(err);
-                            }
-                        });
-                    });
-
-                    var mailOptions = {
-                        from: 'practica@ligaac.ro', // sender address
-                        to: user.email, // list of receivers
-                        subject: 'Practica AC', // Subject line
-                        html: '<br/><strong>Detalii personale</strong><br/>' +
-                        '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
-                        '<p>Numar matricol: ' + user.studentID + '</p>' +
-                        '<br/><strong>Optiune: Aplic la una dintre companiile participante</strong><br/>' +
-                        '<p>Companii selectate: ' + companiesList + '</p>' +
-                        '<br/><p>Va multumim!</p>'
-                    };
-                    UserController.transporter.sendMail(mailOptions, function (err, info) {
+                    // add user to selected companies
+                    Company.find({
+                        //'_id': {$in: companies}
+                    }, function (err, docs) {
                         if (err) {
                             UserController.validationError(res, err);
                         }
-                        else {
-                            console.log(info);
-                        }
+                        var companiesList = '';
+                        var prefix = '';
+                        docs.forEach(function (doc) {
+                            companiesList += prefix + doc.name;
+                            prefix = ", ";
+
+                            if (companies.indexOf(String(doc._id)) < 0) {
+                                // remove old options
+                                var index = doc.users.indexOf(user._id);
+                                if (index > -1) {
+                                    doc.users.splice(index, 1);
+                                    doc.save(function (err, doc) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                    });
+                                }
+                            }
+                            else {
+                                if (doc.users.indexOf(user._id) < 0) {
+                                    doc.users.push(user);
+                                    doc.save(function (err, doc) {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                    });
+                                }
+                            }
+                        });
+
+                        var mailOptions = {
+                            from: 'practica@ligaac.ro', // sender address
+                            to: user.email, // list of receivers
+                            subject: 'Practica AC', // Subject line
+                            html: '<br/><strong>Detalii personale</strong><br/>' +
+                            '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
+                            '<p>Numar matricol: ' + user.studentID + '</p>' +
+                            '<br/><strong>Optiune: Aplic la una dintre companiile participante</strong><br/>' +
+                            '<p>Companii selectate: ' + companiesList + '</p>' +
+                            '<br/><p>Va multumim!</p>'
+                        };
+                        UserController.transporter.sendMail(mailOptions, function (err, info) {
+                            if (err) {
+                                UserController.validationError(res, err);
+                            }
+                            else {
+                                //console.log(info);
+                            }
+                        });
+
+
                     });
-
-
                 });
             } else {
                 return res.status(200).json({status: "UNAUTHORIZED"});
@@ -191,7 +246,15 @@ export class UserController {
         newUser.role = 'user';
 
         newUser.save(function (err, user) {
-            if (err) return UserController.validationError(res, err);
+            if (err) {
+                if (err.errors.email) {
+                    res.status(200).json({status: "EMAIL"});
+                }
+                if (err.errors.studentID) {
+                    res.status(200).json({status: "STUDENT_ID"});
+                }
+                return UserController.validationError(res, err);
+            }
             var token = jwt.sign({_id: user._id}, serverConstants.secrets.session, {expiresInMinutes: 60 * 5});
             res.json({token: token});
         });
@@ -210,6 +273,7 @@ export class UserController {
             user.lastName = newUser.lastName;
             user.email = newUser.email;
             user.studentID = newUser.studentID;
+            user.year = newUser.year;
 
             user.save(function (err, user) {
                 if (err) return UserController.validationError(res, err);
@@ -247,9 +311,6 @@ export class UserController {
         }, function (err, user) { // don't ever give out the password or salt
             if (err) return UserController.validationError(res, err);
             if (!user) return res.status(200).json({status: "UNAUTHORIZED"});
-            console.log(user._id);
-
-            console.log(user.cvMimetype);
             res.writeHead(200, {'Content-Type': user.cvMimetype});
             res.end(user.cv);
         });
