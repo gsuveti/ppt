@@ -200,10 +200,10 @@ export class UserController {
                                 }
                             }
                             else {
-                                if (doc.users.indexOf(user._id) < 0) {
-                                    companiesList += prefix + doc.name;
-                                    prefix = ", ";
+                                companiesList += prefix + doc.name;
+                                prefix = ", ";
 
+                                if (doc.users.indexOf(user._id) < 0) {
                                     doc.users.push(user);
                                     doc.save(function (err, doc) {
                                         if (err) {
