@@ -27,6 +27,7 @@ import forEachChild = ts.forEachChild;
 export class AboutCmp implements OnInit {
 
     companies = [{
+        _id: null,
         name: null,
         description: null,
         web: null,

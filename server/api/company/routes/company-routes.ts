@@ -17,12 +17,16 @@ export class CompanyRoutes {
             .get(CompanyController.getAll);
 
         router
+            .route('/')
+            .post(CompanyController.create);
+
+        router
             .route('/light')
             .get(CompanyController.getAllNoPrograms);
 
-        //router
-        //    .route('/:id')
-        //    .get(CompanyController.getById);
+        router
+            .route('/:id')
+            .post(CompanyController.update);
 
 
         return router;
