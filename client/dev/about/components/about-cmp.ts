@@ -1,6 +1,5 @@
 import {
     Component,
-    View,
     Inject,
     OnInit,
 } from 'angular2/core';
@@ -15,14 +14,14 @@ import {
 import {HTTP_PROVIDERS} from 'angular2/http';
 import AboutService from './about-service';
 import forEachChild = ts.forEachChild;
-
+import {CountDown} from './countdown';
 
 @Component({
     selector: 'about-cmp',
     templateUrl: 'client/dev/about/templates/about.html',
     styleUrls: ['client/dev/about/styles/about.css'],
-    providers: [HTTP_PROVIDERS, AboutService]
-
+    providers: [HTTP_PROVIDERS, AboutService],
+    directives: [CountDown]
 })
 export class AboutCmp implements OnInit {
 

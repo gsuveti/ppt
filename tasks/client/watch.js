@@ -15,7 +15,6 @@ gulp.task(tasks.CLIENT_WATCH, [tasks.CLIENT_LESS, tasks.CLIENT_BUILD_TS_DEV, tas
   browserSync({proxy: "http://localhost:3333", reloadDelay: 1000});
 
   let _watchable = [];
-  //
   //_watchable.push(TS);
   //_watchable.push(LESS);
   //_watchable.push(CSS);

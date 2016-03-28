@@ -146,7 +146,6 @@ export class UserController {
 
     static
     savePractice = function (req, res) {
-        console.log("save practice");
         var companies = req.body.companies;
         var userId = req.user._id;
 

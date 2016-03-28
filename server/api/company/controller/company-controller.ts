@@ -41,8 +41,6 @@ export class CompanyController {
     };
 
     static update = function (req, res) {
-        console.log("update");
-
         var companyId = req.params.id
         var newCompany = req.body;
 
@@ -53,7 +51,6 @@ export class CompanyController {
             if (err) {
                 res.status(200).json({status: 'error', message: err});
             }
-            console.log(company);
             if (company && newCompany && newCompany.summerPracticePrograms) {
                 SummerPracticeProgram.find({'_id': {$in: company.summerPracticePrograms}}).remove(function (err) {
                     if (err) {

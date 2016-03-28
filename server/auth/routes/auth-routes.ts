@@ -37,8 +37,6 @@ export class AuthRoutes {
         router
             .route('/local')
             .post(function (req, res, next) {
-                console.log(req.body);
-
                 passport.authenticate('local', function (err, user, info) {
                     if (err) return res.status(200).json({status: "ERROR"});
                     if (info) return res.status(200).json({status: info.message});
