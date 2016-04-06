@@ -10,6 +10,8 @@ import { Cookie } from 'ng2-cookies/ng2-cookies';
 @Injectable()
 export default class LoginService {
     static AUTH_ENDPOINT:string = '/auth/local';
+    static RESET_PASSWORD_ENDPOINT:string = '/user/reset-password/';
+    static REQUEST_RESET_PASSWORD_ENDPOINT:string = '/user/request-reset-password/';
     static USER_ENDPOINT:string = '/user/';
     static UPDATE_USER_ENDPOINT:string = '/user/update';
     static GET_USER_ENDPOINT:string = '/user/me';
@@ -37,6 +39,30 @@ export default class LoginService {
 
         return this._http
             .post(LoginService.AUTH_ENDPOINT, creds, {headers})
+            .map(res => res.json())
+    }
+
+    resetPassword(token, loginUser):Observable<any> {
+        let creds = JSON.stringify({
+            email: loginUser.email,
+            password: loginUser.password
+        });
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this._http
+            .post(LoginService.RESET_PASSWORD_ENDPOINT+ token, creds, {headers})
+            .map(res => res.json())
+    }
+
+    requestResetPassword(email):Observable<any> {
+
+        let headers = new Headers();
+        headers.append('Content-Type', 'application/json');
+
+        return this._http
+            .post(LoginService.REQUEST_RESET_PASSWORD_ENDPOINT+ email, null, {headers})
             .map(res => res.json())
     }
 

@@ -44,7 +44,6 @@ export class CompanyController {
         var companyId = req.params.id
         var newCompany = req.body;
 
-        console.log(companyId);
         Company.findOne({
             _id: companyId
         }, function (err, company) { // don't ever give out the password or salt
