@@ -11,6 +11,7 @@ var fs = require('fs');
 var busboy = require('connect-busboy'); //middleware for form/file upload
 var path = require('path');     //used for file path
 var fs = require('fs-extra');       //File System - for file manipulation
+var randomstring = require("randomstring");
 
 export class UserController {
     public static transporter = nodemailer.createTransport('smtps://practica@ligaac.ro:practica2016@smtp.gmail.com');
@@ -59,7 +60,7 @@ export class UserController {
                             doc.users.splice(index, 1);
                             doc.save(function (err, doc) {
                                 if (err) {
-                                    console.log(err);
+                                    return UserController.validationError(res, err);
                                 }
                             });
                         }
@@ -193,7 +194,7 @@ export class UserController {
                                     doc.users.splice(index, 1);
                                     doc.save(function (err, doc) {
                                         if (err) {
-                                            console.log(err);
+                                            return UserController.validationError(res, err);
                                         }
                                     });
                                 }
@@ -206,7 +207,7 @@ export class UserController {
                                     doc.users.push(user);
                                     doc.save(function (err, doc) {
                                         if (err) {
-                                            console.log(err);
+                                            return UserController.validationError(res, err);
                                         }
                                     });
                                 }
@@ -304,7 +305,7 @@ export class UserController {
             _id: userId
         }, '-salt -hashedPassword -cv', function (err, user) { // don't ever give out the password or salt
             if (err) return next(err);
-            if (!user) return res.status(401).send('Unauthorized');
+            if (!user) return res.status(200).json({status: "UNAUTHORIZED"});
 
             //if (user.cvName) {
             //    fs.writeFile(user.cvName, user.cv, function (err) {
@@ -312,6 +313,91 @@ export class UserController {
             //    });
             //}
             res.json(user);
+        });
+    };
+
+    static
+    requestResetPassword = function (req, res, next) {
+        var email = req.params.email;
+        User.findOne({
+            email: email
+        }, '-salt -hashedPassword -cv', function (err, user) { // don't ever give out the password or salt
+            if (err) return UserController.validationError(res, err);
+            if (!user) {
+                return res.status(200).json({status: "EMAIL"});
+            }
+            else {
+                user.resetPasswordToken = randomstring.generate();
+                var resetPasswordExpiryDate = new Date();
+                resetPasswordExpiryDate.setDate(resetPasswordExpiryDate.getDate() + 1);
+                user.resetPasswordExpiryDate = resetPasswordExpiryDate;
+
+
+                user.save(function (err, user) {
+                    if (err) {
+                        return UserController.validationError(res, err);
+                    }
+                    else {
+                        var mailOptions = {
+                            from: 'practica@ligaac.ro', // sender address
+                            to: user.email, // list of receivers
+                            subject: 'Resetare parola - Practica AC', // Subject line
+                            html: '<p>Pentru a reseta parola acceseaza linkul de mai jos:</p>' +
+                            '<br/>' +
+                            '<a href="http://practica.ligaac.ro/reset-password/' + user.resetPasswordToken + '/' + user.email + '">Reseteaza parola!</a>'
+
+                        };
+                        UserController.transporter.sendMail(mailOptions, function (err, info) {
+                            if (err) {
+                                return UserController.validationError(res, err);
+                            }
+                            else {
+                                return res.status(200).json({status: "OK"});
+                            }
+                        });
+                    }
+                });
+            }
+
+        });
+    };
+
+
+    static
+    resetPassword = function (req, res, next) {
+        var token = req.params.token;
+        var user = req.body;
+        var email = user.email;
+        var password = user.password;
+
+        User.findOne({
+            email: email
+        }, '-salt -hashedPassword -cv', function (err, user) { // don't ever give out the password or salt
+            if (err) return UserController.validationError(res, err);
+            if (!user) {
+                return res.status(200).json({status: "UNAUTHORIZED"});
+            }
+            else {
+                var now = new Date();
+                if (user.resetPasswordToken && user.resetPasswordToken === token && now < user.resetPasswordExpiryDate) {
+                    user.password = password;
+                    user.resetPasswordToken = undefined;
+                    user.resetPasswordExpiryDate = undefined;
+
+                    user.save(function (err, user) {
+                        if (err) {
+                            return UserController.validationError(res, err);
+                        }
+                        else {
+                            return res.status(200).json({status: "OK"});
+                        }
+                    });
+                }
+                else {
+                    return res.status(200).json({status: "TOKEN"});
+                }
+            }
+
         });
     };
 

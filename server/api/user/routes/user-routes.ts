@@ -31,6 +31,14 @@ export class UserRoutes {
             .post(AuthService.isAuthenticated(), UserController.update);
 
         router
+            .route('/request-reset-password/:email')
+            .post(UserController.requestResetPassword);
+
+        router
+            .route('/reset-password/:token')
+            .post(UserController.resetPassword);
+
+        router
             .route('/')
             .post(UserController.create);
 

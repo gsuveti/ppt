@@ -37,6 +37,9 @@ var UserSchema = new Schema({
     cv: Buffer,
     cvName: String,
     cvMimetype: String,
+
+    resetPasswordToken: String,
+    resetPasswordExpiryDate: Date
 });
 
 /**
