@@ -46,17 +46,33 @@ export class RegisterCmp implements OnInit {
         });
         this.registerForm.value.year = "";
     }
+    yearChanged(value){
+        setTimeout(() => {
+            if (value != this.registerForm.value.year) {
+                // FF Bug
+                this.registerForm.value.year = value;
+            }
+        });
+    }
 
     doRegister() {
         this.registerMessage = '';
-        if (this.registerForm.dirty && this.registerForm.valid) {
+        if (
+            this.registerForm.value.firstName &&
+            this.registerForm.value.lastName &&
+            this.registerForm.value.year &&
+            this.registerForm.value.studentID &&
+            this.registerForm.value.email &&
+            this.registerForm.value.password &&
+            this.registerForm.value.secondPassword
+        ) {
             if (this.registerForm.value.password != this.registerForm.value.secondPassword) {
                 this.registerMessage = "Parolele nu sunt identice!"
             }
-            if (!this.mailPatt.test(this.registerForm.value.email)) {
+            else if (!this.mailPatt.test(this.registerForm.value.email)) {
                 this.registerMessage = "Email-ul nu e valid!"
             }
-            if (!this.registerForm.value.year) {
+            else if (!this.registerForm.value.year) {
                 this.registerMessage = "Selecteza anul de studiu"
             }
             else {
@@ -86,10 +102,13 @@ export class RegisterCmp implements OnInit {
                             }
                         },
                         err => {
-                            tthis.registerMessage = "A aparut o eroare!"
+                            this.registerMessage = "A aparut o eroare!"
                         }
                     );
             }
+        }
+        else{
+            this.registerMessage = "Completeaza toate campurile!"
         }
     }
 

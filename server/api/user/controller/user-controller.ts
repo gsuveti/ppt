@@ -50,7 +50,7 @@ export class UserController {
                     'users': userId
                 }, function (err, docs) {
                     if (err) {
-                        UserController.validationError(res, err);
+                        return UserController.validationError(res, err);
                     }
 
                     docs.forEach(function (doc) {
@@ -68,7 +68,7 @@ export class UserController {
 
                 user.save(function (err, user) {
                         if (err) {
-                            UserController.validationError(res, err);
+                            return UserController.validationError(res, err);
                         }
 
                         var mailOptions;
@@ -126,7 +126,7 @@ export class UserController {
                         if (mailOptions) {
                             UserController.transporter.sendMail(mailOptions, function (err, info) {
                                 if (err) {
-                                    UserController.validationError(res, err);
+                                    return UserController.validationError(res, err);
                                 }
                                 else {
                                     //console.log(info);
@@ -138,7 +138,7 @@ export class UserController {
                     }
                 );
 
-                res.status(200).send("OK");
+                return res.status(200).send("OK");
             }
         });
     }
@@ -151,7 +151,7 @@ export class UserController {
 
         User.findById(userId, function (err, user) {
             if (err) {
-                UserController.validationError(res, err);
+                return UserController.validationError(res, err);
             }
             if (user) {
                 user.hiredCompany = undefined;
@@ -172,14 +172,14 @@ export class UserController {
 
                 user.save(function (err, user) {
                     if (err) {
-                        UserController.validationError(res, err);
+                        return UserController.validationError(res, err);
                     }
                     // add user to selected companies
                     Company.find({
                         //'_id': {$in: companies}
                     }, function (err, docs) {
                         if (err) {
-                            UserController.validationError(res, err);
+                            return UserController.validationError(res, err);
                         }
                         var companiesList = '';
                         var prefix = '';
@@ -227,10 +227,10 @@ export class UserController {
                         };
                         UserController.transporter.sendMail(mailOptions, function (err, info) {
                             if (err) {
-                                UserController.validationError(res, err);
+                                return UserController.validationError(res, err);
                             }
                             else {
-                                //console.log(info);
+                                return res.status(200).json({status: "OK"});
                             }
                         });
 
@@ -241,7 +241,6 @@ export class UserController {
                 return res.status(200).json({status: "UNAUTHORIZED"});
             }
         });
-        res.status(200).json({status: "OK"});
     }
 
 
@@ -253,15 +252,19 @@ export class UserController {
         newUser.save(function (err, user) {
             if (err) {
                 if (err.errors.email) {
-                    res.status(200).json({status: "EMAIL"});
+                    return res.status(200).json({status: "EMAIL"});
                 }
                 if (err.errors.studentID) {
-                    res.status(200).json({status: "STUDENT_ID"});
+                    return res.status(200).json({status: "STUDENT_ID"});
                 }
-                return UserController.validationError(res, err);
+                else {
+                    return UserController.validationError(res, err);
+                }
             }
-            var token = jwt.sign({_id: user._id}, serverConstants.secrets.session, {expiresInMinutes: 60 * 5});
-            res.json({token: token});
+            else {
+                var token = jwt.sign({_id: user._id}, serverConstants.secrets.session, {expiresInMinutes: 60 * 5});
+                res.json({token: token});
+            }
         });
     };
 
@@ -281,11 +284,16 @@ export class UserController {
             user.year = newUser.year;
 
             user.save(function (err, user) {
-                if (err) return UserController.validationError(res, err);
+                if (err) {
+                    return UserController.validationError(res, err);
+                }
+                else {
+                    return res.status(200).json({status: "OK"});
+                }
             });
         });
 
-        res.status(200).json({status: "OK"});
+
     };
 
 

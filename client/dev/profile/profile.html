@@ -48,8 +48,11 @@
                  autofocus/>
         </div>
         <div class="col-sm-6 col-xs-12 col" style="margin-top: -10px; margin-bottom: -10px;">
-          <select class="form-control margin-bottom" [(ngModel)]="newUser.year" id="year" autofocus>
-            <option *ngFor="#year of years">{{year}}</option>
+          <select class="form-control margin-bottom"
+                  [ngModel]="newUser.year" id="year"
+                  (change)="yearChanged($event.target.value)" id="year"
+                  autofocus>
+            <option *ngFor="#year of years" [value]="year">{{year}}</option>
           </select>
         </div>
       </div>

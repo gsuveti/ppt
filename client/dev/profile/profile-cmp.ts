@@ -58,6 +58,15 @@ export class ProfileCmp implements OnInit {
         //console.log("ProfileCmp");
     }
 
+    yearChanged(value){
+        setTimeout(() => {
+            if (value != this.newUser.year) {
+                // FF Bug
+                this.newUser.year = value;
+            }
+        });
+    }
+
     ngOnInit() {
         var token = Cookie.getCookie('ppt');
         if (token) {

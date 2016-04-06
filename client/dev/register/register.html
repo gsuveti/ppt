@@ -31,9 +31,12 @@
                  autofocus/>
         </div>
         <div class="col-sm-6 col-xs-12 col">
-          <select class="form-control margin-bottom" ngControl="year" id="year" autofocus>
+          <select class="form-control margin-bottom"
+                  ngControl="year"
+                  [ngModel]="registerForm.value.year"
+                  (change)="yearChanged($event.target.value)" id="year" autofocus>
             <option value="">Selecteaza anul de studiu</option>
-            <option *ngFor="#year of years">{{year}}</option>
+            <option *ngFor="#year of years" [value]="year">{{year}}</option>
           </select>
         </div>
 
@@ -58,8 +61,7 @@
              autofocus/>
 
       <button type="submit"
-              class="btn btn-default"
-              [disabled]="!registerForm.valid">
+              class="btn btn-default">
         Register
       </button>
     </form>
