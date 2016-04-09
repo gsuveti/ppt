@@ -47,6 +47,7 @@ export class ProfileCmp implements OnInit {
     newUser = {};
     model = {};
     filesToUpload:Array<File>;
+    selectedCompanies = '';
     checkCompanies = [];
     editPersonalInformation = false;
     errorMessage = '';
@@ -67,7 +68,10 @@ export class ProfileCmp implements OnInit {
         });
     }
 
-    ngOnInit() {
+    ngOnInit(){
+        this.init();
+    }
+    init() {
         var token = Cookie.getCookie('ppt');
         if (token) {
             this.loginService.getUser(token)
@@ -77,6 +81,28 @@ export class ProfileCmp implements OnInit {
                         //console.log(data);
                         if (!data.message) {
                             this.user = data;
+
+                            this.aboutService.getCompaniesLight()
+                                .subscribe(
+                                    data => {
+                                        //console.log(data);
+                                        if (!data.message) {
+                                            this.companies = data;
+                                            this.selectedCompanies='';
+                                            var prefix='';
+                                            for(var value of this.companies){
+                                                if(value.users.indexOf(this.user._id) > -1){
+                                                    this.selectedCompanies+=prefix+value.name;
+                                                    prefix=', ';
+                                                }
+                                            }
+                                        }
+                                    }
+                                    //err => {
+                                    //    console.log(err.json().message);
+                                    //},
+                                    //() => console.log('Companies Fetch Complete')
+                                );
                         }
                         else {
                             this.router.navigateByUrl('/login');
@@ -91,19 +117,7 @@ export class ProfileCmp implements OnInit {
         } else {
             this.router.navigateByUrl('/login');
         }
-        this.aboutService.getCompaniesLight()
-            .subscribe(
-                data => {
-                    //console.log(data);
-                    if (!data.message) {
-                        this.companies = data;
-                    }
-                }
-                //err => {
-                //    console.log(err.json().message);
-                //},
-                //() => console.log('Companies Fetch Complete')
-            );
+
     }
 
 
@@ -143,9 +157,7 @@ export class ProfileCmp implements OnInit {
                 this.loginService.noPractice(this.model)
                     .subscribe(
                         data => {
-                            if (!data.message) {
-                                this.companies = data;
-                            }
+                            this.init();
                         }
                         //err => {
                         //    console.log(err.json().message);
@@ -161,7 +173,7 @@ export class ProfileCmp implements OnInit {
                 this.loginService.practice(this.checkCompanies)
                     .subscribe(
                         data => {
-                            //console.log(data);
+                            this.init();
                         }
                         //err => {
                         //    console.log(err.json().message);
@@ -230,4 +242,23 @@ export class ProfileCmp implements OnInit {
             );
     }
 
+    deleteNoPractice(deleteOption){
+        this.model={};
+        this.loginService.noPractice(this.model,deleteOption )
+            .subscribe(
+                (data) => {
+                    this.init()
+                }
+            );
+    }
+
+    deletePractice(){
+        this.checkCompanies=[];
+        this.loginService.practice(this.checkCompanies)
+            .subscribe(
+                (data) => {
+                    this.init();
+                }
+            );
+    }
 }

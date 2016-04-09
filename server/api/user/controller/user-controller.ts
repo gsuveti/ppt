@@ -22,6 +22,9 @@ export class UserController {
     };
 
     static saveNoPractice = function (req, res) {
+
+        var deleteOption = req.query.delete_option;
+
         var details = req.body.details;
         var userId = req.user._id;
 
@@ -29,117 +32,80 @@ export class UserController {
             if (err) {
                 return UserController.validationError(res, err);
             } else {
+                if (details.hiredCompany) {
+                    user.hiredCompany = details.hiredCompany;
+                    user.hiredCompanyAddress = details.hiredCompanyAddress;
+                    user.hiredContactPerson = details.hiredContactPerson;
+                    user.hiredContactPersonEmail = details.hiredContactPersonEmail;
+                }
+                if (details.selfCompany) {
+                    user.selfCompany = details.selfCompany;
+                    user.selfCompanyAddress = details.selfCompanyAddress;
+                    user.selfContactPerson = details.selfContactPerson;
+                    user.selfContactPersonPosition = details.selfContactPersonPosition;
+                    user.selfContactPersonEmail = details.selfContactPersonEmail;
+                }
+                if (details.otherSituation) {
+                    user.otherSituation = details.otherSituation;
+                    user.otherContactPerson = details.otherContactPerson;
+                    user.otherContactPersonPosition = details.otherContactPersonPosition;
+                    user.otherContactPersonEmail = details.otherContactPersonEmail;
+                }
 
-                user.hiredCompany = details.hiredCompany;
-                user.hiredCompanyAddress = details.hiredCompanyAddress;
-                user.hiredContactPerson = details.hiredContactPerson;
-                user.hiredContactPersonEmail = details.hiredContactPersonEmail;
 
-                user.selfCompany = details.selfCompany;
-                user.selfCompanyAddress = details.selfCompanyAddress;
-                user.selfContactPerson = details.selfContactPerson;
-                user.selfContactPersonPosition = details.selfContactPersonPosition;
-                user.selfContactPersonEmail = details.selfContactPersonEmail;
+                if (deleteOption === 'hiredCompany') {
+                    user.hiredCompany = undefined;
+                    user.hiredCompanyAddress = undefined;
+                    user.hiredContactPerson = undefined;
+                    user.hiredContactPersonEmail = undefined;
+                }
 
-                user.otherSituation = details.otherSituation;
-                user.otherContactPerson = details.otherContactPerson;
-                user.otherContactPersonPosition = details.otherContactPersonPosition;
-                user.otherContactPersonEmail = details.otherContactPersonEmail;
+                if (deleteOption === 'selfCompany') {
+                    user.selfCompany = undefined;
+                    user.selfCompanyAddress = undefined;
+                    user.selfContactPerson = undefined;
+                    user.selfContactPersonPosition = undefined;
+                    user.selfContactPersonEmail = undefined;
+                }
+
+                if (deleteOption === 'otherSituation') {
+                    user.otherSituation = undefined;
+                    user.otherContactPerson = undefined;
+                    user.otherContactPersonPosition = undefined;
+                    user.otherContactPersonEmail = undefined;
+                }
 
 
-                Company.find({
-                    'users': userId
-                }, function (err, docs) {
-                    if (err) {
-                        return UserController.validationError(res, err);
-                    }
-
-                    docs.forEach(function (doc) {
-                        var index = doc.users.indexOf(userId);
-                        if (index > -1) {
-                            doc.users.splice(index, 1);
-                            doc.save(function (err, doc) {
-                                if (err) {
-                                    return UserController.validationError(res, err);
-                                }
-                            });
+                if (deleteOption === 'company') {
+                    Company.find({
+                        'users': userId
+                    }, function (err, docs) {
+                        if (err) {
+                            return UserController.validationError(res, err);
                         }
+
+                        docs.forEach(function (doc) {
+                            var index = doc.users.indexOf(userId);
+                            if (index > -1) {
+                                doc.users.splice(index, 1);
+                                doc.save(function (err, doc) {
+                                    if (err) {
+                                        return UserController.validationError(res, err);
+                                    }
+                                });
+                            }
+                        });
                     });
-                });
+                }
 
                 user.save(function (err, user) {
                         if (err) {
                             return UserController.validationError(res, err);
                         }
 
-                        var mailOptions;
-                        if (user.hiredCompany) {
-                            mailOptions = {
-                                from: 'practica@ligaac.ro', // sender address
-                                to: user.email, // list of receivers
-                                subject: 'Practica AC', // Subject line
-                                html: '<br/><strong>Detalii personale</strong><br/>' +
-                                '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
-                                '<p>Numar matricol: ' + user.studentID + '</p>' +
-                                '<p>Anul de studiu: ' + user.year + '</p>' +
-                                '<br/><strong>Optiune: Sunt angajat</strong><br/>' +
-                                '<p>Companie: ' + user.hiredCompany + '</p>' +
-                                '<p>Adresa companie: ' + user.hiredCompanyAddress + '</p>' +
-                                '<p>Persoana de contact: ' + user.hiredContactPerson + '</p>' +
-                                '<p>Email persoana de contact: ' + user.hiredContactPersonEmail + '</p>' +
-                                '<br/><p>Va multumim!</p>'
-                            };
-                        } else if (user.selfCompany) {
-                            mailOptions = {
-                                from: 'practica@ligaac.ro', // sender address
-                                to: user.email, // list of receivers
-                                subject: 'Practica AC', // Subject line
-                                html: '<br/><strong>Detalii personale</strong><br/>' +
-                                '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
-                                '<p>Numar matricol: ' + user.studentID + '</p>' +
-                                '<p>Anul de studiu: ' + user.year + '</p>' +
-                                '<br/><strong>Optiune:  Solicit loc de pratica propus de mine (din domeniul IT&C) </strong><br/>' +
-                                '<p>Companie: ' + user.selfCompany + '</p>' +
-                                '<p>Adresa companie: ' + user.selfCompanyAddress + '</p>' +
-                                '<p>Persoana de contact: ' + user.selfContactPerson + '</p>' +
-                                '<p>Functie persoana de contact: ' + user.selfContactPersonPosition + '</p>' +
-                                '<p>Email persoana de contact: ' + user.selfContactPersonEmail + '</p>' +
-                                '<br/><p>Va multumim!</p>'
-                            };
-                        } else if (user.otherSituation) {
-                            mailOptions = {
-                                from: 'practica@ligaac.ro', // sender address
-                                to: user.email, // list of receivers
-                                subject: 'Practica AC', // Subject line
-                                html: '<br/><strong>Detalii personale</strong><br/>' +
-                                '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
-                                '<p>Numar matricol: ' + user.studentID + '</p>' +
-                                '<p>Anul de studiu: ' + user.year + '</p>' +
-                                '<br/><strong>Optiune:  Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS) </strong><br/>' +
-                                '<p>Situatie: ' + user.otherSituation + '</p>' +
-                                '<p>Persoana de contact: ' + user.otherContactPerson + '</p>' +
-                                '<p>Functie persoana de contact: ' + user.otherContactPersonPosition + '</p>' +
-                                '<p>Email persoana de contact: ' + user.otherContactPersonEmail + '</p>' +
-                                '<br/><p>Va multumim!</p>'
-                            };
-                        }
-
-                        if (mailOptions) {
-                            UserController.transporter.sendMail(mailOptions, function (err, info) {
-                                if (err) {
-                                    return UserController.validationError(res, err);
-                                }
-                                else {
-                                    //console.log(info);
-                                }
-                            });
-                        }
-
-
+                        return UserController.sendMail(user, res);
                     }
                 );
-
-                return res.status(200).send("OK");
             }
         });
     }
@@ -155,22 +121,6 @@ export class UserController {
                 return UserController.validationError(res, err);
             }
             if (user) {
-                user.hiredCompany = undefined;
-                user.hiredCompanyAddress = undefined;
-                user.hiredContactPerson = undefined;
-                user.hiredContactPersonEmail = undefined;
-
-                user.selfCompany = undefined;
-                user.selfCompanyAddress = undefined;
-                user.selfContactPerson = undefined;
-                user.selfContactPersonPosition = undefined;
-                user.selfContactPersonEmail = undefined;
-
-                user.otherSituation = undefined;
-                user.otherContactPerson = undefined;
-                user.otherContactPersonPosition = undefined;
-                user.otherContactPersonEmail = undefined;
-
                 user.save(function (err, user) {
                     if (err) {
                         return UserController.validationError(res, err);
@@ -214,27 +164,7 @@ export class UserController {
                             }
                         });
 
-                        var mailOptions = {
-                            from: 'practica@ligaac.ro', // sender address
-                            to: user.email, // list of receivers
-                            subject: 'Practica AC', // Subject line
-                            html: '<br/><strong>Detalii personale</strong><br/>' +
-                            '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
-                            '<p>Numar matricol: ' + user.studentID + '</p>' +
-                            '<p>Anul de studiu: ' + user.year + '</p>' +
-                            '<br/><strong>Optiune: Aplic la una dintre companiile participante</strong><br/>' +
-                            '<p>Companii selectate: ' + companiesList + '</p>' +
-                            '<br/><p>Va multumim!</p>'
-                        };
-                        UserController.transporter.sendMail(mailOptions, function (err, info) {
-                            if (err) {
-                                return UserController.validationError(res, err);
-                            }
-                            else {
-                                return res.status(200).json({status: "OK"});
-                            }
-                        });
-
+                        return UserController.sendMail(user, res);
 
                     });
                 });
@@ -289,7 +219,7 @@ export class UserController {
                     return UserController.validationError(res, err);
                 }
                 else {
-                    return res.status(200).json({status: "OK"});
+                    UserController.sendMail(user,res);
                 }
             });
         });
@@ -423,4 +353,97 @@ export class UserController {
         res.redirect('/');
     };
 
+    static sendMail(user, res) {
+        var selectedOptions= [];
+        var html = '<br/>' +
+            '<strong>Detalii personale</strong>' +
+            '<br/>' +
+            '<p>Nume: ' + user.firstName + ' ' + user.lastName + '</p>' +
+            '<p>Numar matricol: ' + user.studentID + '</p>' +
+            '<p>Anul de studiu: ' + user.year + '</p>' +
+            '<br/>';
+
+
+        if (user.hiredCompany) {
+            selectedOptions.push(
+                '<br/><strong>Sunt angajat</strong><br/>' +
+                '<p>Companie: ' + user.hiredCompany + '</p>' +
+                '<p>Adresa companie: ' + user.hiredCompanyAddress + '</p>' +
+                '<p>Persoana de contact: ' + user.hiredContactPerson + '</p>' +
+                '<p>Email persoana de contact: ' + user.hiredContactPersonEmail + '</p>' +
+                '<br/>'
+            );
+        }
+        if (user.selfCompany) {
+            selectedOptions.push(
+                '<br/><strong>Solicit loc de pratica propus de mine (din domeniul IT&C) </strong><br/>' +
+                '<p>Companie: ' + user.selfCompany + '</p>' +
+                '<p>Adresa companie: ' + user.selfCompanyAddress + '</p>' +
+                '<p>Persoana de contact: ' + user.selfContactPerson + '</p>' +
+                '<p>Functie persoana de contact: ' + user.selfContactPersonPosition + '</p>' +
+                '<p>Email persoana de contact: ' + user.selfContactPersonEmail + '</p>' +
+                '<br/>'
+            );
+        }
+
+        if (user.otherSituation) {
+            selectedOptions.push(
+                '<br/><strong>Alte situatii (Erasmus, Practica in cadrul facultatii, Proiecte POSDRU, Liga AC LABS) </strong><br/>' +
+                '<p>Situatie: ' + user.otherSituation + '</p>' +
+                '<p>Persoana de contact: ' + user.otherContactPerson + '</p>' +
+                '<p>Functie persoana de contact: ' + user.otherContactPersonPosition + '</p>' +
+                '<p>Email persoana de contact: ' + user.otherContactPersonEmail + '</p>' +
+                '<br/>'
+        );
+        }
+
+        Company.find({
+            'users': user._id
+        }, function (err, docs) {
+            if (err) {
+                return UserController.validationError(res, err);
+            }
+            var companiesList = '';
+            var prefix = '';
+            docs.forEach(function (doc) {
+                companiesList += prefix + doc.name;
+                prefix = ", ";
+            });
+
+            if (companiesList) {
+                selectedOptions.push('<br/><strong>Aplic la una dintre companiile participante</strong><br/>' +
+                    '<p>Companii selectate: ' + companiesList + '</p>');
+            }
+            if(selectedOptions && selectedOptions.length>0){
+                html +='<p>Optiuni alese:</p>';
+                selectedOptions.forEach((option)=>{
+                    html+=option;
+                });
+            }
+            else{
+                html += '<p>Nu ai ales optiuni de practica!</p>';
+            }
+
+
+            html += '<br><p>Va multumim!</p>';
+
+            var mailOptions = {
+                from: 'practica@ligaac.ro', // sender address
+                to: user.email, // list of receivers
+                subject: 'Practica AC', // Subject line
+                html: html
+            };
+
+            UserController.transporter.sendMail(mailOptions, function (err, info) {
+                if (err) {
+                    return UserController.validationError(res, err);
+                }
+                else {
+                    return res.status(200).json({status: "OK"});
+                }
+            });
+        });
+
+
+    }
 }

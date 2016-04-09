@@ -76,6 +76,72 @@
   </div>
 </div>
 
+<div class="wrapper">
+  <div class="content">
+    <h3>Listă opțiuni</h3>
+
+    <p *ngIf="!user.hiredCompany && !user.selfCompany">Nu ai ales optiuni de practica!</p>
+
+    <div *ngIf="user.hiredCompany">
+
+      <p>
+        <strong>Sunt angajat</strong>
+        <button type="button" (click)="deleteNoPractice('hiredCompany')"
+                class="button button-delete glyphicon glyphicon-trash" aria-label="Left Align">
+        </button>
+      </p>
+
+      <p>Nume companie: {{user.hiredCompany}}</p>
+      <p>Adresă companie: {{user.hiredCompanyAddress}}</p>
+      <p>Persoană de contact: {{user.hiredContactPerson}}</p>
+      <p>Email persoană de contact: {{user.hiredContactPersonEmail}}</p>
+      <hr>
+    </div>
+
+
+    <div *ngIf="user.selfCompany">
+      <p>
+        <strong>Solicit loc de practică propus de mine (din domeniul IT&C)</strong>
+        <button type="button" (click)="deleteNoPractice('selfCompany')"
+                class="button button-delete glyphicon glyphicon-trash" aria-label="Left Align">
+        </button>
+      </p>
+      <p>Nume companie: {{user.selfCompany}}</p>
+      <p>Adresă companie: {{user.selfCompanyAddress}}</p>
+      <p>Persoană de contact: {{user.selfContactPerson}}</p>
+      <p>Funcție persoană de contact: {{user.selfContactPersonPosition}}</p>
+      <p>Email persoană de contact: {{user.selfContactPersonEmail}}</p>
+      <hr>
+    </div>
+
+    <div *ngIf="user.otherSituation">
+      <p>
+        <strong>Alte situații (Erasmus, Practică în cadrul facultății, Proiecte POSDRU, Liga AC
+          LABS)</strong>
+        <button type="button" (click)="deleteNoPractice('otherSituation')"
+                class="button button-delete glyphicon glyphicon-trash" aria-label="Left Align">
+        </button>
+      </p>
+      <p>Nume companie: {{user.otherSituation}}</p>
+      <p>Persoană de contact: {{user.otherContactPerson}}</p>
+      <p>Funcție persoană de contact: {{user.otherContactPersonPosition}}</p>
+      <p>Email persoană de contact: {{user.otherContactPersonEmail}}</p>
+      <hr>
+    </div>
+
+    <div *ngIf="selectedCompanies">
+      <p><strong>Am aplicat la companiile partenere</strong>
+        <button type="button" (click)="deletePractice()"
+                class="button button-delete glyphicon glyphicon-trash" aria-label="Left Align">
+        </button>
+      </p>
+      <p>Companii selectate: {{selectedCompanies}}</p>
+      <a href="/user/show-cv?id={{user._id}}">Curriculum Vitae</a>
+      <hr>
+    </div>
+
+  </div>
+</div>
 
 <div class="wrapper">
   <div class="content">

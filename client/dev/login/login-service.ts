@@ -122,7 +122,7 @@ export default class LoginService {
     }
 
 
-    noPractice(details):Observable<any> {
+    noPractice(details,deleteOption):Observable<any> {
         let data = JSON.stringify({
             details: details
         });
@@ -131,7 +131,7 @@ export default class LoginService {
         headers.append('Content-Type', 'application/json');
 
         return this._http
-            .post(LoginService.addAccessToken(LoginService.ADD_NO_PRACTICE_USER_ENDPOINT), data, {headers})
+            .post(LoginService.addAccessToken(LoginService.ADD_NO_PRACTICE_USER_ENDPOINT)+ (deleteOption?"&delete_option="+deleteOption:''), data, {headers})
             .map(res => res.json())
     }
 
