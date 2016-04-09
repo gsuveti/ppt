@@ -80,7 +80,7 @@
   <div class="content">
     <h3>Listă opțiuni</h3>
 
-    <p *ngIf="!user.hiredCompany && !user.selfCompany">Nu ai ales optiuni de practica!</p>
+    <p *ngIf="!user.hiredCompany && !user.selfCompany && !user.otherSituation && !selectedCompanies">Nu ai ales optiuni de practica!</p>
 
     <div *ngIf="user.hiredCompany">
 
