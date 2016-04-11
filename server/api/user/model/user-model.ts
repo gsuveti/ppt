@@ -31,8 +31,8 @@ var UserSchema = new Schema({
 
     otherSituation: String,
     otherContactPerson: String,
-    otherContactPersonPosition: String,
-    otherContactPersonEmail: String,
+    otherContactPerson: String,
+    otherContactPerson: String,
 
     cv: Buffer,
     cvName: String,

@@ -2,6 +2,7 @@
 
 var nodemailer = require('nodemailer');
 var User = require('../model/user-model');
+var Student = require('../model/student-model');
 var Company = require('../../company/model/company-model');
 var passport = require('passport');
 var serverConstants = require('../../../constants/server');
@@ -12,6 +13,8 @@ var busboy = require('connect-busboy'); //middleware for form/file upload
 var path = require('path');     //used for file path
 var fs = require('fs-extra');       //File System - for file manipulation
 var randomstring = require("randomstring");
+var json2csv = require('json2csv');
+var _ = require('lodash');
 
 export class UserController {
     public static transporter = nodemailer.createTransport('smtps://practica@ligaac.ro:practica2016@smtp.gmail.com');
@@ -28,7 +31,7 @@ export class UserController {
         var details = req.body.details;
         var userId = req.user._id;
 
-        User.findById(userId, function (err, user) {
+        User.findById(userId,'-salt -hashedPassword -cv', function (err, user) {
             if (err) {
                 return UserController.validationError(res, err);
             } else {
@@ -116,7 +119,7 @@ export class UserController {
         var companies = req.body.companies;
         var userId = req.user._id;
 
-        User.findById(userId, function (err, user) {
+        User.findById(userId,'-salt -hashedPassword -cv', function (err, user) {
             if (err) {
                 return UserController.validationError(res, err);
             }
@@ -343,6 +346,163 @@ export class UserController {
             res.writeHead(200, {'Content-Type': user.cvMimetype});
             res.end(user.cv);
         });
+    };
+
+
+    static
+    overall = function (req, res, next) {
+        var fields = ['firstName','lastName', 'email', 'year', 'studentID','hiredCompany', 'selfCompany','otherSituation', 'company' ];
+        var fieldNames = ['Prenume','Nume', 'Email', 'An', 'Numar Matricol', 'Angajat', 'Propunere', 'Alte situatii', 'Aplica la companii'];
+
+
+        Company.find({},'users', function (err, docs) {
+            if (err) {
+                return UserController.validationError(res, err);
+            }
+            var companyUsers = '';
+            if (docs && docs.length > 0) {
+                companyUsers = _.reduce(docs, function (companyUsers, doc) {
+                    return companyUsers+ doc.users.toString();
+                }, '');
+            }
+
+
+            User.find({},'-salt -hashedPassword -cv',
+                function (err, users) { // don't ever give out the password or salt
+                    if (err) return UserController.validationError(res, err);
+                    users.forEach(user=> {
+                        if (user.hiredCompany) {
+                            user.hiredCompany = 'DA';
+                        } else {
+                            user.hiredCompany = '';
+                        }
+
+                        if (user.selfCompany) {
+                            user.selfCompany = 'DA';
+                        } else {
+                            user.selfCompany = '';
+                        }
+
+                        if (user.otherSituation) {
+                            user.otherSituation = 'DA';
+                        } else {
+                            user.otherSituation = '';
+                        }
+                        if(companyUsers.indexOf(user._id.toString()) > -1){
+                            user['company']='DA';
+                        }else{
+                            user['company']='';
+                        }
+                    });
+
+                    json2csv({ data: users, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                        if (err) console.log(err);
+                        res.writeHead(200, {'Content-Type': 'text/csv'});
+                        res.end(csv);
+                    });
+                });
+        });
+    };
+
+
+    static
+    hired = function (req, res, next) {
+        var fields = ['firstName','lastName', 'email', 'year', 'studentID','hiredCompany', 'hiredCompanyAddress','hiredContactPerson', 'hiredContactPersonEmail' ];
+        var fieldNames = ['Prenume','Nume', 'Email', 'An', 'Numar Matricol', 'Companie', 'Adresa companie', 'Persoana de contact', 'Email persoana de contact'];
+
+
+
+            User.find({
+                    hiredCompany:{$exists:true}
+            },'-salt -hashedPassword -cv',
+                function (err, users) { // don't ever give out the password or salt
+                    if (err) return UserController.validationError(res, err);
+
+                    json2csv({ data: users, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                        if (err) console.log(err);
+                        res.writeHead(200, {'Content-Type': 'text/csv'});
+                        res.end(csv);
+                    });
+                });
+    };
+
+
+    static
+    self = function (req, res, next) {
+        var fields = ['firstName','lastName', 'email', 'year', 'studentID','selfCompany', 'selfCompanyAddress','selfContactPerson', 'selfContactPersonPosition', 'selfContactPersonEmail' ];
+        var fieldNames = ['Prenume','Nume', 'Email', 'An', 'Numar Matricol', 'Companie', 'Adresa companie', 'Persoana de contact','Pozitie persoana de contact', 'Email persoana de contact'];
+
+
+
+        User.find({
+                selfCompany:{$exists:true}
+            },'-salt -hashedPassword -cv',
+            function (err, users) { // don't ever give out the password or salt
+                if (err) return UserController.validationError(res, err);
+
+                json2csv({ data: users, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                    if (err) console.log(err);
+                    res.writeHead(200, {'Content-Type': 'text/csv'});
+                    res.end(csv);
+                });
+            });
+    };
+
+    static
+    other = function (req, res, next) {
+        var fields = ['firstName','lastName', 'email', 'year', 'studentID','otherSituation', 'otherContactPerson','otherContactPerson', 'otherContactPerson' ];
+        var fieldNames = ['Prenume','Nume', 'Email', 'An', 'Numar Matricol', 'Situatie', 'Persoana de contact','Pozitie persoana de contact', 'Email persoana de contact'];
+
+
+
+        User.find({
+                otherSituation:{$exists:true}
+            },'-salt -hashedPassword -cv',
+            function (err, users) { // don't ever give out the password or salt
+                if (err) return UserController.validationError(res, err);
+
+                json2csv({ data: users, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                    if (err) console.log(err);
+                    res.writeHead(200, {'Content-Type': 'text/csv'});
+                    res.end(csv);
+                });
+            });
+    };
+
+    static
+    noOption = function (req, res, next) {
+        var fields = [ 'name', 'year', 'studentID' ];
+        var fieldNames = ['Nume', 'An', 'Numar Matricol'];
+
+
+
+        User.find({},'studentID',
+            function (err, users) { // don't ever give out the password or salt
+                if (err) return UserController.validationError(res, err);
+                var usersIDs = [];
+                users.forEach(user=> {
+                   usersIDs.push(user.studentID);
+                });
+
+                Student.find({},
+                    function (err, students) { // don't ever give out the password or salt
+                        if (err) return UserController.validationError(res, err);
+                        var noOptionStudents= [];
+                        students.forEach(student=> {
+                            if(usersIDs.indexOf(student.studentID)<0 && usersIDs.indexOf(student.studentID.replace(/\D/g,''))<0){
+                                noOptionStudents.push(student);
+                            }
+                        });
+
+                        json2csv({ data: noOptionStudents, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                            if (err) console.log(err);
+                            res.writeHead(200, {'Content-Type': 'text/csv'});
+                            res.end(csv);
+                        });
+                    });
+
+
+            });
     };
 
     /**

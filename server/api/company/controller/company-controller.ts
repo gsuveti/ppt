@@ -4,7 +4,7 @@ var SummerPracticeProgram = require('../model/summerPracticeProgram-model');
 var Company = require('../model/company-model');
 
 export class CompanyController {
-    static getAll = function (req, res) {
+    static getAll = function (req, res,next) {
         Company.find({}).populate('summerPracticePrograms').exec(function (err, companies) {
             if (err) return res.status(500).send(err);
             res.status(200).json(companies);
@@ -73,4 +73,5 @@ export class CompanyController {
             }
         });
     };
+
 }

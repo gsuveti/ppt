@@ -18,6 +18,27 @@ export class UserRoutes {
         var router = express.Router();
 
         router
+            .route('/overall')
+            .get(UserController.overall);
+
+        router
+            .route('/overall/hired')
+            .get(UserController.hired);
+
+        router
+            .route('/overall/self')
+            .get(UserController.self);
+
+        router
+            .route('/overall/other')
+            .get(UserController.other);
+
+        router
+            .route('/overall/no-option')
+            .get(UserController.noOption);
+
+
+        router
             .route('/me')
             .get(AuthService.isAuthenticated(), UserController.me);
 

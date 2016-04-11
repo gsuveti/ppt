@@ -27,6 +27,7 @@
     "forever": "^0.15.1",
     "helmet": "^0.7.1",
     "js-cookie-fg": "^2.1.0",
+    "json2csv": "^3.2.0",
     "jsonwebtoken": "^5.7.0",
     "lodash": "^3.10.0",
     "mongoose": "^4.1.11",
