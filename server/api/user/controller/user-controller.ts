@@ -489,7 +489,7 @@ export class UserController {
                         if (err) return UserController.validationError(res, err);
                         var noOptionStudents= [];
                         students.forEach(student=> {
-                            if(usersIDs.indexOf(student.studentID)<0 && usersIDs.indexOf(student.studentID.replace(/\D/g,''))<0){
+                            if(usersIDs.indexOf(student.studentID)<0 && usersIDs.indexOf(student.studentID.substring(3))<0){
                                 noOptionStudents.push(student);
                             }
                         });
