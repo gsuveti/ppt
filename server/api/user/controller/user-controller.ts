@@ -395,7 +395,7 @@ export class UserController {
                         }
                     });
 
-                    json2csv({ data: users, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                    json2csv({ data: users, fields: fields , fieldNames:fieldNames}, function(err, csv) {
                         if (err) console.log(err);
                         res.writeHead(200, {'Content-Type': 'text/csv'});
                         res.end(csv);
@@ -418,7 +418,7 @@ export class UserController {
                 function (err, users) { // don't ever give out the password or salt
                     if (err) return UserController.validationError(res, err);
 
-                    json2csv({ data: users, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                    json2csv({ data: users, fields: fields , fieldNames:fieldNames}, function(err, csv) {
                         if (err) console.log(err);
                         res.writeHead(200, {'Content-Type': 'text/csv'});
                         res.end(csv);
@@ -440,7 +440,7 @@ export class UserController {
             function (err, users) { // don't ever give out the password or salt
                 if (err) return UserController.validationError(res, err);
 
-                json2csv({ data: users, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                json2csv({ data: users, fields: fields , fieldNames:fieldNames}, function(err, csv) {
                     if (err) console.log(err);
                     res.writeHead(200, {'Content-Type': 'text/csv'});
                     res.end(csv);
@@ -461,7 +461,7 @@ export class UserController {
             function (err, users) { // don't ever give out the password or salt
                 if (err) return UserController.validationError(res, err);
 
-                json2csv({ data: users, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                json2csv({ data: users, fields: fields , fieldNames:fieldNames}, function(err, csv) {
                     if (err) console.log(err);
                     res.writeHead(200, {'Content-Type': 'text/csv'});
                     res.end(csv);
@@ -494,7 +494,7 @@ export class UserController {
                             }
                         });
 
-                        json2csv({ data: noOptionStudents, fields: fields , fieldNames:fieldNames, del:';'}, function(err, csv) {
+                        json2csv({ data: noOptionStudents, fields: fields , fieldNames:fieldNames}, function(err, csv) {
                             if (err) console.log(err);
                             res.writeHead(200, {'Content-Type': 'text/csv'});
                             res.end(csv);
