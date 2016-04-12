@@ -8,6 +8,7 @@ var CompanySchema = new Schema({
     createdAt: {type: Date, default: Date.now},
     name: {type: String, required: true},
     description: {type: String, required: false},
+    reultsLink: {type: String, required: false},
     web: {type: String, required: false, trim: true},
     summerPracticePrograms: [{type: Schema.Types.ObjectId, ref: 'summer-practice-program'}],
     users: [{type: Schema.Types.ObjectId, ref: 'User'}],

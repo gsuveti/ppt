@@ -20,6 +20,7 @@ import {LoginCmp} from '../../login/login-cmp';
 import {ResetPasswordCmp} from '../../login/reset-password-cmp';
 import {ResetPasswordRequestCmp} from '../../login/reset-password-request-cmp';
 import {AboutCmp} from '../../about/components/about-cmp';
+import {CompanyCmp} from '../../company/company-cmp';
 
 
 @Component({
@@ -36,6 +37,7 @@ import {AboutCmp} from '../../about/components/about-cmp';
     {path: '/register', name: "Register", component: RegisterCmp},
     {path: '/reset-password/:token/:email', name: "ResetPassword", component: ResetPasswordCmp},
     {path: '/reset-password', name: "ResetPasswordRequest", component: ResetPasswordRequestCmp},
+    {path: '/results/:resultsLink', name: "CompanyResults", component: CompanyCmp},
 ])
 export class AppCmp implements OnInit {
     constructor(router:Router) {

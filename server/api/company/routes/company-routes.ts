@@ -28,6 +28,10 @@ export class CompanyRoutes {
             .route('/:id')
             .post(CompanyController.update);
 
+        router
+            .route('/results/:resultsLink')
+            .get(CompanyController.results);
+
 
         return router;
     }

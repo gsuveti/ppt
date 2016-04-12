@@ -31,7 +31,7 @@ export class UserController {
         var details = req.body.details;
         var userId = req.user._id;
 
-        User.findById(userId,'-salt -hashedPassword -cv', function (err, user) {
+        User.findById(userId, '-salt -hashedPassword -cv', function (err, user) {
             if (err) {
                 return UserController.validationError(res, err);
             } else {
@@ -119,7 +119,7 @@ export class UserController {
         var companies = req.body.companies;
         var userId = req.user._id;
 
-        User.findById(userId,'-salt -hashedPassword -cv', function (err, user) {
+        User.findById(userId, '-salt -hashedPassword -cv', function (err, user) {
             if (err) {
                 return UserController.validationError(res, err);
             }
@@ -222,7 +222,7 @@ export class UserController {
                     return UserController.validationError(res, err);
                 }
                 else {
-                    UserController.sendMail(user,res);
+                    UserController.sendMail(user, res);
                 }
             });
         });
@@ -348,26 +348,48 @@ export class UserController {
         });
     };
 
+    static
+    cleanup = function (req, res, next) {
+        var emails = req.body;
+        User.find({
+                email: {$in: emails}
+            }, 'id',
+            function (err, users) { // don't ever give out the password or salt
+                if (err) return UserController.validationError(res, err);
+                users.forEach(user=> {
+                    Company.update(
+                        {users: user._id},
+                        {$pull: {users: user._id}},
+                        {multi: true},
+                        function (err, response) {
+                            if (err) {
+                                return UserController.validationError(res, err);
+                            }
+                            return res.status(200).json({status: "OK"});
+                        });
+                });
+            });
+    };
 
     static
     overall = function (req, res, next) {
-        var fields = ['firstName','lastName', 'email', 'year', 'studentID','hiredCompany', 'selfCompany','otherSituation', 'company' ];
-        var fieldNames = ['Prenume','Nume', 'Email', 'An', 'Numar Matricol', 'Angajat', 'Propunere', 'Alte situatii', 'Aplica la companii'];
+        var fields = ['firstName', 'lastName', 'email', 'year', 'studentID', 'hiredCompany', 'selfCompany', 'otherSituation', 'company'];
+        var fieldNames = ['Prenume', 'Nume', 'Email', 'An', 'Numar Matricol', 'Angajat', 'Propunere', 'Alte situatii', 'Aplica la companii'];
 
 
-        Company.find({},'users', function (err, docs) {
+        Company.find({}, 'users', function (err, docs) {
             if (err) {
                 return UserController.validationError(res, err);
             }
             var companyUsers = '';
             if (docs && docs.length > 0) {
                 companyUsers = _.reduce(docs, function (companyUsers, doc) {
-                    return companyUsers+ doc.users.toString();
+                    return companyUsers + doc.users.toString();
                 }, '');
             }
 
 
-            User.find({},'-salt -hashedPassword -cv',
+            User.find({}, '-salt -hashedPassword -cv',
                 function (err, users) { // don't ever give out the password or salt
                     if (err) return UserController.validationError(res, err);
                     users.forEach(user=> {
@@ -388,14 +410,14 @@ export class UserController {
                         } else {
                             user.otherSituation = '';
                         }
-                        if(companyUsers.indexOf(user._id.toString()) > -1){
-                            user['company']='DA';
-                        }else{
-                            user['company']='';
+                        if (companyUsers.indexOf(user._id.toString()) > -1) {
+                            user['company'] = 'DA';
+                        } else {
+                            user['company'] = '';
                         }
                     });
 
-                    json2csv({ data: users, fields: fields , fieldNames:fieldNames}, function(err, csv) {
+                    json2csv({data: users, fields: fields, fieldNames: fieldNames}, function (err, csv) {
                         if (err) console.log(err);
                         res.writeHead(200, {'Content-Type': 'text/csv'});
                         res.end(csv);
@@ -407,40 +429,38 @@ export class UserController {
 
     static
     hired = function (req, res, next) {
-        var fields = ['firstName','lastName', 'email', 'year', 'studentID','hiredCompany', 'hiredCompanyAddress','hiredContactPerson', 'hiredContactPersonEmail' ];
-        var fieldNames = ['Prenume','Nume', 'Email', 'An', 'Numar Matricol', 'Companie', 'Adresa companie', 'Persoana de contact', 'Email persoana de contact'];
+        var fields = ['firstName', 'lastName', 'email', 'year', 'studentID', 'hiredCompany', 'hiredCompanyAddress', 'hiredContactPerson', 'hiredContactPersonEmail'];
+        var fieldNames = ['Prenume', 'Nume', 'Email', 'An', 'Numar Matricol', 'Companie', 'Adresa companie', 'Persoana de contact', 'Email persoana de contact'];
 
 
+        User.find({
+                hiredCompany: {$exists: true}
+            }, '-salt -hashedPassword -cv',
+            function (err, users) { // don't ever give out the password or salt
+                if (err) return UserController.validationError(res, err);
 
-            User.find({
-                    hiredCompany:{$exists:true}
-            },'-salt -hashedPassword -cv',
-                function (err, users) { // don't ever give out the password or salt
-                    if (err) return UserController.validationError(res, err);
-
-                    json2csv({ data: users, fields: fields , fieldNames:fieldNames}, function(err, csv) {
-                        if (err) console.log(err);
-                        res.writeHead(200, {'Content-Type': 'text/csv'});
-                        res.end(csv);
-                    });
+                json2csv({data: users, fields: fields, fieldNames: fieldNames}, function (err, csv) {
+                    if (err) console.log(err);
+                    res.writeHead(200, {'Content-Type': 'text/csv'});
+                    res.end(csv);
                 });
+            });
     };
 
 
     static
     self = function (req, res, next) {
-        var fields = ['firstName','lastName', 'email', 'year', 'studentID','selfCompany', 'selfCompanyAddress','selfContactPerson', 'selfContactPersonPosition', 'selfContactPersonEmail' ];
-        var fieldNames = ['Prenume','Nume', 'Email', 'An', 'Numar Matricol', 'Companie', 'Adresa companie', 'Persoana de contact','Pozitie persoana de contact', 'Email persoana de contact'];
-
+        var fields = ['firstName', 'lastName', 'email', 'year', 'studentID', 'selfCompany', 'selfCompanyAddress', 'selfContactPerson', 'selfContactPersonPosition', 'selfContactPersonEmail'];
+        var fieldNames = ['Prenume', 'Nume', 'Email', 'An', 'Numar Matricol', 'Companie', 'Adresa companie', 'Persoana de contact', 'Pozitie persoana de contact', 'Email persoana de contact'];
 
 
         User.find({
-                selfCompany:{$exists:true}
-            },'-salt -hashedPassword -cv',
+                selfCompany: {$exists: true}
+            }, '-salt -hashedPassword -cv',
             function (err, users) { // don't ever give out the password or salt
                 if (err) return UserController.validationError(res, err);
 
-                json2csv({ data: users, fields: fields , fieldNames:fieldNames}, function(err, csv) {
+                json2csv({data: users, fields: fields, fieldNames: fieldNames}, function (err, csv) {
                     if (err) console.log(err);
                     res.writeHead(200, {'Content-Type': 'text/csv'});
                     res.end(csv);
@@ -450,18 +470,17 @@ export class UserController {
 
     static
     other = function (req, res, next) {
-        var fields = ['firstName','lastName', 'email', 'year', 'studentID','otherSituation', 'otherContactPerson','otherContactPerson', 'otherContactPerson' ];
-        var fieldNames = ['Prenume','Nume', 'Email', 'An', 'Numar Matricol', 'Situatie', 'Persoana de contact','Pozitie persoana de contact', 'Email persoana de contact'];
-
+        var fields = ['firstName', 'lastName', 'email', 'year', 'studentID', 'otherSituation', 'otherContactPerson', 'otherContactPerson', 'otherContactPerson'];
+        var fieldNames = ['Prenume', 'Nume', 'Email', 'An', 'Numar Matricol', 'Situatie', 'Persoana de contact', 'Pozitie persoana de contact', 'Email persoana de contact'];
 
 
         User.find({
-                otherSituation:{$exists:true}
-            },'-salt -hashedPassword -cv',
+                otherSituation: {$exists: true}
+            }, '-salt -hashedPassword -cv',
             function (err, users) { // don't ever give out the password or salt
                 if (err) return UserController.validationError(res, err);
 
-                json2csv({ data: users, fields: fields , fieldNames:fieldNames}, function(err, csv) {
+                json2csv({data: users, fields: fields, fieldNames: fieldNames}, function (err, csv) {
                     if (err) console.log(err);
                     res.writeHead(200, {'Content-Type': 'text/csv'});
                     res.end(csv);
@@ -471,30 +490,29 @@ export class UserController {
 
     static
     noOption = function (req, res, next) {
-        var fields = [ 'name', 'year', 'studentID' ];
+        var fields = ['name', 'year', 'studentID'];
         var fieldNames = ['Nume', 'An', 'Numar Matricol'];
 
 
-
-        User.find({},'studentID',
+        User.find({}, 'studentID',
             function (err, users) { // don't ever give out the password or salt
                 if (err) return UserController.validationError(res, err);
                 var usersIDs = [];
                 users.forEach(user=> {
-                   usersIDs.push(user.studentID);
+                    usersIDs.push(user.studentID);
                 });
 
                 Student.find({},
                     function (err, students) { // don't ever give out the password or salt
                         if (err) return UserController.validationError(res, err);
-                        var noOptionStudents= [];
+                        var noOptionStudents = [];
                         students.forEach(student=> {
-                            if(usersIDs.indexOf(student.studentID)<0 && usersIDs.indexOf(student.studentID.substring(3))<0){
+                            if (usersIDs.indexOf(student.studentID) < 0 && usersIDs.indexOf(student.studentID.substring(3)) < 0) {
                                 noOptionStudents.push(student);
                             }
                         });
 
-                        json2csv({ data: noOptionStudents, fields: fields , fieldNames:fieldNames}, function(err, csv) {
+                        json2csv({data: noOptionStudents, fields: fields, fieldNames: fieldNames}, function (err, csv) {
                             if (err) console.log(err);
                             res.writeHead(200, {'Content-Type': 'text/csv'});
                             res.end(csv);
@@ -514,7 +532,7 @@ export class UserController {
     };
 
     static sendMail(user, res) {
-        var selectedOptions= [];
+        var selectedOptions = [];
         var html = '<br/>' +
             '<strong>Detalii personale</strong>' +
             '<br/>' +
@@ -554,7 +572,7 @@ export class UserController {
                 '<p>Functie persoana de contact: ' + user.otherContactPersonPosition + '</p>' +
                 '<p>Email persoana de contact: ' + user.otherContactPersonEmail + '</p>' +
                 '<br/>'
-        );
+            );
         }
 
         Company.find({
@@ -574,13 +592,13 @@ export class UserController {
                 selectedOptions.push('<br/><strong>Aplic la una dintre companiile participante</strong><br/>' +
                     '<p>Companii selectate: ' + companiesList + '</p>');
             }
-            if(selectedOptions && selectedOptions.length>0){
-                html +='<p>Optiuni alese:</p>';
-                selectedOptions.forEach((option)=>{
-                    html+=option;
+            if (selectedOptions && selectedOptions.length > 0) {
+                html += '<p>Optiuni alese:</p>';
+                selectedOptions.forEach((option)=> {
+                    html += option;
                 });
             }
-            else{
+            else {
                 html += '<p>Nu ai ales optiuni de practica!</p>';
             }
 

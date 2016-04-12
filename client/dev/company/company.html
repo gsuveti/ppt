@@ -1,0 +1,28 @@
+<div class="wrapper">
+  <div class="content">
+    <h3 class="todo-title">{{company.name}}</h3>
+    <a href="/companies/results/{{resultsLink}}?csv=true">Download as CSV</a>
+    <br/>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Firstname</th>
+        <th>Lastname</th>
+        <th>Year</th>
+        <th>Email</th>
+        <th>CV</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="#user of company.users">
+        <td class="col">{{user.firstName}}</td>
+        <td class="col">{{user.lastName}}</td>
+        <td class="col">{{user.year}}</td>
+        <td class="col">{{user.email}}</td>
+        <td><a class="col" href="/user/show-cv?id={{user._id}}">CV</a></td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>

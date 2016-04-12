@@ -22,6 +22,10 @@ export class UserRoutes {
             .get(UserController.overall);
 
         router
+            .route('/cleanup')
+            .post(UserController.cleanup);
+
+        router
             .route('/overall/hired')
             .get(UserController.hired);
 

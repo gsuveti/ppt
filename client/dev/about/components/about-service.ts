@@ -18,6 +18,12 @@ export default class AboutService {
       .map((r) => r.json());
   }
 
+  getResultsCompany(resultsLink):Observable<any> {
+    return this._http
+      .get(AboutService.ENDPOINT+"/results/"+resultsLink)
+      .map((r) => r.json());
+  }
+
   getCompaniesLight():Observable<any> {
     return this._http
         .get(AboutService.ENDPOINT+"/light")

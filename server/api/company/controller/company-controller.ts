@@ -2,9 +2,11 @@
 
 var SummerPracticeProgram = require('../model/summerPracticeProgram-model');
 var Company = require('../model/company-model');
+var json2csv = require('json2csv');
+var sanitize = require("sanitize-filename");
 
 export class CompanyController {
-    static getAll = function (req, res,next) {
+    static getAll = function (req, res, next) {
         Company.find({}).populate('summerPracticePrograms').exec(function (err, companies) {
             if (err) return res.status(500).send(err);
             res.status(200).json(companies);
@@ -72,6 +74,39 @@ export class CompanyController {
                 });
             }
         });
+    };
+
+    static results = function (req, res) {
+        var resultsLink = req.params.resultsLink
+        var csv = req.query.csv;
+
+        Company.find({resultsLink: resultsLink}, 'name users')
+            .populate('users', '_id firstName lastName email year', null, {sort: {'year': 1}})
+            .exec(function (err, companies) { // don't ever give out the password or salt
+                if (err) {
+                    return res.status(200).json({status: 'error', message: err});
+                }
+                var company = companies[0];
+                if (csv) {
+                    company.users.forEach(user=> {
+                        user.cvLink = 'practica.ligaac.ro/user/show-cv?id=' + user._id;
+                    });
+
+                    json2csv({
+                        data: company.users,
+                        fields: ['firstName', 'lastName', 'year', 'email', 'cvLink'],
+                        fieldNames: ['Prenume', 'Nume', 'An', 'Email', 'CV']
+                    }, function (err, csv) {
+                        if (err) console.log(err);
+                        res.writeHead(200, {'Content-Type': 'text/csv','Content-Disposition': 'attachment; filename="'+sanitize(company.name)+'.csv"',});
+                        return res.end(csv);
+                    });
+                }
+                else {
+                    return res.status(200).json({status: 'OK', data: company});
+                }
+
+            });
     };
 
 }
