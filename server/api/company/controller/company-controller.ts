@@ -88,7 +88,7 @@ export class CompanyController {
                     return res.status(200).json({status: 'error', message: err});
                 }
                 var company = companies[0];
-                company.users=_.sortBy(company.users, ['email','lastName','firstName']);
+                company.users = _.sortBy(company.users, ['year','lastName','firstName']);
                 if (csv) {
                     company.users.forEach(user=> {
                         user.cvLink = 'practica.ligaac.ro/user/show-cv?id=' + user._id;
