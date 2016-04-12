@@ -4,6 +4,7 @@ var SummerPracticeProgram = require('../model/summerPracticeProgram-model');
 var Company = require('../model/company-model');
 var json2csv = require('json2csv');
 var sanitize = require("sanitize-filename");
+var _ = require("lodash");
 
 export class CompanyController {
     static getAll = function (req, res, next) {
@@ -81,12 +82,13 @@ export class CompanyController {
         var csv = req.query.csv;
 
         Company.find({resultsLink: resultsLink}, 'name users')
-            .populate('users', '_id firstName lastName email year', null, {sort: {'year': 1}})
+            .populate('users', '_id firstName lastName email year')
             .exec(function (err, companies) { // don't ever give out the password or salt
                 if (err) {
                     return res.status(200).json({status: 'error', message: err});
                 }
                 var company = companies[0];
+                company.users=_.sortBy(company.users, ['email','lastName','firstName']);
                 if (csv) {
                     company.users.forEach(user=> {
                         user.cvLink = 'practica.ligaac.ro/user/show-cv?id=' + user._id;
